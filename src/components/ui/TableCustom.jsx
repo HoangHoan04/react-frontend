@@ -13,7 +13,6 @@ const TableCustom = ({
 }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
 
   // Sorting logic
   const sortedData = useMemo(() => {
@@ -37,27 +36,14 @@ const TableCustom = ({
     return sortableData;
   }, [data, sortConfig]);
 
-  // Search filter
-  const filteredData = useMemo(() => {
-    if (!searchTerm) return sortedData;
-
-    return sortedData.filter((row) =>
-      Object.values(row).some((value) =>
-        String(value).toLowerCase().includes(searchTerm.toLowerCase()),
-      ),
-    );
-  }, [sortedData, searchTerm]);
-
   // Pagination
   const paginatedData = useMemo(() => {
-    if (!pagination) return filteredData;
-
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
-    return filteredData.slice(startIndex, endIndex);
-  }, [filteredData, currentPage, pageSize, pagination]);
+    return sortedData.slice(startIndex, endIndex);
+  }, [sortedData, currentPage, pageSize]);
 
-  const totalPages = Math.ceil(filteredData.length / pageSize);
+  const totalPages = Math.ceil(sortedData.length / pageSize);
 
   const handleSort = (key) => {
     if (!sortable) return;
@@ -110,25 +96,7 @@ const TableCustom = ({
   };
 
   return (
-    <div className="custom-table-container">
-      {/* Search bar */}
-      <div className="table-controls">
-        <div className="search-box">
-          <input
-            type="text"
-            placeholder="Tìm kiếm..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="search-input"
-          />
-          <span className="search-icon">🔍</span>
-        </div>
-        <div className="table-info">{filteredData.length} kết quả</div>
-      </div>
-
+    <div className="bg-black">
       {/* Table */}
       <div className="table-wrapper">
         <table
