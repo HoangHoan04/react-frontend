@@ -1,4 +1,4 @@
-import "./assets/styles/style.css";
+import "./assets/styles/index.css";
 import TableCustom from "./components/ui/TableCustom";
 
 function App() {
