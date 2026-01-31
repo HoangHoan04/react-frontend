@@ -1,0 +1,51 @@
+/* App Styles */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Main Color */
+  --bg-main: #f5f7fa;
+  --text-main: #0054a6;
+  --common-main: #e6f2ff;
+
+  /* Sidebar Background */
+  --sidebar-left-bg: #cfe8ff;
+  --sidebar-right-bg: #e6f2ff;
+
+  /* Common Colors */
+  --black-color: #000000;
+  --white-color: #ffffff;
+  --red-color: #ff4d4f;
+  --green-color: #52c41a;
+  --blue-color: #1890ff;
+  --orange-color: #fa8c16;
+  --gray-color: #8c8c8c;
+  --light-gray-color: #f0f0f0;
+  --dark-gray-color: #595959;
+
+  /* Status Colors */
+  --success-color: #28a745;
+  --error-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+}
+
+body {
+  background: var(--bg-main);
+  min-height: 100vh;
+  font-family:
+    "Segoe UI",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+
+/* Button Styles */
+
+/* Table Styles */
+
+/* Toast Styles */
