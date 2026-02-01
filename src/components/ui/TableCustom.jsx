@@ -14,7 +14,6 @@ const TableCustom = ({
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Sorting logic
   const sortedData = useMemo(() => {
     let sortableData = [...data];
 
@@ -36,7 +35,6 @@ const TableCustom = ({
     return sortableData;
   }, [data, sortConfig]);
 
-  // Pagination
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
