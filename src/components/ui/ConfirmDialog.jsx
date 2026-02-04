@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import ButtonCustom from "../common/Button";
+import ButtonCustom from "../common/button/Button";
 
 const CustomConfirmDialog = ({
   visible = false,

@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "primeicons/primeicons.css";
 import { BrowserRouter as Router } from "react-router-dom";
-import "./assets/styles/index.css";
+import "@/assets/styles/index.css";
 import { AuthProvider } from "./context/AuthContext";
 import { LoadingProvider } from "./context/LoadingContext";
 import { ThemeProvider } from "./context/ThemeContext";
