@@ -1,6 +1,6 @@
 import { useTheme } from "@/context/ThemeContext";
 import { useEffect, useState } from "react";
-import { IconButton } from "../common/IconButton";
+import TooltipButtonCustom from "../common/button/TooltipButton";
 
 const FullScreen = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -31,7 +31,7 @@ const FullScreen = () => {
   };
 
   return (
-    <IconButton
+    <TooltipButtonCustom
       icon={isFullscreen ? "pi pi-window-minimize" : "pi pi-window-maximize"}
       onClick={toggleFullscreen}
       tooltip={isFullscreen ? "Thoát toàn màn hình" : "Toàn màn hình"}

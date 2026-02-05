@@ -1,8 +1,11 @@
 import { useLoading } from "@/context/LoadingContext";
 import { useState } from "react";
 import { Accordion, AccordionTab } from "../../../components/common/Accordion";
+import CustomButton from "../../../components/common/button/Button";
+import CustomRadioButton from "../../../components/common/button/RadioButton";
+import TooltipButtonCustom from "../../../components/common/button/TooltipButton";
 import CustomDateInput from "../../../components/common/Calendar";
-import FloatLabel from "../../../components/common/FloatLabelInput";
+import FloatLabelInput from "../../../components/common/input/FloatLabelInput";
 import CustomConfirmDialog from "../../../components/ui/ConfirmDialog";
 import { useToast } from "../../../context/ToastContext";
 
@@ -24,19 +27,20 @@ export default function Dashboard() {
 
   const [showConfirm, setShowConfirm] = useState(false);
 
+  const [choice, setChoice] = useState("yes");
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-
       <div className="max-w-md mx-auto p-6 space-y-6">
-        <FloatLabel
+        <FloatLabelInput
           label="Họ và tên"
           value={name}
           onChange={(e) => setName(e.target.value)}
           icon="pi pi-user"
         />
 
-        <FloatLabel
+        <FloatLabelInput
           label="Email"
           type="email"
           value={email}
@@ -50,7 +54,6 @@ export default function Dashboard() {
       >
         Test Loading (3 giây)
       </button>
-
       <div style={{ padding: "40px", fontFamily: "system-ui, sans-serif" }}>
         <h1 style={{ marginBottom: "24px" }}>Toast Component Demo</h1>
 
@@ -196,7 +199,6 @@ export default function Dashboard() {
           </button>
         </div>
       </div>
-
       <div className="min-h-screen  py-12 px-6">
         <div className="max-w-lg mx-auto shadow-2xl rounded-2xl p-8 space-y-10">
           <h1 className="text-3xl font-bold text-center text-gray-800">
@@ -232,7 +234,6 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-
       <div className="max-w-3xl mx-auto p-6">
         <h1 className="text-2xl font-bold mb-6 text-center">
           Custom Accordion (PrimeReact style)
@@ -295,14 +296,12 @@ export default function Dashboard() {
           </Accordion>
         </div>
       </div>
-
       <button
         className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
         onClick={() => setShowConfirm(true)}
       >
         Xóa sản phẩm
       </button>
-
       <CustomConfirmDialog
         visible={showConfirm}
         onHide={() => setShowConfirm(false)}
@@ -317,6 +316,93 @@ export default function Dashboard() {
         }}
         onReject={() => console.log("Đã hủy")}
       />
+      <div className="flex flex-wrap gap-4 p-6">
+        <CustomButton label="Primary" severity="primary" icon="pi pi-check" />
+        <CustomButton
+          label="Outlined"
+          severity="primary"
+          outlined
+          icon="pi pi-user"
+        />
+        <CustomButton
+          label="Success"
+          severity="success"
+          raised
+          icon="pi pi-save"
+        />
+        <CustomButton
+          label="Danger"
+          severity="danger"
+          icon="pi pi-trash"
+          iconPos="right"
+        />
+        <CustomButton label="Loading..." severity="info" loading />
+        <CustomButton
+          label="Text Button"
+          severity="help"
+          text
+          icon="pi pi-info-circle"
+        />
+        <CustomButton label="Rounded Pill" severity="warning" rounded />
+        <CustomButton label="Disabled" disabled icon="pi pi-lock" />
+      </div>
+      <div className="p-6 space-y-4">
+        <CustomRadioButton
+          id="yes"
+          name="agree"
+          value="yes"
+          checkedValue={choice}
+          onChange={(e) => setChoice(e.target.value)}
+          label="Đồng ý"
+        />
+
+        <CustomRadioButton
+          id="no"
+          name="agree"
+          value="no"
+          checkedValue={choice}
+          onChange={(e) => setChoice(e.target.value)}
+          label="Không đồng ý"
+        />
+
+        <CustomRadioButton
+          id="disabled"
+          name="agree"
+          value="disabled"
+          checkedValue={choice}
+          onChange={() => {}}
+          label="Disabled"
+          disabled
+        />
+
+        <CustomRadioButton
+          id="error"
+          name="agree"
+          value="error"
+          checkedValue={choice}
+          onChange={(e) => setChoice(e.target.value)}
+          label="Có lỗi (invalid)"
+          invalid
+        />
+
+        <p>Đang chọn: {choice}</p>
+      </div>
+
+      <TooltipButtonCustom
+        icon="pi pi-trash"
+        tooltip="Xóa"
+        severity="danger"
+        variant="outlined"
+      />
+      <TooltipButtonCustom
+        icon="pi pi-check"
+        label="Xác nhận"
+        tooltip="Hoàn tất"
+        severity="success"
+        variant="outlined"
+        size="large"
+      />
+      <TooltipButtonCustom icon="pi pi-plus" label="Thêm" severity="primary" />
     </div>
   );
 }

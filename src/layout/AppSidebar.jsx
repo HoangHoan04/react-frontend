@@ -3,6 +3,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { convertRoutesToMenuItems } from "@/utils/route.util";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { logo } from "../assets/images";
 
 const checkIsActive = (item, currentPath) => {
   if (
@@ -201,11 +202,13 @@ export default function AppSidebar({
         }
       `}
     >
-      <div className="flex items-center justify-center h-15 p-4 shrink-0">
+      <div className="flex items-center justify-center h-45 p-4 shrink-0">
         <div
-          className={`h-8 w-8 rounded-full transition-transform duration-300 hover:scale-110
+          className={`h-30 w-30 flex justify-center items-center rounded-full transition-transform duration-300 hover:scale-110
             ${isDark ? "bg-white/10" : "bg-blue-500/20"}`}
-        />
+        >
+          <img src={logo} alt="" className="h-25 w-25 rounded-full" />
+        </div>
       </div>
 
       <div className="flex flex-col flex-1 p-2 gap-0">

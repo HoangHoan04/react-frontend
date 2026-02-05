@@ -1,4 +1,3 @@
-import { IconButton } from "@/components/common/IconButton";
 import Breadcrumbs from "@/components/ui/Breadcrumb";
 import FullScreen from "@/components/ui/FullScreen";
 import { ThemeSwitch } from "@/components/ui/ThemeSwitch";
@@ -7,6 +6,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { useRef, useState } from "react";
 import { Avatar } from "../components/common/Avatar";
 import { DropdownMenu } from "../components/common/Dropdown";
+import TooltipButtonCustom from "../components/common/button/TooltipButton";
 
 export default function AppNavbar({
   collapsed,
@@ -61,7 +61,7 @@ export default function AppNavbar({
     >
       <div className="flex items-center justify-between w-full gap-2 sm:gap-4">
         <div className="flex items-center gap-2 sm:gap-4 flex-1 overflow-hidden">
-          <IconButton
+          <TooltipButtonCustom
             icon={collapsed ? "pi pi-bars" : "pi pi-times"}
             onClick={onToggleSidebar}
             tooltip={collapsed ? "Mở menu" : "Đóng menu"}
