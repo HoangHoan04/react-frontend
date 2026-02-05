@@ -2,18 +2,25 @@ import { DndContext, DragOverlay } from "@dnd-kit/core";
 import Droppable from "./Droppable";
 import ChoiceMap from "./ChoiceMap";
 import { useState } from "react";
+import { useTheme } from "../../context/ThemeContext";
+import Chart from "../../components/ui/Chart";
+import { arrayMove } from "@dnd-kit/sortable";
 
 const DashboardPage = () => {
-  const [pos, setPos] = useState({ x: 50, y: 50 });
-  const [activeId, setActiveId] = useState(null);
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
+  const [pos, setPos] = useState({ x: 0, y: 0 });
   const [overDrop, setOverDrop] = useState(false);
+  const [activeId, setActiveId] = useState(null);
+  const [droppedCharts, setDroppedCharts] = useState([]);
 
   const handleDragStart = (event) => {
     setActiveId(event.active.id);
   };
 
   const handleDragEnd = (event) => {
-    const { delta, over } = event;
+    const { delta, over, active } = event;
     if (!over || over.id !== "droppable") {
       setActiveId(null);
       return;
@@ -24,7 +31,39 @@ const DashboardPage = () => {
       y: prev.y + delta.y,
     }));
 
-    setActiveId(null);
+    if (over.id === "droppable") {
+      setDroppedCharts((prev) => {
+        // Nếu item chưa trong dropzone → thêm vào
+        const exists = prev.some((c) => c.id === active.id);
+
+        if (!exists) {
+          return [
+            ...prev,
+            {
+              // id: active.id,
+              id: Date.now().toString(),
+              type: "pie",
+              data: [
+                { name: "Chrome", value: 45 },
+                { name: "Firefox", value: 25 },
+                { name: "Safari", value: 15 },
+                { name: "Edge", value: 10 },
+                { name: "Other", value: 5 },
+              ],
+            },
+          ];
+        }
+
+        // Nếu đã tồn tại → reorder
+        const oldIndex = prev.findIndex((c) => c.id === active.id);
+        const newIndex = prev.findIndex((c) => c.id === over.id);
+
+        // nếu over là droppable (không phải item), thì không reorder
+        if (newIndex === -1) return prev;
+
+        return arrayMove(prev, oldIndex, newIndex);
+      });
+    }
   };
   const handleDragOver = (event) => {
     setOverDrop(event.over?.id === "droppable");
@@ -36,17 +75,34 @@ const DashboardPage = () => {
       onDragEnd={handleDragEnd}
       onDragOver={handleDragOver}
     >
-      <div className="dashboard-page w-5/6 h-full bg-[var(--bg-main)] pl-4 pt-4 border border-black rounded-lg relative">
-        <div className="flex gap-1">
-          <ChoiceMap position={pos} overDrop={overDrop} />
-          <Droppable />
+      <div
+        className={`dashboard-page w-full h-full  p-4 border border-black rounded-lg relative ${isDark ? "bg-gray-900" : "bg-[var(--bg-main)]"}`}
+      >
+        <div className="flex gap-1 h-full">
+          <ChoiceMap
+            position={pos}
+            overDrop={overDrop}
+            isDark={isDark}
+            activeId={activeId}
+          />
+          <Droppable charts={droppedCharts} isDark={isDark} />
         </div>
       </div>
 
-      {/* Draggable “bay tự do” khi kéo */}
       <DragOverlay>
-        {activeId ? (
-          <button className="px-3 py-2 bg-green-400 rounded-lg">Drag me</button>
+        {activeId === "drag-map" ? (
+          <Chart
+            type="pie"
+            isDark={isDark}
+            small={true}
+            data={[
+              { name: "Chrome", value: 45 },
+              { name: "Firefox", value: 25 },
+              { name: "Safari", value: 15 },
+              { name: "Edge", value: 10 },
+              { name: "Other", value: 5 },
+            ]}
+          />
         ) : null}
       </DragOverlay>
     </DndContext>

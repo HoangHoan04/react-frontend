@@ -44,6 +44,10 @@ body {
     sans-serif;
 }
 
+.rdrDefinedRangesWrapper {
+  display: none !important;
+}
+
 /* Button Styles */
 
 /* Table Styles */

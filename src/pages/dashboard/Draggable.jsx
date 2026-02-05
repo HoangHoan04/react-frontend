@@ -1,6 +1,6 @@
 import { useDraggable } from "@dnd-kit/core";
 
-const Draggable = ({ id, children, position, overDrop }) => {
+const ChartDraggableItem = ({ id, children, position, overDrop }) => {
   const { attributes, listeners, setNodeRef } = useDraggable({ id });
 
   return (
@@ -8,17 +8,11 @@ const Draggable = ({ id, children, position, overDrop }) => {
       ref={setNodeRef}
       {...listeners}
       {...attributes}
-      style={{
-        position: "absolute",
-        left: position.x,
-        top: position.y,
-        transform: overDrop ? "scale(9)" : "scale(1)",
-        transition: "transform 0.2s ease",
-      }}
+      className="cursor-grab w-full h-full flex items-center justify-center"
     >
       {children}
     </div>
   );
 };
 
-export default Draggable;
+export default ChartDraggableItem;
