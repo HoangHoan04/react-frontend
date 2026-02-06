@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useId } from "react";
 
-const FloatLabel = ({
+const FloatLabelInput = ({
   label,
   value = "",
   onChange,
@@ -62,7 +62,7 @@ const FloatLabel = ({
   );
 };
 
-FloatLabel.propTypes = {
+FloatLabelInput.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func,
@@ -73,4 +73,4 @@ FloatLabel.propTypes = {
   inputClassName: PropTypes.string,
 };
 
-export default FloatLabel;
+export default FloatLabelInput;
