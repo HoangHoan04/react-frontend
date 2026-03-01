@@ -36,9 +36,7 @@ const CustomRadioButton = ({
     .join(" ");
 
   return (
-    <div
-      className={`inline-flex items-center gap-2.5 select-none ${className}`}
-    >
+    <div className={`inline-flex items-center gap-2 select-none ${className}`}>
       <input
         type="radio"
         id={id}
@@ -61,7 +59,7 @@ const CustomRadioButton = ({
       {label && (
         <label
           htmlFor={id}
-          className={`text-base font-medium leading-none ${
+          className={`text-sm font-medium leading-none mr-2 ${
             disabled ? "opacity-60" : "text-gray-700 dark:text-gray-300"
           } ${invalid ? "text-red-600 dark:text-red-400" : ""} ${labelClassName}`}
         >

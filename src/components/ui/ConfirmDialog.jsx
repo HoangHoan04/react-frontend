@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import ButtonCustom from "../common/button/Button";
+import { default as CustomButton } from "../common/button/Button";
 
 const CustomConfirmDialog = ({
   visible = false,
@@ -15,6 +15,7 @@ const CustomConfirmDialog = ({
   severity = "warning",
   onAccept,
   onReject,
+  isDark = false,
 }) => {
   const dialogRef = useRef(null);
 
@@ -58,7 +59,7 @@ const CustomConfirmDialog = ({
 
   const content = (
     <div
-      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 transition-opacity duration-300"
+      className={`fixed inset-0 z-9999 flex items-center justify-center backdrop-blur-sm p-4 transition-opacity duration-300 ${isDark ? "bg-black bg-opacity-70" : ""}`}
       onClick={(e) => {
         if (e.target === e.currentTarget) onHide?.();
       }}
@@ -66,8 +67,8 @@ const CustomConfirmDialog = ({
       <div
         ref={dialogRef}
         className={`
-          w-full max-w-md sm:max-w-lg transform bg-white dark:bg-gray-900 
-          rounded-2xl shadow-2xl ring-1 ring-black/10 dark:ring-white/10 
+          w-full max-w-md sm:max-w-lg transform
+          rounded-2xl shadow-2xl ring-1
           overflow-hidden transition-all duration-300 
           scale-100 opacity-100 animate-in fade-in zoom-in-95
         `}
@@ -83,37 +84,37 @@ const CustomConfirmDialog = ({
         </div>
 
         {/* Body */}
-        <div className="px-6 py-6 text-gray-700 dark:text-gray-300">
+        <div className={`px-6 py-6 ${isDark ? "bg-gray-900" : "bg-white"}`}>
           <p className="text-base leading-relaxed whitespace-pre-line">
             {message}
           </p>
         </div>
 
         {/* Footer */}
-        <div className="flex flex-col sm:flex-row justify-end gap-3 px-6 py-5 border-t border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/30">
-          <ButtonCustom
+        <div
+          className={`flex flex-col sm:flex-row justify-end gap-3 px-6 py-5 border-t ${isDark ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"}`}
+        >
+          <CustomButton
             label={rejectLabel}
-            variant="outlined"
-            type="secondary"
-            icon="pi pi-times"
+            severity="danger"
+            icon="pi pi-times-circle"
             iconPos="left"
-            className={`min-w-30 justify-center ${rejectClassName}`}
+            className={`justify-center ${rejectClassName}`}
             onClick={handleReject}
           />
 
-          <ButtonCustom
+          <CustomButton
             label={acceptLabel}
-            variant="contained"
-            type={
+            severity={
               severity === "danger"
-                ? "error"
+                ? "danger"
                 : severity === "warning"
                   ? "warning"
                   : "primary"
             }
-            icon="pi pi-check"
+            icon="pi pi-check-circle"
             iconPos="left"
-            className={`min-w-30 justify-center font-semibold ${acceptClassName}`}
+            className={`justify-center font-semibold ${acceptClassName}`}
             onClick={handleAccept}
           />
         </div>
