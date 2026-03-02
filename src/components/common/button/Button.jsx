@@ -18,10 +18,10 @@ const CustomButton = ({
 }) => {
   const severityStyles = {
     primary: {
-      base: "bg-primary-500 hover:bg-primary-600 active:bg-primary-700 text-white border-primary-500",
+      base: "bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white border-blue-500",
       outlined:
-        "border-primary-500 text-primary-500 hover:bg-primary-50 active:bg-primary-100",
-      text: "text-primary-500 hover:bg-primary-50 active:bg-primary-100",
+        "border-blue-500 text-blue-500 hover:bg-blue-50 active:bg-blue-100",
+      text: "text-blue-500 hover:bg-blue-50 active:bg-blue-100",
     },
     secondary: {
       base: "bg-gray-600 hover:bg-gray-700 active:bg-gray-800 text-white border-gray-600",
@@ -78,13 +78,13 @@ const CustomButton = ({
     // Căn giữa nội dung
     "inline-flex items-center justify-center gap-2",
     // Kích thước & padding giống PrimeReact button
-    "px-4 py-2.5 text-base font-medium leading-tight",
+    "px-2.5 py-1.5 text-sm font-medium leading-tight",
     // Bo góc mặc định
     "rounded-md",
     // Transition mượt
     "transition-all duration-200 ease-in-out",
     // Focus ring giống PrimeReact
-    "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-400/50",
+    "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400/50",
     // Disabled state
     disabled && "opacity-60 cursor-not-allowed",
     // Raised (box-shadow)
@@ -99,11 +99,11 @@ const CustomButton = ({
 
   // Xử lý icon & loading
   const showIcon = icon && !loading;
-  const iconClass = `pi ${icon} text-lg ${loading ? "animate-spin" : ""}`;
+  const iconClass = `pi ${icon} text-base ${loading ? "animate-spin" : ""}`;
 
   // Loading icon mặc định (spinner)
   const loadingIcon = loading ? (
-    <i className="pi pi-spin pi-spinner text-lg" />
+    <i className="pi pi-spin pi-spinner text-base" />
   ) : null;
 
   return (
