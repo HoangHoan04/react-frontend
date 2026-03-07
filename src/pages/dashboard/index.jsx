@@ -75,7 +75,7 @@ const DashboardPage = () => {
       onDragOver={handleDragOver}
     >
       <div
-        className={`dashboard-page w-full h-full  p-4 border border-black rounded-lg relative ${isDark ? "bg-gray-900" : "bg-[var(--bg-main)]"}`}
+        className={`dashboard-page w-full h-full  p-4 border border-black rounded-lg relative ${isDark ? "bg-gray-900" : "bg-(--bg-main)"}`}
       >
         <div className="flex gap-1 h-full">
           <ChoiceChart
