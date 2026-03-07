@@ -1,6 +1,6 @@
 import { useDraggable } from "@dnd-kit/core";
 
-const ChartDraggableItem = ({ id, children, position, overDrop }) => {
+const ChartDraggableItem = ({ id, children }) => {
   const { attributes, listeners, setNodeRef } = useDraggable({ id });
 
   return (

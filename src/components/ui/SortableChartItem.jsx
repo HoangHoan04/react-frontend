@@ -11,6 +11,8 @@ export default function SortableChartItem({ id, chart, isDark }) {
     transition,
   };
 
+  console.log(chart);
+
   return (
     <div
       ref={setNodeRef}
@@ -26,7 +28,7 @@ export default function SortableChartItem({ id, chart, isDark }) {
       </div>
 
       <Chart
-        type="pie"
+        type={chart.type}
         isDark={isDark}
         small={false}
         data={[

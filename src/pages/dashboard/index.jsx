@@ -1,10 +1,10 @@
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import Droppable from "./Droppable";
-import ChoiceMap from "./ChoiceMap";
 import { useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
 import Chart from "../../components/ui/Chart";
 import { arrayMove } from "@dnd-kit/sortable";
+import ChoiceChart from "./ChoiceChart";
 
 const DashboardPage = () => {
   const { theme } = useTheme();
@@ -33,7 +33,6 @@ const DashboardPage = () => {
 
     if (over.id === "droppable") {
       setDroppedCharts((prev) => {
-        // Nếu item chưa trong dropzone → thêm vào
         const exists = prev.some((c) => c.id === active.id);
 
         if (!exists) {
@@ -42,7 +41,7 @@ const DashboardPage = () => {
             {
               // id: active.id,
               id: Date.now().toString(),
-              type: "pie",
+              type: "bar",
               data: [
                 { name: "Chrome", value: 45 },
                 { name: "Firefox", value: 25 },
@@ -79,7 +78,7 @@ const DashboardPage = () => {
         className={`dashboard-page w-full h-full  p-4 border border-black rounded-lg relative ${isDark ? "bg-gray-900" : "bg-[var(--bg-main)]"}`}
       >
         <div className="flex gap-1 h-full">
-          <ChoiceMap
+          <ChoiceChart
             position={pos}
             overDrop={overDrop}
             isDark={isDark}
@@ -92,7 +91,7 @@ const DashboardPage = () => {
       <DragOverlay>
         {activeId === "drag-map" ? (
           <Chart
-            type="pie"
+            type="bar"
             isDark={isDark}
             small={true}
             data={[

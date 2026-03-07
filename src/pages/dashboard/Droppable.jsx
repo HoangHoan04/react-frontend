@@ -9,9 +9,6 @@ function Droppable({ charts = [], isDark }) {
   const { isOver, setNodeRef } = useDroppable({
     id: "droppable",
   });
-  const style = {
-    color: isOver ? "green" : undefined,
-  };
   let gridCols = "grid-cols-1";
   if (charts.length === 2) gridCols = "grid-cols-2";
   if (charts.length >= 3) gridCols = "grid-cols-2";

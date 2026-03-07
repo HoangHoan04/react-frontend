@@ -3,7 +3,7 @@ import ChartDraggableItem from "./Draggable";
 import PopupDateRangePicker from "../../components/ui/PopupDateRangePicker";
 import Chart from "../../components/ui/Chart";
 
-const ChoiceMap = ({ position, overDrop, isDark }) => {
+const ChoiceChart = ({ isDark }) => {
   return (
     <section className="w-2/6 p-2">
       <div className="py-2">
@@ -56,13 +56,9 @@ const ChoiceMap = ({ position, overDrop, isDark }) => {
       </div>
 
       <div className="w-full h-52 border-black border-2 border-dashed mt-4 rounded-2xl relative overflow-hidden">
-        <ChartDraggableItem
-          id="drag-map"
-          position={position}
-          overDrop={overDrop}
-        >
+        <ChartDraggableItem id="drag-map">
           <Chart
-            type="pie"
+            type="bar"
             isDark={isDark}
             small={true}
             data={[
@@ -79,4 +75,4 @@ const ChoiceMap = ({ position, overDrop, isDark }) => {
   );
 };
 
-export default ChoiceMap;
+export default ChoiceChart;
