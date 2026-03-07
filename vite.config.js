@@ -15,4 +15,32 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    chunkSizeWarningLimit: 1600,
+    rollupOptions: {
+      onwarn(warning, warn) {
+        // Ignore eval warnings from lottie-web
+        if (warning.code === "EVAL" && warning.id?.includes("lottie")) {
+          return;
+        }
+        warn(warning);
+      },
+      output: {
+        manualChunks: {
+          // React core
+          vendor: ["react", "react-dom", "react-router-dom"],
+          // Charts library
+          charts: ["recharts"],
+          // Animations
+          animations: ["lottie-react", "lottie-web"],
+          // UI libraries
+          ui: ["@tanstack/react-query", "date-fns", "react-date-range"],
+          // State management
+          state: ["zustand"],
+          // DnD
+          dnd: ["@dnd-kit/core", "@dnd-kit/sortable"],
+        },
+      },
+    },
+  },
 });
