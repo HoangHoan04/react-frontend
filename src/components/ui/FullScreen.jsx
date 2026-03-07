@@ -1,11 +1,8 @@
-import { useTheme } from "@/context/ThemeContext";
 import { useEffect, useState } from "react";
 import TooltipButtonCustom from "../common/button/TooltipButton";
 
 const FullScreen = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -35,7 +32,6 @@ const FullScreen = () => {
       icon={isFullscreen ? "pi pi-window-minimize" : "pi pi-window-maximize"}
       onClick={toggleFullscreen}
       tooltip={isFullscreen ? "Thoát toàn màn hình" : "Toàn màn hình"}
-      isDark={isDark}
       tooltipPosition="bottom"
     />
   );

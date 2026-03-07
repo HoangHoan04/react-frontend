@@ -1,4 +1,4 @@
-import { useLoading } from "@/context/LoadingContext";
+import { useLoadingStore, useToastStore } from "@/stores";
 import { useState } from "react";
 import { Accordion, AccordionTab } from "../../../components/common/Accordion";
 import CustomButton from "../../../components/common/button/Button";
@@ -9,11 +9,11 @@ import FloatLabelInput from "../../../components/common/input/FloatLabelInput";
 import CustomSelect from "../../../components/common/Select";
 import DataTable from "../../../components/common/table/DataTable";
 import CustomConfirmDialog from "../../../components/ui/ConfirmDialog";
-import { useToast } from "../../../context/ToastContext";
 
 export default function Dashboard() {
-  const { showLoading, hideLoading } = useLoading();
-  const { showToast } = useToast();
+  const showLoading = useLoadingStore((state) => state.showLoading);
+  const hideLoading = useLoadingStore((state) => state.hideLoading);
+  const showToast = useToastStore((state) => state.showToast);
   const handleTestLoading = () => {
     showLoading();
     setTimeout(() => {

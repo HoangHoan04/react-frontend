@@ -1,4 +1,4 @@
-import { useTheme } from "@/context/ThemeContext";
+import { useThemeStore } from "@/stores";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 
@@ -15,6 +15,7 @@ export default function CustomSelect({
   const [dropdownPosition, setDropdownPosition] = useState(position);
   const dropdownRef = useRef(null);
   const triggerRef = useRef(null);
+  const theme = useThemeStore((state) => state.theme);
 
   // Chuẩn hóa options về dạng {label, value}
   const normalizedOptions = options.map((opt) => {
@@ -73,7 +74,6 @@ export default function CustomSelect({
     }
   };
 
-  const { theme } = useTheme();
   const isDark = theme === "dark";
 
   return (

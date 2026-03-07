@@ -1,16 +1,6 @@
-import { createContext, useCallback, useContext, useState } from "react";
+import { useToastStore } from "@/stores";
+import { useState } from "react";
 import { createPortal } from "react-dom";
-
-const ToastContext = createContext(undefined);
-
-export const useToast = () => {
-  const ctx = useContext(ToastContext);
-  if (!ctx)
-    throw new Error(
-      "Phương thức useToast phải được sử dụng trong ToastProvider",
-    );
-  return ctx;
-};
 
 const ToastContainer = ({ toast, onClose }) => {
   const [isClosing, setIsClosing] = useState(false);
@@ -221,52 +211,31 @@ const ToastContainer = ({ toast, onClose }) => {
   );
 };
 
-export const ToastProvider = ({ children }) => {
-  const [toasts, setToasts] = useState([]);
+export const ToastRenderer = () => {
+  const { toasts, removeToast } = useToastStore();
 
-  const showToast = useCallback(
-    ({ type = "info", title = "", message = "", timeout = 3000 }) => {
-      const id = Math.random().toString(36).substring(2, 9);
-      const newToast = { id, type, title, message, timeout };
+  if (toasts.length === 0) return null;
 
-      setToasts((prev) => [...prev, newToast]);
-
-      setTimeout(() => {
-        setToasts((prev) => prev.filter((t) => t.id !== id));
-      }, timeout);
-    },
-    [],
-  );
-
-  const removeToast = useCallback((id) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
-  }, []);
-
-  return (
-    <ToastContext.Provider value={{ showToast }}>
-      {children}
-      {createPortal(
-        <div
-          style={{
-            position: "fixed",
-            top: "20px",
-            right: "20px",
-            zIndex: 9999,
-            pointerEvents: "none",
-          }}
-        >
-          <div style={{ pointerEvents: "auto" }}>
-            {toasts.map((toast) => (
-              <ToastContainer
-                key={toast.id}
-                toast={toast}
-                onClose={() => removeToast(toast.id)}
-              />
-            ))}
-          </div>
-        </div>,
-        document.body,
-      )}
-    </ToastContext.Provider>
+  return createPortal(
+    <div
+      style={{
+        position: "fixed",
+        top: "20px",
+        right: "20px",
+        zIndex: 9999,
+        pointerEvents: "none",
+      }}
+    >
+      <div style={{ pointerEvents: "auto" }}>
+        {toasts.map((toast) => (
+          <ToastContainer
+            key={toast.id}
+            toast={toast}
+            onClose={() => removeToast(toast.id)}
+          />
+        ))}
+      </div>
+    </div>,
+    document.body,
   );
 };

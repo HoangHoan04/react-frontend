@@ -1,13 +1,13 @@
+import { useThemeStore } from "@/stores";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
-import Droppable from "./Droppable";
-import { useState } from "react";
-import { useTheme } from "../../context/ThemeContext";
-import Chart from "../../components/ui/Chart";
 import { arrayMove } from "@dnd-kit/sortable";
+import { useState } from "react";
+import Chart from "../../components/ui/Chart";
 import ChoiceChart from "./ChoiceChart";
+import Droppable from "./Droppable";
 
 const DashboardPage = () => {
-  const { theme } = useTheme();
+  const theme = useThemeStore((state) => state.theme);
   const isDark = theme === "dark";
 
   const [pos, setPos] = useState({ x: 0, y: 0 });

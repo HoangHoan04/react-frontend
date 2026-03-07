@@ -1,5 +1,5 @@
 import { ROUTES } from "@/common/constants/routes";
-import { useTheme } from "@/context/ThemeContext";
+import { useThemeStore } from "@/stores";
 import { convertRoutesToMenuItems } from "@/utils/route.util";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -23,7 +23,7 @@ export default function AppSidebar({
   sidebarWidth,
   collapsedWidth,
 }) {
-  const { theme } = useTheme();
+  const theme = useThemeStore((state) => state.theme);
   const location = useLocation();
   const navigate = useNavigate();
 

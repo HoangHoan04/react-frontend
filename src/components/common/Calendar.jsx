@@ -1,4 +1,4 @@
-import { useTheme } from "@/context/ThemeContext";
+import { useThemeStore } from "@/stores";
 import { format, isValid, parse } from "date-fns";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
@@ -12,7 +12,7 @@ const CustomDateInput = ({
   type = "date", // "date", "time", "datetime",
   ...rest
 }) => {
-  const { theme } = useTheme();
+  const theme = useThemeStore((state) => state.theme);
   const isDark = theme === "dark";
 
   const getFormat = () => {

@@ -1,4 +1,4 @@
-import { useTheme } from "@/context/ThemeContext";
+import { useThemeStore } from "@/stores";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import AppNavbar from "./AppNavbar";
@@ -6,7 +6,7 @@ import AppSidebar from "./AppSidebar";
 
 export default function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
-  const { theme } = useTheme();
+  const theme = useThemeStore((state) => state.theme);
   const isDark = theme === "dark";
 
   const sidebarWidth = 280;
