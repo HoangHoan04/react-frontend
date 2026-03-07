@@ -1,6 +1,6 @@
 import { ROUTES } from "@/common/constants/routes";
 import AppLayout from "@/layout/AppLayout";
-import Dashboard from "@/pages/main/dashboard";
+import Dashboard from "@/pages/dashboard";
 import { Route, Routes } from "react-router-dom";
 
 export default function AppRoutes() {
