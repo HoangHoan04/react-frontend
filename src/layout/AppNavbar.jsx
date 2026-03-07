@@ -67,6 +67,7 @@ export default function AppNavbar({
             tooltip={collapsed ? "Mở menu" : "Đóng menu"}
             isDark={isDark}
             style={{ marginLeft: 5 }}
+            severity="outlined"
           />
           <div className="hidden sm:block">
             <Breadcrumbs theme={theme} />

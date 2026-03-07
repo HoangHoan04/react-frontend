@@ -34,52 +34,50 @@ const CustomTooltipButton = ({
   const severityStyles = {
     primary: {
       default:
-        "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white shadow-sm focus:ring-blue-500/50",
-      text: "bg-transparent hover:bg-blue-50 active:bg-blue-100 text-blue-600 focus:ring-blue-500/50",
-      outlined:
-        "border-2 border-blue-600 hover:bg-blue-50 active:bg-blue-100 text-blue-600 focus:ring-blue-500/50",
+        "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white shadow-sm",
+      text: "bg-transparent hover:bg-blue-50 active:bg-blue-100 text-blue-600",
+      outlined: "border-2 border-blue-600 text-blue-600",
+    },
+    outlined: {
+      default: "text-gray-600",
+      text: "bg-transparent text-gray-600",
+      outlined: "text-gray-600",
     },
     secondary: {
       default:
-        "bg-gray-600 hover:bg-gray-700 active:bg-gray-800 text-white shadow-sm focus:ring-gray-500/50",
-      text: "bg-transparent hover:bg-gray-100 active:bg-gray-200 text-gray-600 focus:ring-gray-500/50",
-      outlined:
-        "border-2 border-gray-600 hover:bg-gray-50 active:bg-gray-100 text-gray-600 focus:ring-gray-500/50",
+        "bg-gray-600 hover:bg-gray-700 active:bg-gray-800 text-white shadow-sm",
+      text: "bg-transparent hover:bg-gray-100 active:bg-gray-200 text-gray-600",
+      outlined: "border-2 border-gray-600 text-gray-600",
     },
     success: {
       default:
-        "bg-green-600 hover:bg-green-700 active:bg-green-800 text-white shadow-sm focus:ring-green-500/50",
-      text: "bg-transparent hover:bg-green-50 active:bg-green-100 text-green-600 focus:ring-green-500/50",
-      outlined:
-        "border-2 border-green-600 hover:bg-green-50 active:bg-green-100 text-green-600 focus:ring-green-500/50",
+        "bg-green-600 hover:bg-green-700 active:bg-green-800 text-white shadow-sm",
+      text: "bg-transparent hover:bg-green-50 active:bg-green-100 text-green-600",
+      outlined: "border-2 border-green-600 text-green-600",
     },
     info: {
       default:
-        "bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white shadow-sm focus:ring-blue-400/50",
-      text: "bg-transparent hover:bg-blue-50 active:bg-blue-100 text-blue-500 focus:ring-blue-400/50",
-      outlined:
-        "border-2 border-blue-500 hover:bg-blue-50 active:bg-blue-100 text-blue-500 focus:ring-blue-400/50",
+        "bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white shadow-sm",
+      text: "bg-transparent hover:bg-blue-50 active:bg-blue-100 text-blue-500",
+      outlined: "border-2 border-blue-500 text-blue-500",
     },
     warning: {
       default:
-        "bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white shadow-sm focus:ring-orange-400/50",
-      text: "bg-transparent hover:bg-orange-50 active:bg-orange-100 text-orange-500 focus:ring-orange-400/50",
-      outlined:
-        "border-2 border-orange-500 hover:bg-orange-50 active:bg-orange-100 text-orange-500 focus:ring-orange-400/50",
+        "bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white shadow-sm",
+      text: "bg-transparent hover:bg-orange-50 active:bg-orange-100 text-orange-500",
+      outlined: "border-2 border-orange-500 text-orange-500",
     },
     danger: {
       default:
-        "bg-red-600 hover:bg-red-700 active:bg-red-800 text-white shadow-sm focus:ring-red-500/50",
-      text: "bg-transparent hover:bg-red-50 active:bg-red-100 text-red-600 focus:ring-red-500/50",
-      outlined:
-        "border-2 border-red-600 hover:bg-red-50 active:bg-red-100 text-red-600 focus:ring-red-500/50",
+        "bg-red-600 hover:bg-red-700 active:bg-red-800 text-white shadow-sm",
+      text: "bg-transparent hover:bg-red-50 active:bg-red-100 text-red-600",
+      outlined: "border-2 border-red-600 text-red-600",
     },
     help: {
       default:
-        "bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white shadow-sm focus:ring-purple-500/50",
-      text: "bg-transparent hover:bg-purple-50 active:bg-purple-100 text-purple-600 focus:ring-purple-500/50",
-      outlined:
-        "border-2 border-purple-600 hover:bg-purple-50 active:bg-purple-100 text-purple-600 focus:ring-purple-500/50",
+        "bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white shadow-sm",
+      text: "bg-transparent hover:bg-purple-50 active:bg-purple-100 text-purple-600",
+      outlined: "border-2 border-purple-600 text-purple-600",
     },
   };
 
@@ -123,7 +121,7 @@ const CustomTooltipButton = ({
         className={`
           inline-flex items-center justify-center
           font-medium transition-all duration-200
-          focus:outline-none focus:ring-2 focus:ring-offset-2
+          focus:outline-none
           disabled:opacity-50 disabled:cursor-not-allowed
           ${sizeClasses[size]}
           ${shapeClass}

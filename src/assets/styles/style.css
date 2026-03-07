@@ -1,3 +1,11 @@
+/* App Styles */
+
+* {
+  /* margin: 0;
+  padding: 0; */
+  box-sizing: border-box;
+}
+
 :root {
   /* Main Color */
   --bg-main: #f5f7fa;
@@ -35,3 +43,13 @@ body {
     BlinkMacSystemFont,
     sans-serif;
 }
+
+.rdrDefinedRangesWrapper {
+  display: none !important;
+}
+
+/* Button Styles */
+
+/* Table Styles */
+
+/* Toast Styles */
