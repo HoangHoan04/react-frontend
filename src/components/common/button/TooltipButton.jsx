@@ -1,8 +1,7 @@
-// TooltipButtonCustom.jsx
 import PropTypes from "prop-types";
 import { useRef, useState } from "react";
 
-const TooltipButtonCustom = ({
+const CustomTooltipButton = ({
   icon,
   label,
   onClick,
@@ -10,140 +9,108 @@ const TooltipButtonCustom = ({
   tooltipPosition = "top",
   className = "",
   style = {},
-  isDark = false,
   size = "default", // "small" | "default" | "large"
   variant = "default", // "default" | "text" | "outlined"
-  severity = "primary", // MỚI: primary | secondary | success | info | warning | danger | help | contrast
+  severity = "primary", // primary | secondary | success | info | warning | danger | help
   disabled = false,
   ...rest
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const buttonRef = useRef(null);
 
-  // Kích thước
-  const sizeClasses =
-    {
-      small: "min-w-8 h-8 text-sm px-2.5",
-      default: "min-w-9 h-9 text-base px-3",
-      large: "min-w-11 h-11 text-lg px-4",
-    }[size] || "min-w-9 h-9 text-base px-3";
+  const hasLabel = !!label;
+
+  // Kích thước button
+  const sizeClasses = {
+    small: hasLabel ? "h-8 px-3 text-sm gap-1.5" : "w-8 h-8 text-sm",
+    default: hasLabel ? "h-10 px-4 text-base gap-2" : "w-10 h-10 text-base",
+    large: hasLabel ? "h-12 px-5 text-lg gap-2.5" : "w-12 h-12 text-lg",
+  };
 
   // Shape: rounded-full nếu chỉ icon, rounded-md nếu có label
-  const hasLabel = !!label;
   const shapeClass = hasLabel ? "rounded-md" : "rounded-full";
 
-  // Màu theo severity (gần giống PrimeReact Aura theme)
-  const severityColors = {
+  // Màu theo severity và variant
+  const severityStyles = {
     primary: {
-      main: "#6366f1",
-      light: "#818cf8",
-      hover: "#4f46e5",
-      ring: "#c7d2fe",
+      default:
+        "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white shadow-sm focus:ring-blue-500/50",
+      text: "bg-transparent hover:bg-blue-50 active:bg-blue-100 text-blue-600 focus:ring-blue-500/50",
+      outlined:
+        "border-2 border-blue-600 hover:bg-blue-50 active:bg-blue-100 text-blue-600 focus:ring-blue-500/50",
     },
     secondary: {
-      main: "#6b7280",
-      light: "#9ca3af",
-      hover: "#4b5563",
-      ring: "#d1d5db",
+      default:
+        "bg-gray-600 hover:bg-gray-700 active:bg-gray-800 text-white shadow-sm focus:ring-gray-500/50",
+      text: "bg-transparent hover:bg-gray-100 active:bg-gray-200 text-gray-600 focus:ring-gray-500/50",
+      outlined:
+        "border-2 border-gray-600 hover:bg-gray-50 active:bg-gray-100 text-gray-600 focus:ring-gray-500/50",
     },
     success: {
-      main: "#10b981",
-      light: "#34d399",
-      hover: "#059669",
-      ring: "#a7f3d0",
+      default:
+        "bg-green-600 hover:bg-green-700 active:bg-green-800 text-white shadow-sm focus:ring-green-500/50",
+      text: "bg-transparent hover:bg-green-50 active:bg-green-100 text-green-600 focus:ring-green-500/50",
+      outlined:
+        "border-2 border-green-600 hover:bg-green-50 active:bg-green-100 text-green-600 focus:ring-green-500/50",
     },
     info: {
-      main: "#3b82f6",
-      light: "#60a5fa",
-      hover: "#2563eb",
-      ring: "#bfdbfe",
+      default:
+        "bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white shadow-sm focus:ring-blue-400/50",
+      text: "bg-transparent hover:bg-blue-50 active:bg-blue-100 text-blue-500 focus:ring-blue-400/50",
+      outlined:
+        "border-2 border-blue-500 hover:bg-blue-50 active:bg-blue-100 text-blue-500 focus:ring-blue-400/50",
     },
     warning: {
-      main: "#f59e0b",
-      light: "#fbbf24",
-      hover: "#d97706",
-      ring: "#fde68a",
+      default:
+        "bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white shadow-sm focus:ring-orange-400/50",
+      text: "bg-transparent hover:bg-orange-50 active:bg-orange-100 text-orange-500 focus:ring-orange-400/50",
+      outlined:
+        "border-2 border-orange-500 hover:bg-orange-50 active:bg-orange-100 text-orange-500 focus:ring-orange-400/50",
     },
     danger: {
-      main: "#ef4444",
-      light: "#f87171",
-      hover: "#dc2626",
-      ring: "#fecaca",
+      default:
+        "bg-red-600 hover:bg-red-700 active:bg-red-800 text-white shadow-sm focus:ring-red-500/50",
+      text: "bg-transparent hover:bg-red-50 active:bg-red-100 text-red-600 focus:ring-red-500/50",
+      outlined:
+        "border-2 border-red-600 hover:bg-red-50 active:bg-red-100 text-red-600 focus:ring-red-500/50",
     },
     help: {
-      main: "#8b5cf6",
-      light: "#a78bfa",
-      hover: "#7c3aed",
-      ring: "#ddd6fe",
-    },
-    contrast: {
-      main: isDark ? "#f3f4f6" : "#111827",
-      light: isDark ? "#e5e7eb" : "#374151",
-      hover: isDark ? "#d1d5db" : "#1f2937",
-      ring: isDark ? "#9ca3af" : "#6b7280",
+      default:
+        "bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white shadow-sm focus:ring-purple-500/50",
+      text: "bg-transparent hover:bg-purple-50 active:bg-purple-100 text-purple-600 focus:ring-purple-500/50",
+      outlined:
+        "border-2 border-purple-600 hover:bg-purple-50 active:bg-purple-100 text-purple-600 focus:ring-purple-500/50",
     },
   };
 
-  const color = severityColors[severity] || severityColors.primary;
+  const buttonStyles =
+    severityStyles[severity]?.[variant] || severityStyles.primary.default;
 
-  // Base styles
-  const baseStyles = `
-    inline-flex items-center justify-center gap-2
-    font-medium transition-all duration-200
-    focus:outline-none focus:ring-2 focus:ring-offset-1
-    disabled:opacity-50 disabled:cursor-not-allowed
-    cursor-pointer
-  `;
-
-  // Variant styles (áp dụng màu từ severity)
-  const variantStyles =
-    {
-      default: isDark
-        ? `bg-[${color.main}] hover:bg-[${color.hover}] active:bg-[${color.hover}] text-white shadow-sm`
-        : `bg-[${color.main}] hover:bg-[${color.hover}] active:bg-[${color.hover}] text-white shadow-sm`,
-      text: isDark
-        ? `bg-transparent hover:bg-[${color.light}]/20 active:bg-[${color.light}]/30 text-[${color.main}]`
-        : `bg-transparent hover:bg-[${color.light}]/10 active:bg-[${color.light}]/20 text-[${color.main}]`,
-      outlined: isDark
-        ? `border border-[${color.light}] hover:bg-[${color.light}]/15 active:bg-[${color.light}]/25 text-[${color.main}]`
-        : `border border-[${color.main}]/60 hover:bg-[${color.main}]/5 active:bg-[${color.main}]/10 text-[${color.main}]`,
-    }[variant] || variantStyles.default;
-
-  // Focus ring theo severity
-  const focusRing = `focus:ring-[${color.ring}]/50`;
-
-  // Tooltip position
-  const getTooltipPosition = () => {
-    const positions = {
-      top: {
-        container: "bottom-full left-1/2 -translate-x-1/2 mb-2",
-        arrow:
-          "top-full left-1/2 -translate-x-1/2 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent",
-        arrowColor: isDark ? "border-t-[#262626]" : "border-t-[#262626]",
-      },
-      bottom: {
-        container: "top-full left-1/2 -translate-x-1/2 mt-2",
-        arrow:
-          "bottom-full left-1/2 -translate-x-1/2 border-l-4 border-r-4 border-b-4 border-l-transparent border-r-transparent",
-        arrowColor: isDark ? "border-b-[#262626]" : "border-b-[#262626]",
-      },
-      right: {
-        container: "left-full top-1/2 -translate-y-1/2 ml-2",
-        arrow:
-          "right-full top-1/2 -translate-y-1/2 border-t-4 border-b-4 border-r-4 border-t-transparent border-b-transparent",
-        arrowColor: isDark ? "border-r-[#262626]" : "border-r-[#262626]",
-      },
-      left: {
-        container: "right-full top-1/2 -translate-y-1/2 mr-2",
-        arrow:
-          "left-full top-1/2 -translate-y-1/2 border-t-4 border-b-4 border-l-4 border-t-transparent border-b-transparent",
-        arrowColor: isDark ? "border-l-[#262626]" : "border-l-[#262626]",
-      },
-    };
-    return positions[tooltipPosition] || positions.top;
+  // Tooltip position classes
+  const tooltipPositions = {
+    top: {
+      container: "bottom-full left-1/2 -translate-x-1/2 mb-2",
+      arrow:
+        "top-full left-1/2 -translate-x-1/2 border-l-transparent border-r-transparent border-t-gray-900 border-l-4 border-r-4 border-t-4",
+    },
+    bottom: {
+      container: "top-full left-1/2 -translate-x-1/2 mt-2",
+      arrow:
+        "bottom-full left-1/2 -translate-x-1/2 border-l-transparent border-r-transparent border-b-gray-900 border-l-4 border-r-4 border-b-4",
+    },
+    right: {
+      container: "left-full top-1/2 -translate-y-1/2 ml-2",
+      arrow:
+        "right-full top-1/2 -translate-y-1/2 border-t-transparent border-b-transparent border-r-gray-900 border-t-4 border-b-4 border-r-4",
+    },
+    left: {
+      container: "right-full top-1/2 -translate-y-1/2 mr-2",
+      arrow:
+        "left-full top-1/2 -translate-y-1/2 border-t-transparent border-b-transparent border-l-gray-900 border-t-4 border-b-4 border-l-4",
+    },
   };
 
-  const tooltipPos = getTooltipPosition();
+  const tooltipPos = tooltipPositions[tooltipPosition] || tooltipPositions.top;
 
   return (
     <div className="relative inline-block">
@@ -154,45 +121,45 @@ const TooltipButtonCustom = ({
         onMouseLeave={() => setShowTooltip(false)}
         disabled={disabled}
         className={`
-          ${baseStyles}
-          ${sizeClasses}
+          inline-flex items-center justify-center
+          font-medium transition-all duration-200
+          focus:outline-none focus:ring-2 focus:ring-offset-2
+          disabled:opacity-50 disabled:cursor-not-allowed
+          ${sizeClasses[size]}
           ${shapeClass}
-          ${variantStyles}
-          ${focusRing}
+          ${buttonStyles}
           ${className}
         `}
         style={style}
         {...rest}
       >
-        {icon && (
-          <i className={`${icon} text-lg ${hasLabel ? "" : "text-xl"}`} />
-        )}
-        {label && <span className="leading-none">{label}</span>}
+        {icon && <i className={`${icon} ${hasLabel ? "" : "text-lg"}`} />}
+        {label && <span className="font-medium">{label}</span>}
       </button>
 
+      {/* Tooltip */}
       {showTooltip && tooltip && !disabled && (
         <div
           className={`
-            absolute z-50 px-3 py-1.5 text-xs rounded shadow-md whitespace-nowrap pointer-events-none
-            ${
-              isDark
-                ? "bg-[#1f1f1f] text-white border"
-                : "bg-gray-800 text-white shadow-xl"
-            }
+            absolute z-9999
+            px-3 py-2 
+            text-xs font-medium text-white
+            bg-gray-900 rounded-md shadow-xl
+            whitespace-nowrap pointer-events-none
+            animate-in fade-in zoom-in-95 duration-200
             ${tooltipPos.container}
           `}
         >
           {tooltip}
-          <div
-            className={`absolute w-0 h-0 ${tooltipPos.arrow} ${tooltipPos.arrowColor}`}
-          />
+          {/* Arrow */}
+          <div className={`absolute w-0 h-0 ${tooltipPos.arrow}`} />
         </div>
       )}
     </div>
   );
 };
 
-TooltipButtonCustom.propTypes = {
+CustomTooltipButton.propTypes = {
   icon: PropTypes.string,
   label: PropTypes.string,
   onClick: PropTypes.func,
@@ -200,7 +167,6 @@ TooltipButtonCustom.propTypes = {
   tooltipPosition: PropTypes.oneOf(["top", "bottom", "left", "right"]),
   className: PropTypes.string,
   style: PropTypes.object,
-  isDark: PropTypes.bool,
   size: PropTypes.oneOf(["small", "default", "large"]),
   variant: PropTypes.oneOf(["default", "text", "outlined"]),
   severity: PropTypes.oneOf([
@@ -211,9 +177,8 @@ TooltipButtonCustom.propTypes = {
     "warning",
     "danger",
     "help",
-    "contrast",
   ]),
   disabled: PropTypes.bool,
 };
 
-export default TooltipButtonCustom;
+export default CustomTooltipButton;
