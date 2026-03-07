@@ -10,33 +10,6 @@ const Product_manager = () => {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
   const { showToast } = useToast();
-  // const columns = [
-  //   {
-  //     key: "id",
-  //     label: "ID",
-  //     width: "80px",
-  //   },
-  //   {
-  //     key: "title",
-  //     label: "Tên sản phẩm",
-  //     width: "200px",
-  //   },
-  //   {
-  //     key: "slug",
-  //     label: "Slug",
-  //     width: "250px",
-  //   },
-  //   {
-  //     key: "price",
-  //     label: "Giá",
-  //     width: "150px",
-  //   },
-  //   {
-  //     key: "description",
-  //     label: "Mô tả",
-  //     width: "150px",
-  //   },
-  // ];
   const columns = [
     {
       field: "id",
