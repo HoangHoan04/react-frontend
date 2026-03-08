@@ -11,8 +11,6 @@ export default function SortableChartItem({ id, chart, isDark }) {
     transition,
   };
 
-  console.log(chart);
-
   return (
     <div
       ref={setNodeRef}
@@ -22,7 +20,7 @@ export default function SortableChartItem({ id, chart, isDark }) {
       <div
         {...listeners}
         {...attributes}
-        className="absolute top-2 right-2 cursor-grab active:cursor-grabbing p-1 rounded bg-gray-200 dark:bg-gray-700"
+        className="absolute z-30 top-2 right-2 cursor-grab active:cursor-grabbing p-1 rounded bg-gray-200 dark:bg-gray-700 hover:cursor-pointer"
       >
         <i className="pi pi-equals"></i>
       </div>

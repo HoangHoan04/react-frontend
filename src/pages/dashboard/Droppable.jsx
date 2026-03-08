@@ -1,8 +1,5 @@
 import { useDroppable } from "@dnd-kit/core";
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import SortableChartItem from "../../components/ui/SortableChartItem";
 
 function Droppable({ charts = [], isDark }) {
@@ -27,7 +24,7 @@ function Droppable({ charts = [], isDark }) {
       ) : (
         <SortableContext
           items={charts.filter(Boolean).map((c) => c.id)}
-          strategy={verticalListSortingStrategy}
+          strategy={rectSortingStrategy}
         >
           <div className={`grid ${gridCols} gap-4`}>
             {charts.filter(Boolean).map((chart) => (
