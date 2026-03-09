@@ -1,15 +1,52 @@
-import { useLoading } from "@/context/LoadingContext";
+import { useLoadingStore,useToastStore } from "@/stores";
 import { useEffect, useState } from "react";
 import rootApiService from "@/services/api.service";
 import { API_ENDPOINTS } from "@/services/endpoint";
 import DataTable from "../../../components/common/table/DataTable";
 import CustomTooltipButton from "../../../components/common/button/TooltipButton";
-import { useToast } from "@/context/ToastContext";
+import CustomButton from "../../../components/common/button/Button";
+import SearchInput from "../../../components/common/input/SearchInput";
+import Modal from "../../../components/ui/Modal";
+import { Accordion, AccordionTab } from "../../../components/common/Accordion";
+import FloatLabelInput from "../../../components/common/input/FloatLabelInput";
 const Product_manager = () => {
-  const { showLoading, hideLoading } = useLoading();
+  const showLoading = useLoadingStore((state) => state.showLoading);
+  const hideLoading = useLoadingStore((state) => state.hideLoading);
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
-  const { showToast } = useToast();
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isProductModalVisible, setIsProductModalVisible] = useState(false);
+  const showToasts = useToastStore((state) => state.showToast);
+
+  const filteredProducts = products.filter((product) => {
+    const keyword = searchKeyword.trim().toLowerCase();
+    if (!keyword) return true;
+
+    const searchableText = [
+      product.id,
+      product.title,
+      product.description,
+      product.category?.name,
+      product.price,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    return searchableText.includes(keyword);
+  });
+
+  const openProductModal = (product) => {
+    setSelectedProduct(product);
+    setIsProductModalVisible(true);
+  };
+
+  const closeProductModal = () => {
+    setIsProductModalVisible(false);
+    setSelectedProduct(null);
+  };
+
   const columns = [
     {
       field: "id",
@@ -64,11 +101,7 @@ const Product_manager = () => {
             <CustomTooltipButton
               onClick={(e) => {
                 e.stopPropagation();
-                showToast({
-                  type: "info",
-                  title: "Xem chi tiết",
-                  message: `Đang xem sản phẩm: ${rowData.title}`,
-                });
+                openProductModal(rowData);
               }}
               tooltip="Xem chi tiết"
               icon="pi pi-eye"
@@ -125,32 +158,87 @@ const Product_manager = () => {
     fetchProducts();
   }, []);
   const handleRowClick = (rowData) => {
-    showToast({
-      type: "info",
-      title: "Sản phẩm đã chọn",
-      message: `Bạn đã chọn: ${rowData.title}`,
-    });
+    openProductModal(rowData);
   };
-  return (
-    <div className="p-6">
-      <div className="mt-10 p-6">
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
-          </h2>
-        </div>
 
-        <DataTable
-          data={products}
-          columns={columns}
-          paginator={true}
-          rows={10}
-          rowsPerPageOptions={[5, 10, 20, 50]}
-          sortable={true}
-          hoverable={true}
-          onRowClick={handleRowClick}
-          emptyMessage="Không có sản phẩm nào"
-        />
-      </div>
+  const modalFooter = (
+    <div className="flex justify-end">
+      <CustomButton
+        label="Đóng"
+        severity="secondary"
+        onClick={closeProductModal}
+      />
+    </div>
+  );
+
+  return (
+    <div>
+      <Accordion defaultActiveIndex={1} className="mb-15">
+        <AccordionTab header="Tìm kiếm">
+          <FloatLabelInput
+            label="Tìm kiếm theo ID, tên, mô tả, danh mục hoặc giá"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+            className="mt-5 max-w-md"
+          />
+        </AccordionTab>
+      </Accordion>
+
+      <DataTable
+        data={filteredProducts}
+        columns={columns}
+        paginator={true}
+        rows={10}
+        rowsPerPageOptions={[5, 10, 20, 50]}
+        sortable={true}
+        hoverable={true}
+        onRowClick={handleRowClick}
+        emptyMessage="Không có sản phẩm nào"
+      />
+
+      <Modal
+        visible={isProductModalVisible}
+        onClose={closeProductModal}
+        title="Chi tiết sản phẩm"
+        size="lg"
+        footer={modalFooter}
+      >
+        {selectedProduct ? (
+          <div className="grid gap-5 md:grid-cols-[220px_1fr]">
+            <img
+              src={selectedProduct.images?.[0] || "/default-image.png"}
+              alt={selectedProduct.title}
+              className="h-56 w-full rounded-lg border border-gray-200 object-cover"
+            />
+
+            <div className="space-y-3 text-sm">
+              <p>
+                <span className="font-semibold text-gray-700">ID:</span>{" "}
+                {selectedProduct.id}
+              </p>
+              <p>
+                <span className="font-semibold text-gray-700">Tên:</span>{" "}
+                {selectedProduct.title}
+              </p>
+              <p>
+                <span className="font-semibold text-gray-700">Danh mục:</span>{" "}
+                {selectedProduct.category?.name || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold text-gray-700">Giá:</span>{" "}
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(selectedProduct.price)}
+              </p>
+              <p className="leading-6 text-gray-600">
+                <span className="font-semibold text-gray-700">Mô tả:</span>{" "}
+                {selectedProduct.description || "Không có mô tả."}
+              </p>
+            </div>
+          </div>
+        ) : null}
+      </Modal>
     </div>
   );
 };
