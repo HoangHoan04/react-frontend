@@ -23,7 +23,7 @@ const FloatLabelInput = ({
         value={value}
         onChange={onChange}
         placeholder={placeholder || " "}
-        className={` peer w-full px-4 py-3 text-gray-900 border border-gray-300 rounded-lg  focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30
+        className={` peer w-full px-4 py-3 border border-gray-300 rounded-lg  focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30
         disabled:bg-gray-100 disabled:text-gray-500
           transition-all duration-200
           ${icon ? "pl-10" : "pl-4"}
@@ -45,14 +45,14 @@ const FloatLabelInput = ({
       <label
         htmlFor={id}
         className={`
-          absolute left-4 pointer-events-none text-gray-500 
-          transition-all duration-200 ease-in-out origin-left
+          absolute pointer-events-none
+          transition-all duration-200 ease-in-out
           ${icon ? "left-10" : "left-4"}
-          peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-blue-500 peer-focus:px-1 
+          peer-focus:-top-6 peer-focus:text-sm peer-focus:text-blue-500 peer-focus:px-1 
           ${
             hasValue
-              ? "-top-4.5 text-xs text-blue-500 px-1 "
-              : "top-1/2 -translate-y-1/2 text-base"
+              ? "-top-6 text-sm text-blue-500 px-1"
+              : "top-1/2 -translate-y-1/2 text-base text-gray-500"
           }
         `}
       >

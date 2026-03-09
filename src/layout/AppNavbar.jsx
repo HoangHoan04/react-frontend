@@ -1,8 +1,7 @@
 import Breadcrumbs from "@/components/ui/Breadcrumb";
 import FullScreen from "@/components/ui/FullScreen";
 import { ThemeSwitch } from "@/components/ui/ThemeSwitch";
-import { useAuth } from "@/context/AuthContext";
-import { useTheme } from "@/context/ThemeContext";
+import { useAuthStore, useThemeStore } from "@/stores";
 import { useRef, useState } from "react";
 import { Avatar } from "../components/common/Avatar";
 import { DropdownMenu } from "../components/common/Dropdown";
@@ -14,11 +13,12 @@ export default function AppNavbar({
   onChangePassword,
   onLogout,
 }) {
-  const { theme, toggleTheme } = useTheme();
+  const theme = useThemeStore((state) => state.theme);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
+  const user = useAuthStore((state) => state.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const avatarRef = useRef(null);
   const isDark = theme === "dark";
-  const { user } = useAuth();
 
   const menuItems = [
     {
@@ -65,7 +65,6 @@ export default function AppNavbar({
             icon={collapsed ? "pi pi-bars" : "pi pi-times"}
             onClick={onToggleSidebar}
             tooltip={collapsed ? "Mở menu" : "Đóng menu"}
-            isDark={isDark}
             style={{ marginLeft: 5 }}
             severity="outlined"
           />
