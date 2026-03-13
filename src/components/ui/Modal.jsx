@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import PropTypes from "prop-types";
 import { createPortal } from "react-dom";
-
+import { useThemeStore } from "@/stores";
 const sizeClasses = {
   sm: "max-w-md",
   md: "max-w-2xl",
@@ -23,6 +23,8 @@ const Modal = ({
   bodyClassName = "",
   showCloseButton = true,
 }) => {
+  const theme = useThemeStore((state) => state.theme);
+  const isDark = theme === "dark";
   useEffect(() => {
     if (!visible) return undefined;
 
@@ -47,7 +49,7 @@ const Modal = ({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-9999 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+      className={`fixed inset-0 z-9999 flex items-center justify-center ${isDark ? 'bg-black/60' : 'bg-black/40'} backdrop-blur-sm p-4`}
       onClick={(event) => {
         if (closeOnOverlayClick && event.target === event.currentTarget) {
           onClose?.();
@@ -55,15 +57,17 @@ const Modal = ({
       }}
     >
       <div
-        className={`w-full ${sizeClasses[size] || sizeClasses.md} rounded-xl bg-white shadow-2xl ring-1 ring-black/5 overflow-hidden ${className}`}
+        className={`w-full ${sizeClasses[size] || sizeClasses.md} rounded-xl ${isDark ? 'bg-gray-900' : 'bg-white'} shadow-2xl ring-1 ${isDark ? 'ring-white/10' : 'ring-black/5'} overflow-hidden ${className}`}
       >
-        <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4">
-          <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+        <div className={`flex items-center justify-between border-b ${isDark ? 'border-gray-700' : 'border-gray-200'} px-5 py-4`}>
+          <h3 className={`text-lg font-semibold ${isDark ? 'text-gray-100' : 'text-gray-800'}`}>
+            {title}
+          </h3>
           {showCloseButton && (
             <button
               type="button"
               aria-label="Close modal"
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+              className={`inline-flex h-8 w-8 items-center justify-center rounded-full ${isDark ? 'text-gray-400 hover:bg-gray-700 hover:text-gray-300' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'} transition-colors`}
               onClick={onClose}
             >
               <i className="pi pi-times text-sm" />
@@ -74,7 +78,9 @@ const Modal = ({
         <div className={`px-5 py-4 ${bodyClassName}`}>{children}</div>
 
         {footer && (
-          <div className="border-t border-gray-200 bg-gray-50 px-5 py-4">{footer}</div>
+          <div className={`border-t ${isDark ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} px-5 py-4`}>
+            {footer}
+          </div>
         )}
       </div>
     </div>,

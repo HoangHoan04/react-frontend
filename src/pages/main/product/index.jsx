@@ -5,7 +5,6 @@ import { API_ENDPOINTS } from "@/services/endpoint";
 import DataTable from "../../../components/common/table/DataTable";
 import CustomTooltipButton from "../../../components/common/button/TooltipButton";
 import CustomButton from "../../../components/common/button/Button";
-import SearchInput from "../../../components/common/input/SearchInput";
 import Modal from "../../../components/ui/Modal";
 import { Accordion, AccordionTab } from "../../../components/common/Accordion";
 import FloatLabelInput from "../../../components/common/input/FloatLabelInput";
@@ -213,26 +212,26 @@ const Product_manager = () => {
 
             <div className="space-y-3 text-sm">
               <p>
-                <span className="font-semibold text-gray-700">ID:</span>{" "}
+                <span className="font-medium">ID:</span>{" "}
                 {selectedProduct.id}
               </p>
               <p>
-                <span className="font-semibold text-gray-700">Tên:</span>{" "}
+                <span className="font-medium">Tên:</span>{" "}
                 {selectedProduct.title}
               </p>
               <p>
-                <span className="font-semibold text-gray-700">Danh mục:</span>{" "}
+                <span className="font-medium">Danh mục:</span>{" "}
                 {selectedProduct.category?.name || "N/A"}
               </p>
               <p>
-                <span className="font-semibold text-gray-700">Giá:</span>{" "}
+                <span className="font-medium">Giá:</span>{" "}
                 {new Intl.NumberFormat("vi-VN", {
                   style: "currency",
                   currency: "VND",
                 }).format(selectedProduct.price)}
               </p>
-              <p className="leading-6 text-gray-600">
-                <span className="font-semibold text-gray-700">Mô tả:</span>{" "}
+              <p className="leading-6">
+                <span className="font-medium">Mô tả:</span>{" "}
                 {selectedProduct.description || "Không có mô tả."}
               </p>
             </div>
