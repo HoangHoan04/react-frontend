@@ -22,6 +22,15 @@ const DashboardPage = () => {
     setActiveId(event.active.id);
   };
 
+  const handleRemoveChart = (chartId) => {
+    setDroppedCharts((prev) => prev.filter((chart) => chart.id !== chartId));
+    showToast({
+      message: "Xóa biểu đồ thành công!",
+      type: "success",
+      title: "Xóa biểu đồ",
+    });
+  };
+
   const handleDragEnd = (event) => {
     const { over, active } = event;
 
@@ -106,7 +115,11 @@ const DashboardPage = () => {
       >
         <div className="flex gap-1 h-full">
           <ChoiceChart isDark={isDark} />
-          <Droppable charts={droppedCharts} isDark={isDark} />
+          <Droppable
+            charts={droppedCharts}
+            isDark={isDark}
+            onRemoveChart={handleRemoveChart}
+          />
         </div>
       </div>
 

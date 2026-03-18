@@ -17,7 +17,6 @@ const ChoiceChart = ({ isDark }) => {
   const [selectedTable, setSelectedTable] = useState("none");
   const [dateRange, setDateRange] = useState({ start: null, end: null });
 
-  console.log("Selected Chart:", selectedChart);
   return (
     <section className="w-2/6 p-2">
       <div className="py-2">
@@ -28,19 +27,19 @@ const ChoiceChart = ({ isDark }) => {
         </h2>
         <div className="flex justify-between items-center">
           <button
-            className={`p-2 rounded-lg hover:cursor-pointer border ${isDark ? "border-gray-600" : "border-white"} hover:border-gray-600`}
+            className={`p-2 rounded-lg hover:cursor-pointer border ${isDark ? "border-gray-600" : "border-white"} hover:border-gray-600 ${selectedChart === "bar" ? (isDark ? "bg-gray-700" : "bg-gray-200") : ""}`}
             onClick={() => setSelectedChart("bar")}
           >
             <img src="/chart/column_chart.png" className="inline-block mr-2" />
           </button>
           <button
-            className={`p-2 rounded-lg hover:cursor-pointer border ${isDark ? "border-gray-600" : "border-white"} hover:border-gray-600`}
+            className={`p-2 rounded-lg hover:cursor-pointer border ${isDark ? "border-gray-600" : "border-white"} hover:border-gray-600 ${selectedChart === "line" ? (isDark ? "bg-gray-700" : "bg-gray-200") : ""}`}
             onClick={() => setSelectedChart("line")}
           >
             <img src="/chart/line_chart.png" className="inline-block mr-2" />
           </button>
           <button
-            className={`p-2 rounded-lg hover:cursor-pointer border ${isDark ? "border-gray-600" : "border-white"} hover:border-gray-600`}
+            className={`p-2 rounded-lg hover:cursor-pointer border ${isDark ? "border-gray-600" : "border-white"} hover:border-gray-600 ${selectedChart === "pie" ? (isDark ? "bg-gray-700" : "bg-gray-200") : ""}`}
             onClick={() => setSelectedChart("pie")}
           >
             <img src="/chart/pie_chart.png" className="inline-block mr-2" />

@@ -2,7 +2,7 @@ import { useDroppable } from "@dnd-kit/core";
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import SortableChartItem from "../../components/ui/SortableChartItem";
 
-function Droppable({ charts = [], isDark }) {
+function Droppable({ charts = [], isDark, onRemoveChart }) {
   const { isOver, setNodeRef } = useDroppable({
     id: "droppable",
   });
@@ -33,6 +33,7 @@ function Droppable({ charts = [], isDark }) {
                 id={chart.id}
                 chart={chart}
                 isDark={isDark}
+                onRemove={onRemoveChart}
               />
             ))}
           </div>
