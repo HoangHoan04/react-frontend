@@ -19,7 +19,7 @@ export const API_ENDPOINTS = {
     DETAIL: (id) => `/products/${id}`,
     SLUG: (slug) => `/products/slug/${slug}`,
     CREATE: "/products/",
-    UPDTE: (id) => `/products/${id}`,
+    UPDATE: (id) => `/products/${id}`,
     DELETE: (id) => `/products/${id}`,
     PAGINATION: (limit, offset) => `/products?offset=${offset}&limit=${limit}`,
     RELATED_BY_ID: (id) => `/products/${id}/related`,
