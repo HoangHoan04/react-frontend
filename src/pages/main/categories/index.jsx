@@ -9,6 +9,7 @@ import {
   useCreateCategory,
   useDeleteCategory,
   useGetCategories,
+  useGetCategoryBySlug,
   useUpdateCategory,
 } from "@/hooks";
 import { useThemeStore, useToastStore } from "@/stores";
@@ -38,6 +39,13 @@ export default function CategoryManager() {
 
   // Hook CRUD cho Category
   const { categories, isLoading, error, refetch } = useGetCategories();
+  const exactSlugQuery = slugExact.toLowerCase().trim();
+  const {
+    category: categoryBySlug,
+    isLoading: isLoadingCategoryBySlug,
+    error: errorCategoryBySlug,
+    refetch: refetchCategoryBySlug,
+  } = useGetCategoryBySlug(exactSlugQuery);
   const { mutateAsync: createCategory, isPending: isCreating } =
     useCreateCategory();
   const { mutateAsync: updateCategory, isPending: isUpdating } =
@@ -51,19 +59,33 @@ export default function CategoryManager() {
   const isEditMode = Boolean(editingCategory?.id);
 
   // Memoized values and callbacks
+  const sourceCategories = useMemo(() => {
+    if (!exactSlugQuery) {
+      return categories || [];
+    }
+
+    if (Array.isArray(categoryBySlug)) {
+      return categoryBySlug;
+    }
+
+    return categoryBySlug ? [categoryBySlug] : [];
+  }, [categories, categoryBySlug, exactSlugQuery]);
+
   const filteredCategories = useMemo(() => {
-    return (categories || []).filter((item) => {
+    return sourceCategories.filter((item) => {
       const slugValue = (item?.slug || "").toLowerCase().trim();
       const containsValue = slugContains.toLowerCase().trim();
-      const exactValue = slugExact.toLowerCase().trim();
 
       const matchedContains =
         !containsValue || slugValue.includes(containsValue);
-      const matchedExact = !exactValue || slugValue === exactValue;
+      const matchedExact = !exactSlugQuery || slugValue === exactSlugQuery;
 
       return matchedContains && matchedExact;
     });
-  }, [categories, slugContains, slugExact]);
+  }, [sourceCategories, slugContains, exactSlugQuery]);
+
+  const tableLoading = isLoading || (Boolean(exactSlugQuery) && isLoadingCategoryBySlug);
+  const tableError = exactSlugQuery ? errorCategoryBySlug : error;
 
   const openDeleteDialog = useCallback((category) => {
     setCategoryToDelete(category);
@@ -311,9 +333,14 @@ export default function CategoryManager() {
             icon="pi pi-refresh"
             severity="info"
             outlined
-            loading={isLoading}
+            loading={tableLoading}
             onClick={async () => {
-              await refetch();
+              if (exactSlugQuery) {
+                await refetchCategoryBySlug();
+              } else {
+                await refetch();
+              }
+
               showToast({
                 type: "info",
                 title: "Đã tải lại",
@@ -329,7 +356,7 @@ export default function CategoryManager() {
           isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"
         }`}
       >
-        {error ? (
+        {tableError ? (
           <div
             className={`rounded-lg border px-4 py-3 text-sm ${
               isDark
@@ -346,7 +373,7 @@ export default function CategoryManager() {
           columns={columns}
           rows={5}
           rowsPerPageOptions={[5, 10, 20]}
-          emptyMessage={isLoading ? "Đang tải dữ liệu..." : "Không có dữ liệu"}
+          emptyMessage={tableLoading ? "Đang tải dữ liệu..." : "Không có dữ liệu"}
         />
       </div>
 
