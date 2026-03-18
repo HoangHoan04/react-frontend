@@ -2,7 +2,7 @@ import { useToastStore } from "@/stores";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 
-const ToastContainer = ({ toast, onClose }) => {
+const ToastCustom = ({ toast, onClose }) => {
   const [isClosing, setIsClosing] = useState(false);
 
   const handleClose = () => {
@@ -211,7 +211,7 @@ const ToastContainer = ({ toast, onClose }) => {
   );
 };
 
-export const ToastRenderer = () => {
+export const ToastComponent = () => {
   const { toasts, removeToast } = useToastStore();
 
   if (toasts.length === 0) return null;
@@ -228,7 +228,7 @@ export const ToastRenderer = () => {
     >
       <div style={{ pointerEvents: "auto" }}>
         {toasts.map((toast) => (
-          <ToastContainer
+          <ToastCustom
             key={toast.id}
             toast={toast}
             onClose={() => removeToast(toast.id)}

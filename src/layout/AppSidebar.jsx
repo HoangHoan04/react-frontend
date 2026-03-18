@@ -207,7 +207,7 @@ export default function AppSidebar({
           className={`h-30 w-30 flex justify-center items-center rounded-full transition-transform duration-300 hover:scale-110
             ${isDark ? "bg-white/10" : "bg-blue-500/20"}`}
         >
-          <img src={logo} alt="" className="h-25 w-25 rounded-full" />
+          <img src={logo} alt="Logo" className="h-25 w-25 rounded-full" />
         </div>
       </div>
 

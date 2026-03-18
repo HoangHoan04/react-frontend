@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import TooltipButtonCustom from "../common/button/TooltipButton";
+import CustomTooltipButton from "../common/button/TooltipButton";
 
 const FullScreen = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -28,11 +28,14 @@ const FullScreen = () => {
   };
 
   return (
-    <TooltipButtonCustom
+    <CustomTooltipButton
+      outlined
+      severity="secondary"
       icon={isFullscreen ? "pi pi-window-minimize" : "pi pi-window-maximize"}
       onClick={toggleFullscreen}
       tooltip={isFullscreen ? "Thoát toàn màn hình" : "Toàn màn hình"}
       tooltipPosition="bottom"
+      size="small"
     />
   );
 };
