@@ -1,258 +1,268 @@
+import CustomButton from "@/components/common/button/Button";
+import CustomImage from "@/components/common/Image";
+import CustomInputText from "@/components/common/input/InputText";
+import DataTable from "@/components/common/table/DataTable";
+import CustomConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useThemeStore } from "@/stores";
-import DataTable from "../../../components/common/table/DataTable";
-import CustomTooltipButton from "../../../components/common/button/TooltipButton";
-import CustomButton from "../../../components/common/button/Button";
+import { useMemo } from "react";
 import { Accordion, AccordionTab } from "../../../components/common/Accordion";
-import FloatLabelInput from "../../../components/common/input/FloatLabelInput";
+import CustomTooltipButton from "../../../components/common/button/TooltipButton";
+import { ROUTES } from "../../../common/constants/routes";
+import { useRouter } from "../../../route/hooks/use-router";
 import useProductManager from "./useProductManager";
-import ProductViewModal from "./ProductViewModal";
 import ProductEditModal from "./ProductEditModal";
-import ProductDeleteModal from "./ProductDeleteModal";
 
-const Product_manager = () => {
+export default function ProductManager() {
   const theme = useThemeStore((state) => state.theme);
   const isDark = theme === "dark";
+  const router = useRouter();
 
   const {
-    products,
-    activeSearchType, setActiveSearchType,
+    products, isLoading, refetch,
     searchForm, handleSearchFormChange, handleSearch, handleResetSearch,
-    SEARCH_TYPES,
-    selectedProduct, isViewModalVisible, openViewModal, closeViewModal,
-    editProduct, isEditModalVisible, editForm, imageErrors,
-    openEditModal, closeEditModal,
+    editingProduct, isEditMode, isEditModalVisible,
+    editForm, formErrors,
+    openCreateModal, openEditModal, closeEditModal,
     handleEditFormChange, handleImageChange, handleAddImage, handleRemoveImage,
-    setImageErrors, handleEditSubmit,
-    deleteProduct, isDeleteModalVisible, openDeleteModal, closeDeleteModal, handleDeleteConfirm,
+    handleSubmitProduct,
+    productToDelete, isDeleteDialogVisible,
+    openDeleteDialog, closeDeleteDialog, handleConfirmDelete,
   } = useProductManager();
 
-  // --- Style helpers -------------------------------------------------------
-  const inputClass = `w-full rounded-lg border px-3 py-2 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-    isDark ? "border-gray-600 bg-gray-800 text-gray-100 placeholder-gray-500" : "border-gray-300 bg-white text-gray-800 placeholder-gray-400"
-  }`;
-  const labelClass = `text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`;
-  const tabClass = (type) =>
-    `px-3 py-1.5 text-xs rounded-md font-medium transition-colors cursor-pointer ${
-      activeSearchType === type
-        ? "bg-blue-500 text-white"
-        : isDark
-        ? "text-gray-400 hover:bg-gray-700"
-        : "text-gray-500 hover:bg-gray-100"
-    }`;
-
-  // --- Search form render ---------------------------------------------------
-  const renderSearchInputs = () => {
-    switch (activeSearchType) {
-      case "title":
-        return (
-          <div className="flex flex-col gap-1.5 max-w-md">
-            <label className={labelClass}>Tên sản phẩm</label>
-            <FloatLabelInput
-              value={searchForm.title}
-              onChange={handleSearchFormChange("title")}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            />
-          </div>
-        );
-
-      case "price":
-        return (
-          <div className="flex flex-col gap-1.5 max-w-xs">
-            <label className={labelClass}>Giá chính xác (USD)</label>
-            <FloatLabelInput
-              type="number"
-              min="0"
-              value={searchForm.price}
-              onChange={handleSearchFormChange("price")}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            />
-          </div>
-        );
-
-      case "priceRange":
-        return (
-          <div className="flex items-end gap-3 flex-wrap">
-            <div className="flex flex-col gap-1.5">
-              <label className={labelClass}>Giá từ (USD)</label>
-              <FloatLabelInput
-                type="number"
-                min="0"
-                value={searchForm.priceMin}
-                onChange={handleSearchFormChange("priceMin")}
-              />
-            </div>
-            <div className={`pb-2 text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-              đến
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label className={labelClass}>Giá đến (USD)</label>
-              <FloatLabelInput
-                type="number"
-                min="0"
-                value={searchForm.priceMax}
-                onChange={handleSearchFormChange("priceMax")}
-              />
-            </div>
-          </div>
-        );
-
-      case "categoryId":
-        return (
-          <div className="flex flex-col gap-1.5 max-w-xs">
-            <label className={labelClass}>ID danh mục</label>
-            <FloatLabelInput
-              type="number"
-              min="1"
-              value={searchForm.categoryId}
-              onChange={handleSearchFormChange("categoryId")}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            />
-          </div>
-        );
-
-      case "categorySlug":
-        return (
-          <div className="flex flex-col gap-1.5 max-w-md">
-            <label className={labelClass}>Slug danh mục</label>
-            <FloatLabelInput
-              value={searchForm.categorySlug}
-              onChange={handleSearchFormChange("categorySlug")}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            />
-          </div>
-        );
-
-      default:
-        return null;
-    }
-  };
-
-  // --- Table columns -------------------------------------------------------
-  const columns = [
-    { field: "id", header: "ID", sortable: true, width: "80px" },
-    { field: "title", header: "Tên sản phẩm", sortable: true },
+  // ─── Columns ──────────────────────────────────────────────────────────────
+  const columns = useMemo(() => [
+    { field: "id", header: "ID", width: "70px" },
+    { field: "title", header: "Tên sản phẩm" },
     {
       field: "category",
       header: "Danh mục",
-      sortable: true,
-      body: (rowData) => rowData.category?.name || "N/A",
+      body: (row) => row.category?.name || "N/A",
     },
     {
       field: "price",
       header: "Giá bán",
-      sortable: true,
-      body: (rowData) =>
-        new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(rowData.price),
+      body: (row) => (
+        <span className="font-medium">${row.price?.toFixed(2) || "0.00"}</span>
+      ),
     },
     {
       field: "images",
       header: "Hình ảnh",
-      width: "120px",
-      body: (rowData) => (
-        <img src={rowData.images?.[0] || "/default-image.png"} alt={rowData.title} className="w-16 h-16 object-cover rounded-md" />
+      width: "100px",
+      sortable: false,
+      body: (row) => (
+        <CustomImage
+          src={row.images?.[0]}
+          alt={row.title}
+          previewTitle={row.title}
+          emptyText="Không có ảnh"
+          thumbnailClassName="h-14 w-14 rounded-md object-cover"
+        />
       ),
     },
     {
       field: "actions",
-      header: "Thao tác",
+      header: "Hành động",
+      width: "140px",
       sortable: false,
-      width: "150px",
-      body: (rowData) => (
+      body: (row) => (
         <div className="flex gap-2">
-          <CustomTooltipButton onClick={(e) => { e.stopPropagation(); openViewModal(rowData); }} tooltip="Xem chi tiết" icon="pi pi-eye" size="small" />
-          <CustomTooltipButton onClick={(e) => { e.stopPropagation(); openEditModal(rowData); }} tooltip="Sửa" icon="pi pi-pencil" severity="warning" size="small" />
-          <CustomTooltipButton onClick={(e) => { e.stopPropagation(); openDeleteModal(rowData); }} tooltip="Xóa" icon="pi pi-trash" severity="danger" size="small" />
+          <CustomTooltipButton
+            tooltip="Xem chi tiết"
+            icon="pi pi-eye"
+            severity="info"
+            outlined
+            size="small"
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(
+                ROUTES.MAIN.PRODUCT_MANAGER.children.DETAIL_PRODUCT.path.replace(":id", row.id)
+              );
+            }}
+          />
+          <CustomTooltipButton
+            tooltip="Chỉnh sửa"
+            icon="pi pi-pencil"
+            severity="warning"
+            outlined
+            size="small"
+            onClick={(e) => { e.stopPropagation(); openEditModal(row); }}
+          />
+          <CustomTooltipButton
+            tooltip="Xóa"
+            icon="pi pi-trash"
+            severity="danger"
+            outlined
+            size="small"
+            onClick={(e) => { e.stopPropagation(); openDeleteDialog(row); }}
+          />
         </div>
       ),
     },
-  ];
+  ], [openEditModal, openDeleteDialog, router]);
 
-  // --- Render --------------------------------------------------------------
+  // ─── Render ───────────────────────────────────────────────────────────────
   return (
-    <div>
-      <Accordion defaultActiveIndex={0} className="mb-15">
-        <AccordionTab header="Tìm kiếm">
-          <div className="mt-3 space-y-4">
+    <div className="space-y-4">
 
-            {/* Tab chon loai tim kiem */}
-            <div className={`flex flex-wrap gap-1.5 rounded-lg p-1 w-fit ${isDark ? "bg-gray-800" : "bg-gray-100"}`}>
-              {Object.entries(SEARCH_TYPES).map(([type, label]) => (
-                <button key={type} type="button" className={tabClass(type)} onClick={() => setActiveSearchType(type)}>
-                  {label}
-                </button>
-              ))}
-            </div>
+      {/* Khu vực tìm kiếm */}
+      <div className={`rounded-2xl border p-4 shadow-sm ${isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"}`}>
+        <Accordion multiple className="mb-0">
+          <AccordionTab
+            header="Tìm kiếm"
+            headerClassName={isDark ? "bg-[#202020] text-gray-100" : "bg-[#f8fbff]"}
+            contentClassName={isDark ? "bg-[#171717]" : "bg-white"}
+          >
+            <div className="space-y-4 pt-1">
 
-            {/* Form tim kiem tuong ung */}
-            <div className="flex items-end gap-3 flex-wrap">
-              {renderSearchInputs()}
-
-              <div className="flex gap-2">
-                <CustomButton
-                  label="Tìm kiếm"
-                  icon="pi pi-search"
-                  onClick={handleSearch}
+              {/* Hàng 1: Tên + Giá chính xác */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <CustomInputText
+                  label="Tên sản phẩm"
+                  value={searchForm.title}
+                  onChange={handleSearchFormChange("title")}
+                  placeholder="Ví dụ: iPhone, Laptop..."
+                  isDark={isDark}
+                  containerClassName="w-full"
                 />
-                <CustomButton
-                  label="Đặt lại"
-                  icon="pi pi-refresh"
-                  severity="secondary"
-                  onClick={handleResetSearch}
+                <CustomInputText
+                  label="Giá chính xác (USD)"
+                  type="number"
+                  min="0"
+                  value={searchForm.price}
+                  onChange={handleSearchFormChange("price")}
+                  placeholder="Ví dụ: 100"
+                  isDark={isDark}
+                  containerClassName="w-full"
                 />
               </div>
+
+              {/* Hàng 2: Khoảng giá */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <CustomInputText
+                  label="Giá tối thiểu (USD)"
+                  type="number"
+                  min="0"
+                  value={searchForm.priceMin}
+                  onChange={handleSearchFormChange("priceMin")}
+                  placeholder="0"
+                  isDark={isDark}
+                  containerClassName="w-full"
+                />
+                <CustomInputText
+                  label="Giá tối đa (USD)"
+                  type="number"
+                  min="0"
+                  value={searchForm.priceMax}
+                  onChange={handleSearchFormChange("priceMax")}
+                  placeholder="9999"
+                  isDark={isDark}
+                  containerClassName="w-full"
+                />
+              </div>
+
+              {/* Hàng 3: ID danh mục + Slug danh mục */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <CustomInputText
+                  label="ID danh mục"
+                  type="number"
+                  min="1"
+                  value={searchForm.categoryId}
+                  onChange={handleSearchFormChange("categoryId")}
+                  placeholder="Ví dụ: 1, 2, 3..."
+                  isDark={isDark}
+                  containerClassName="w-full"
+                />
+                <CustomInputText
+                  label="Slug danh mục"
+                  value={searchForm.categorySlug}
+                  onChange={handleSearchFormChange("categorySlug")}
+                  placeholder="Ví dụ: electronics, furniture..."
+                  isDark={isDark}
+                  containerClassName="w-full"
+                />
+              </div>
+
+              {/* Nút hành động + đếm kết quả */}
+              <div className="flex items-center justify-between flex-wrap gap-3">
+                <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}>
+                  Đang hiển thị {products.length} sản phẩm
+                </p>
+                <div className="flex gap-2">
+                  <CustomButton label="Tìm kiếm" icon="pi pi-search" severity="info" outlined onClick={handleSearch} />
+                  <CustomButton label="Đặt lại" icon="pi pi-refresh" severity="secondary" outlined onClick={handleResetSearch} />
+                </div>
+              </div>
             </div>
+          </AccordionTab>
+        </Accordion>
+      </div>
 
-            {/* So luong ket qua */}
-            <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}>
-              Đang hiển thị {products.length} sản phẩm
-            </p>
-          </div>
-        </AccordionTab>
-      </Accordion>
+      {/* Thanh hành động */}
+      <div className="flex items-center justify-between gap-3">
+        <CustomButton
+          label="Thêm sản phẩm"
+          icon="pi pi-plus-circle"
+          severity="success"
+          outlined
+          onClick={openCreateModal}
+        />
+        <CustomButton
+          label="Tải lại"
+          icon="pi pi-refresh"
+          severity="info"
+          outlined
+          onClick={refetch}
+        />
+      </div>
 
-      <DataTable
-        data={products}
-        columns={columns}
-        paginator={true}
-        rows={10}
-        rowsPerPageOptions={[5, 10, 20, 50]}
-        sortable={true}
-        hoverable={true}
-        onRowClick={openViewModal}
-        emptyMessage="Không có sản phẩm nào"
-      />
+      {/* Bảng dữ liệu */}
+      <div className={`rounded-2xl border p-4 shadow-sm ${isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"}`}>
+        <DataTable
+          data={products}
+          columns={columns}
+          paginator
+          rows={10}
+          rowsPerPageOptions={[5, 10, 20, 50]}
+          sortable
+          hoverable
+          onRowClick={(row) =>
+            router.push(
+              ROUTES.MAIN.PRODUCT_MANAGER.children.DETAIL_PRODUCT.path.replace(":id", row.id)
+            )
+          }
+          emptyMessage="Không có sản phẩm nào"
+        />
+      </div>
 
-      <ProductViewModal
-        visible={isViewModalVisible}
-        product={selectedProduct}
-        isDark={isDark}
-        onClose={closeViewModal}
-      />
-
+      {/* Modal thêm / chỉnh sửa */}
       <ProductEditModal
         visible={isEditModalVisible}
-        product={editProduct}
+        isEditMode={isEditMode}
         editForm={editForm}
-        imageErrors={imageErrors}
+        formErrors={formErrors}
         isDark={isDark}
         onClose={closeEditModal}
-        onSubmit={handleEditSubmit}
+        onSubmit={handleSubmitProduct}
         onFormChange={handleEditFormChange}
         onImageChange={handleImageChange}
         onAddImage={handleAddImage}
         onRemoveImage={handleRemoveImage}
-        setImageErrors={setImageErrors}
       />
 
-      <ProductDeleteModal
-        visible={isDeleteModalVisible}
-        product={deleteProduct}
+      {/* Dialog xác nhận xóa */}
+      <CustomConfirmDialog
+        visible={isDeleteDialogVisible}
+        onHide={closeDeleteDialog}
+        header="Xác nhận xóa sản phẩm"
+        message={`Bạn có chắc chắn muốn xóa sản phẩm "${productToDelete?.title || ""}" không?`}
+        severity="danger"
+        acceptLabel="Xóa"
+        rejectLabel="Hủy"
+        icon="pi pi-trash"
         isDark={isDark}
-        onClose={closeDeleteModal}
-        onConfirm={handleDeleteConfirm}
+        onAccept={handleConfirmDelete}
       />
     </div>
   );
-};
-
-export default Product_manager;
+}

@@ -1,12 +1,13 @@
-import Modal from "../../../components/ui/Modal";
-import CustomButton from "../../../components/common/button/Button";
-import FloatLabelInput from "../../../components/common/input/FloatLabelInput";
+import CustomModal from "@/components/common/Modal";
+import CustomButton from "@/components/common/button/Button";
+import CustomInputText from "@/components/common/input/InputText";
+import CustomFileUpload from "@/components/common/FileUpload";
 
 const ProductEditModal = ({
   visible,
-  product,
+  isEditMode,
   editForm,
-  imageErrors,
+  formErrors,
   isDark,
   onClose,
   onSubmit,
@@ -14,119 +15,161 @@ const ProductEditModal = ({
   onImageChange,
   onAddImage,
   onRemoveImage,
-  setImageErrors,
 }) => {
-  if (!product) return null;
-
-  const inputClass = `w-full rounded-lg border px-3 py-2 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-    isDark
-      ? "border-gray-600 bg-gray-800 text-gray-100 placeholder-gray-500"
-      : "border-gray-300 bg-white text-gray-800 placeholder-gray-400"
-  }`;
-  const labelClass = `text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`;
-
-  const footer = (
-    <div className="flex justify-end gap-2">
-      <CustomButton label="Hủy" severity="secondary" onClick={onClose} />
-      <CustomButton label="Lưu thay đổi" icon="pi pi-check" onClick={onSubmit} />
-    </div>
-  );
-
   return (
-    <Modal
+    <CustomModal
       visible={visible}
-      onClose={onClose}
-      title={`Chỉnh sửa sản phẩm #${product.id}`}
-      size="lg"
-      footer={footer}
+      onHide={onClose}
+      header={isEditMode ? "Chỉnh sửa sản phẩm" : "Thêm sản phẩm mới"}
+      showHeader
+      closeButton
+      showFooter
+      modalWidth="max-w-2xl"
+      isDark={isDark}
+      footer={
+        <>
+          <CustomButton
+            label="Hủy"
+            icon="pi pi-times"
+            severity="danger"
+            outlined
+            onClick={onClose}
+          />
+          <CustomButton
+            label={isEditMode ? "Cập nhật" : "Thêm mới"}
+            icon={isEditMode ? "pi pi-pen-to-square" : "pi pi-plus-circle"}
+            severity={isEditMode ? "warning" : "success"}
+            outlined
+            onClick={onSubmit}
+          />
+        </>
+      }
     >
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4">
 
-        {/* ── Cột trái: thông tin cơ bản ── */}
-        <div className="space-y-4">
-          <div className="flex flex-col gap-1.5">
-            <label className={labelClass}>Tên sản phẩm <span className="text-red-500">*</span></label>
-            <FloatLabelInput value={editForm.title} onChange={onFormChange("title")} />
-          </div>
+        {/* Tên sản phẩm */}
+        <CustomInputText
+          label="Tên sản phẩm"
+          value={editForm.title}
+          onChange={onFormChange("title")}
+          placeholder="Nhập tên sản phẩm"
+          isDark={isDark}
+          error={Boolean(formErrors.title)}
+          errorMessage={formErrors.title}
+          containerClassName="w-full"
+        />
 
-          <div className="flex flex-col gap-1.5">
-            <label className={labelClass}>Giá bán (USD) <span className="text-red-500">*</span></label>
-            <FloatLabelInput type="number" min="0" value={editForm.price} onChange={onFormChange("price")} />
-          </div>
+        {/* Giá bán */}
+        <CustomInputText
+          label="Giá bán (USD)"
+          type="number"
+          min="0"
+          value={String(editForm.price)}
+          onChange={onFormChange("price")}
+          placeholder="Nhập giá bán"
+          isDark={isDark}
+          error={Boolean(formErrors.price)}
+          errorMessage={formErrors.price}
+          containerClassName="w-full"
+        />
 
-          <div className="flex flex-col gap-1.5">
-            <label className={labelClass}>Mô tả</label>
-            <textarea
-              value={editForm.description}
-              onChange={onFormChange("description")}
-              rows={6}
-              placeholder="Nhập mô tả sản phẩm..."
-              className={inputClass}
-            />
-          </div>
+        {/* Mô tả */}
+        <div>
+          <label
+            className={`block text-sm font-medium mb-1.5 ${
+              isDark ? "text-gray-300" : "text-gray-700"
+            }`}
+          >
+            Mô tả
+          </label>
+          <textarea
+            value={editForm.description}
+            onChange={onFormChange("description")}
+            rows={4}
+            placeholder="Nhập mô tả sản phẩm..."
+            className={`w-full rounded-md border outline-none transition-all duration-200 px-3 py-2 text-sm resize-none ${
+              isDark
+                ? "bg-[#111] border-[#333] text-gray-100 placeholder-gray-600 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50"
+                : "bg-white border-gray-300 text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-blue-400/30 focus:border-blue-400"
+            }`}
+          />
         </div>
 
-        {/* ── Cột phải: hình ảnh ── */}
-        <div className="flex flex-col gap-3">
-          <label className={labelClass}>
-            Hình ảnh{" "}
-            <span className={`text-xs font-normal ${isDark ? "text-gray-400" : "text-gray-500"}`}>(nhập URL)</span>
+        {/* Hình ảnh */}
+        <div>
+          <label
+            className={`block text-sm font-medium mb-2 ${
+              isDark ? "text-gray-300" : "text-gray-700"
+            }`}
+          >
+            Hình ảnh
+            <span
+              className={`ml-1 text-xs font-normal ${
+                isDark ? "text-gray-500" : "text-gray-400"
+              }`}
+            >
+              (tải lên hoặc nhập URL)
+            </span>
           </label>
 
-          <div className="flex flex-col gap-2.5 overflow-y-auto max-h-64 pr-0.5">
+          <div className="space-y-3">
             {editForm.images.map((url, index) => (
-              <div key={index} className="space-y-1">
-                <div className="flex items-center gap-2">
-
-                  {/* Thumbnail */}
-                  <div className={`h-10 w-10 flex-shrink-0 overflow-hidden rounded-md border ${isDark ? "border-gray-600" : "border-gray-200"}`}>
-                    {url.trim() && !imageErrors[index] ? (
-                      <img
-                        src={url}
-                        alt={`Ảnh ${index + 1}`}
-                        className="h-full w-full object-cover"
-                        onError={() => setImageErrors((prev) => ({ ...prev, [index]: true }))}
-                        onLoad={() => setImageErrors((prev) => ({ ...prev, [index]: false }))}
-                      />
-                    ) : (
-                      <div className={`flex h-full w-full items-center justify-center ${isDark ? "bg-gray-700" : "bg-gray-100"}`}>
-                        <i className={`pi pi-image text-sm ${imageErrors[index] ? "text-red-400" : isDark ? "text-gray-500" : "text-gray-400"}`} />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Input URL */}
-                  <input
-                    type="text"
-                    value={url}
-                    onChange={(e) => onImageChange(index, e.target.value)}
-                    placeholder={`https://example.com/image-${index + 1}.jpg`}
-                    className={`${inputClass} flex-1`}
-                  />
-
-                  {/* Nút xóa */}
+              <div
+                key={index}
+                className={`rounded-xl border p-3 ${
+                  isDark
+                    ? "border-[#333] bg-[#111]"
+                    : "border-gray-200 bg-gray-50"
+                }`}
+              >
+                {/* Header của từng ảnh */}
+                <div className="flex items-center justify-between mb-3">
+                  <span
+                    className={`text-xs font-medium ${
+                      isDark ? "text-gray-400" : "text-gray-500"
+                    }`}
+                  >
+                    Ảnh {index + 1}
+                  </span>
                   <button
                     type="button"
                     onClick={() => onRemoveImage(index)}
-                    disabled={editForm.images.length === 1 && !url.trim()}
-                    className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg transition-colors ${
-                      editForm.images.length === 1 && !url.trim()
-                        ? "cursor-not-allowed opacity-30"
+                    disabled={editForm.images.length === 1}
+                    className={`h-6 w-6 inline-flex items-center justify-center rounded transition-colors ${
+                      editForm.images.length === 1
+                        ? "opacity-30 cursor-not-allowed"
                         : isDark
                         ? "text-red-400 hover:bg-red-900/30"
                         : "text-red-500 hover:bg-red-50"
                     }`}
                   >
-                    <i className="pi pi-times text-xs" />
+                    <i className="pi pi-trash text-xs" />
                   </button>
                 </div>
 
-                {imageErrors[index] && url.trim() && (
-                  <p className="ml-12 text-xs text-red-500">
-                    <i className="pi pi-exclamation-circle mr-1" />
-                    URL không tải được
-                  </p>
-                )}
+                {/* File upload */}
+                <CustomFileUpload
+                  label=""
+                  value={url}
+                  onChange={(uploadedUrl) =>
+                    onImageChange(index, uploadedUrl || "")
+                  }
+                  emptyText="Chưa có ảnh — nhấn để tải lên"
+                  isDark={isDark}
+                  previewTitle={`Ảnh ${index + 1}`}
+                />
+
+                {/* Nhập URL thủ công */}
+                <div className="mt-3">
+                  <CustomInputText
+                    label="Hoặc nhập URL ảnh"
+                    value={url}
+                    onChange={(e) => onImageChange(index, e.target.value)}
+                    placeholder="https://example.com/image.jpg"
+                    isDark={isDark}
+                    containerClassName="w-full"
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -135,38 +178,18 @@ const ProductEditModal = ({
           <button
             type="button"
             onClick={onAddImage}
-            className={`flex items-center gap-2 rounded-lg border border-dashed px-3 py-2 text-sm transition-colors ${
+            className={`mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed px-3 py-2.5 text-sm transition-colors ${
               isDark
-                ? "border-gray-600 text-gray-400 hover:border-blue-500 hover:text-blue-400"
+                ? "border-[#444] text-gray-400 hover:border-blue-500 hover:text-blue-400"
                 : "border-gray-300 text-gray-500 hover:border-blue-400 hover:text-blue-500"
             }`}
           >
             <i className="pi pi-plus text-xs" />
             Thêm ảnh
           </button>
-
-          {/* Preview tổng hợp */}
-          {editForm.images.some((url) => url.trim()) && (
-            <div className={`rounded-lg border p-3 ${isDark ? "border-gray-700 bg-gray-800/50" : "border-gray-200 bg-gray-50"}`}>
-              <p className={`mb-2 text-xs font-medium ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-                Tất cả ảnh ({editForm.images.filter((u) => u.trim()).length})
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {editForm.images.filter((url) => url.trim()).map((url, i) => (
-                  <img
-                    key={i}
-                    src={url}
-                    alt={`Preview ${i + 1}`}
-                    className="h-14 w-14 rounded-md object-cover border border-gray-200"
-                    onError={(e) => { e.currentTarget.style.display = "none"; }}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </div>
-    </Modal>
+    </CustomModal>
   );
 };
 

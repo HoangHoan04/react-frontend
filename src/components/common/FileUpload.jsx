@@ -1,4 +1,4 @@
-import { useUploadFile } from "@/hooks";
+import { useUploadFile } from "@/hooks/upload";
 import { useToastStore } from "@/stores";
 import { useEffect, useMemo, useRef, useState } from "react";
 import CustomButton from "./button/Button";
