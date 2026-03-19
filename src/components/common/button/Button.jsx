@@ -81,6 +81,8 @@ const CustomButton = ({
     "px-2.5 py-1.5 text-sm font-medium leading-tight",
     // Bo góc mặc định
     "rounded-md",
+    // Outlined cần có border-width để hiển thị màu viền theo severity
+    outlined && "border",
     // Transition mượt
     "transition-all duration-200 ease-in-out",
     // Focus ring giống PrimeReact
@@ -133,9 +135,9 @@ const CustomButton = ({
 };
 
 CustomButton.propTypes = {
-  label: PropTypes.string,
-  icon: PropTypes.string,
-  iconPos: PropTypes.oneOf(["left", "right", "top", "bottom"]),
+  label: PropTypes.string, // Text hiển thị trên button
+  icon: PropTypes.string, // Tên icon PrimeReact (ví dụ: "pi pi-check")
+  iconPos: PropTypes.oneOf(["left", "right", "top", "bottom"]), // Vị trí icon
   severity: PropTypes.oneOf([
     "primary",
     "secondary",
@@ -145,16 +147,16 @@ CustomButton.propTypes = {
     "danger",
     "help",
     "contrast",
-  ]),
-  outlined: PropTypes.bool,
-  text: PropTypes.bool,
-  raised: PropTypes.bool,
-  rounded: PropTypes.bool,
-  disabled: PropTypes.bool,
-  loading: PropTypes.bool,
-  className: PropTypes.string,
-  onClick: PropTypes.func,
-  type: PropTypes.string,
+  ]), // Mức độ (màu sắc) của button
+  outlined: PropTypes.bool, // Kiểu outlined
+  text: PropTypes.bool, // Kiểu text
+  raised: PropTypes.bool, // Kiểu raised
+  rounded: PropTypes.bool, // Kiểu rounded
+  disabled: PropTypes.bool, // Trạng thái disabled
+  loading: PropTypes.bool, // Trạng thái loading
+  className: PropTypes.string, // Class CSS tùy chỉnh
+  onClick: PropTypes.func, // Hàm xử lý sự kiện click
+  type: PropTypes.string, // Loại button (button, submit, reset)
 };
 
 export default CustomButton;

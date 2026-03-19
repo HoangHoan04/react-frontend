@@ -71,16 +71,16 @@ const CustomRadioButton = ({
 };
 
 CustomRadioButton.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  value: PropTypes.any.isRequired,
-  checkedValue: PropTypes.any,
-  onChange: PropTypes.func.isRequired,
-  label: PropTypes.string,
-  disabled: PropTypes.bool,
-  invalid: PropTypes.bool,
-  className: PropTypes.string,
-  labelClassName: PropTypes.string,
+  id: PropTypes.string.isRequired, // ID duy nhất cho radio button
+  name: PropTypes.string.isRequired, // Tên nhóm radio button
+  value: PropTypes.any.isRequired, // Giá trị của radio button
+  checkedValue: PropTypes.any, // Giá trị đang được chọn trong nhóm
+  onChange: PropTypes.func.isRequired, // Hàm xử lý sự kiện khi radio button thay đổi
+  label: PropTypes.string, // Text hiển thị bên cạnh radio button
+  disabled: PropTypes.bool, // Trạng thái disabled
+  invalid: PropTypes.bool, // Trạng thái invalid (lỗi)
+  className: PropTypes.string, // Class CSS tùy chỉnh cho container
+  labelClassName: PropTypes.string, // Class CSS tùy chỉnh cho label
 };
 
 export default CustomRadioButton;

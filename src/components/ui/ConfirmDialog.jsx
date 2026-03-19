@@ -59,7 +59,7 @@ const CustomConfirmDialog = ({
 
   const content = (
     <div
-      className={`fixed inset-0 z-9999 flex items-center justify-center backdrop-blur-sm p-4 transition-opacity duration-300 ${isDark ? "bg-black bg-opacity-70" : ""}`}
+      className={`fixed inset-0 z-9999 flex items-center justify-center backdrop-blur-sm p-4 transition-opacity duration-300 ${isDark ? "bg-black bg-opacity-500" : ""}`}
       onClick={(e) => {
         if (e.target === e.currentTarget) onHide?.();
       }}
@@ -70,7 +70,7 @@ const CustomConfirmDialog = ({
           w-full max-w-md sm:max-w-lg transform
           rounded-2xl shadow-2xl ring-1
           overflow-hidden transition-all duration-300 
-          scale-100 opacity-100 animate-in fade-in zoom-in-95
+          scale-100 opacity-500 animate-in fade-in zoom-in-95
         `}
       >
         {/* Header */}

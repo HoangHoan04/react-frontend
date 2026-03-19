@@ -4,7 +4,7 @@ import "primeicons/primeicons.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import { LoadingRenderer } from "./components/ui/LoadingRenderer";
 import { StoreInitializer } from "./components/ui/StoreInitializer";
-import { ToastRenderer } from "./components/ui/ToastRenderer";
+import { ToastComponent } from "./components/ui/Toast";
 import AppRoutes from "./route";
 
 export default function App() {
@@ -16,7 +16,7 @@ export default function App() {
       <Router>
         <AppRoutes />
       </Router>
-      <ToastRenderer />
+      <ToastComponent />
       <LoadingRenderer />
     </QueryClientProvider>
   );

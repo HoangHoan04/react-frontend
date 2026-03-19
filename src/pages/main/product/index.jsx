@@ -46,9 +46,8 @@ const Product_manager = () => {
       case "title":
         return (
           <div className="flex flex-col gap-1.5 max-w-md">
-            <label className={labelClass}>Ten san pham</label>
+            <label className={labelClass}>Tên sản phẩm</label>
             <FloatLabelInput
-              label="Nhap ten can tim..."
               value={searchForm.title}
               onChange={handleSearchFormChange("title")}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -59,9 +58,8 @@ const Product_manager = () => {
       case "price":
         return (
           <div className="flex flex-col gap-1.5 max-w-xs">
-            <label className={labelClass}>Gia chinh xac (USD)</label>
+            <label className={labelClass}>Giá chính xác (USD)</label>
             <FloatLabelInput
-              label="Nhap gia..."
               type="number"
               min="0"
               value={searchForm.price}
@@ -75,9 +73,8 @@ const Product_manager = () => {
         return (
           <div className="flex items-end gap-3 flex-wrap">
             <div className="flex flex-col gap-1.5">
-              <label className={labelClass}>Gia tu (USD)</label>
+              <label className={labelClass}>Giá từ (USD)</label>
               <FloatLabelInput
-                label="Min..."
                 type="number"
                 min="0"
                 value={searchForm.priceMin}
@@ -85,12 +82,11 @@ const Product_manager = () => {
               />
             </div>
             <div className={`pb-2 text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-              den
+              đến
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className={labelClass}>Gia den (USD)</label>
+              <label className={labelClass}>Giá đến (USD)</label>
               <FloatLabelInput
-                label="Max..."
                 type="number"
                 min="0"
                 value={searchForm.priceMax}
@@ -103,9 +99,8 @@ const Product_manager = () => {
       case "categoryId":
         return (
           <div className="flex flex-col gap-1.5 max-w-xs">
-            <label className={labelClass}>ID danh muc</label>
+            <label className={labelClass}>ID danh mục</label>
             <FloatLabelInput
-              label="Nhap ID danh muc..."
               type="number"
               min="1"
               value={searchForm.categoryId}
@@ -118,9 +113,8 @@ const Product_manager = () => {
       case "categorySlug":
         return (
           <div className="flex flex-col gap-1.5 max-w-md">
-            <label className={labelClass}>Slug danh muc</label>
+            <label className={labelClass}>Slug danh mục</label>
             <FloatLabelInput
-              label="Vi du: electronics, furniture..."
               value={searchForm.categorySlug}
               onChange={handleSearchFormChange("categorySlug")}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -136,23 +130,23 @@ const Product_manager = () => {
   // --- Table columns -------------------------------------------------------
   const columns = [
     { field: "id", header: "ID", sortable: true, width: "80px" },
-    { field: "title", header: "Ten san pham", sortable: true },
+    { field: "title", header: "Tên sản phẩm", sortable: true },
     {
       field: "category",
-      header: "Danh muc",
+      header: "Danh mục",
       sortable: true,
       body: (rowData) => rowData.category?.name || "N/A",
     },
     {
       field: "price",
-      header: "Gia ban",
+      header: "Giá bán",
       sortable: true,
       body: (rowData) =>
         new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(rowData.price),
     },
     {
       field: "images",
-      header: "Hinh anh",
+      header: "Hình ảnh",
       width: "120px",
       body: (rowData) => (
         <img src={rowData.images?.[0] || "/default-image.png"} alt={rowData.title} className="w-16 h-16 object-cover rounded-md" />
@@ -160,7 +154,7 @@ const Product_manager = () => {
     },
     {
       field: "actions",
-      header: "Thao tac",
+      header: "Thao tác",
       sortable: false,
       width: "150px",
       body: (rowData) => (
@@ -177,7 +171,7 @@ const Product_manager = () => {
   return (
     <div>
       <Accordion defaultActiveIndex={0} className="mb-15">
-        <AccordionTab header="Tim kiem">
+        <AccordionTab header="Tìm kiếm">
           <div className="mt-3 space-y-4">
 
             {/* Tab chon loai tim kiem */}
@@ -195,12 +189,12 @@ const Product_manager = () => {
 
               <div className="flex gap-2">
                 <CustomButton
-                  label="Tim kiem"
+                  label="Tìm kiếm"
                   icon="pi pi-search"
                   onClick={handleSearch}
                 />
                 <CustomButton
-                  label="Dat lai"
+                  label="Đặt lại"
                   icon="pi pi-refresh"
                   severity="secondary"
                   onClick={handleResetSearch}
@@ -210,7 +204,7 @@ const Product_manager = () => {
 
             {/* So luong ket qua */}
             <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}>
-              Dang hien thi {products.length} san pham
+              Đang hiển thị {products.length} sản phẩm
             </p>
           </div>
         </AccordionTab>
@@ -225,7 +219,7 @@ const Product_manager = () => {
         sortable={true}
         hoverable={true}
         onRowClick={openViewModal}
-        emptyMessage="Khong co san pham nao"
+        emptyMessage="Không có sản phẩm nào"
       />
 
       <ProductViewModal

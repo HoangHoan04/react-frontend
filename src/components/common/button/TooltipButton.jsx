@@ -11,6 +11,7 @@ const CustomTooltipButton = ({
   style = {},
   size = "default", // "small" | "default" | "large"
   variant = "default", // "default" | "text" | "outlined"
+  outlined = false,
   severity = "primary", // primary | secondary | success | info | warning | danger | help
   disabled = false,
   ...rest
@@ -39,9 +40,9 @@ const CustomTooltipButton = ({
       outlined: "border-2 border-blue-600 text-blue-600",
     },
     outlined: {
-      default: "text-gray-600",
-      text: "bg-transparent text-gray-600",
-      outlined: "text-gray-600",
+      default: "text-gray-500",
+      text: "bg-transparent text-gray-500",
+      outlined: "text-gray-500",
     },
     secondary: {
       default:
@@ -81,8 +82,10 @@ const CustomTooltipButton = ({
     },
   };
 
+  const resolvedVariant = outlined ? "outlined" : variant;
   const buttonStyles =
-    severityStyles[severity]?.[variant] || severityStyles.primary.default;
+    severityStyles[severity]?.[resolvedVariant] ||
+    severityStyles.primary.default;
 
   // Tooltip position classes
   const tooltipPositions = {
@@ -131,7 +134,7 @@ const CustomTooltipButton = ({
         style={style}
         {...rest}
       >
-        {icon && <i className={`${icon} ${hasLabel ? "" : "text-lg"}`} />}
+        {icon && <i className={`${icon} ${hasLabel ? "" : "text-base"}`} />}
         {label && <span className="font-medium">{label}</span>}
       </button>
 
@@ -158,15 +161,16 @@ const CustomTooltipButton = ({
 };
 
 CustomTooltipButton.propTypes = {
-  icon: PropTypes.string,
-  label: PropTypes.string,
-  onClick: PropTypes.func,
-  tooltip: PropTypes.string,
-  tooltipPosition: PropTypes.oneOf(["top", "bottom", "left", "right"]),
-  className: PropTypes.string,
-  style: PropTypes.object,
-  size: PropTypes.oneOf(["small", "default", "large"]),
-  variant: PropTypes.oneOf(["default", "text", "outlined"]),
+  icon: PropTypes.string, // Tên icon PrimeReact (ví dụ: "pi pi-check")
+  label: PropTypes.string, // Text hiển thị trên button
+  onClick: PropTypes.func, // Hàm xử lý sự kiện click
+  tooltip: PropTypes.string, // Text hiển thị trong tooltip
+  tooltipPosition: PropTypes.oneOf(["top", "bottom", "left", "right"]), // Vị trí của tooltip
+  className: PropTypes.string, // Class CSS tùy chỉnh
+  style: PropTypes.object, // Style tùy chỉnh
+  size: PropTypes.oneOf(["small", "default", "large"]), // Kích thước của button
+  variant: PropTypes.oneOf(["default", "text", "outlined"]), // Kiểu của button
+  outlined: PropTypes.bool, // Dùng nhanh kiểu outlined
   severity: PropTypes.oneOf([
     "primary",
     "secondary",
@@ -175,8 +179,8 @@ CustomTooltipButton.propTypes = {
     "warning",
     "danger",
     "help",
-  ]),
-  disabled: PropTypes.bool,
+  ]), // Mức độ (màu sắc) của button
+  disabled: PropTypes.bool, // Trạng thái disabled
 };
 
 export default CustomTooltipButton;

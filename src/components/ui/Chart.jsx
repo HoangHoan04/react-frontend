@@ -1,17 +1,16 @@
-import React from "react";
 import {
-  LineChart,
-  Line,
-  BarChart,
   Bar,
-  PieChart,
-  Pie,
+  BarChart,
   Cell,
+  Legend,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
 } from "recharts";
 
 const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#6366f1"];

@@ -111,20 +111,15 @@ export default function DataTable({
                     <div className="flex items-center gap-2">
                       <span>{column.header}</span>
                       {isSortable && (
-                        <span className="flex flex-col">
-                          <i
-                            className={`pi pi-chevron-up text-[8px] -mb-1 ${
-                              isSorted && sortOrder === 1 ? "text-blue-600" : ""
-                            }`}
-                          ></i>
-                          <i
-                            className={`pi pi-chevron-down text-[8px] ${
-                              isSorted && sortOrder === -1
-                                ? "text-blue-600"
-                                : ""
-                            }`}
-                          ></i>
-                        </span>
+                        <i
+                          className={`pi text-sm ${
+                            isSorted && sortOrder === 1
+                              ? "pi-sort-amount-up text-blue-600"
+                              : isSorted && sortOrder === -1
+                                ? "pi-sort-amount-down text-blue-600"
+                                : "pi-sort-alt"
+                          }`}
+                        ></i>
                       )}
                     </div>
                   </th>
