@@ -27,10 +27,7 @@ const EMPTY_EDIT_FORM = {
 const useProductManager = () => {
   const showToast = useToastStore((state) => state.showToast);
 
-  // searchForm: giá trị đang nhập
-  // committedParams: chỉ cập nhật khi bấm "Tìm kiếm" → tránh gọi API liên tục
   const [searchForm, setSearchForm] = useState(EMPTY_SEARCH_FORM);
-  const [committedParams, setCommittedParams] = useState({});
 
   // Modal thêm / chỉnh sửa
   const [editingProduct, setEditingProduct] = useState(null);
@@ -44,10 +41,8 @@ const useProductManager = () => {
 
   const isEditMode = Boolean(editingProduct?.id);
 
-  // ─── Query ────────────────────────────────────────────────────────────────
-  const { products, isLoading, refetch } = useFilterProducts(committedParams);
-
-  // ─── Mutations ─────────────────────────────────────────────────────────────
+  // ─── Data & mutations ─────────────────────────────────────────────────────
+  const { products, isLoading, fetchWithFilter } = useFilterProducts();
   const { mutateAsync: createProduct, isPending: isCreating } = useCreateProduct();
   const { mutateAsync: updateProduct, isPending: isUpdating } = useUpdateProduct(editingProduct?.id);
   const { mutateAsync: deleteProduct, isPending: isDeleting } = useDeleteProduct(productToDelete?.id);
@@ -80,12 +75,12 @@ const useProductManager = () => {
     if (searchForm.categoryId)          params.categoryId   = searchForm.categoryId;
     if (searchForm.categorySlug.trim()) params.categorySlug = searchForm.categorySlug.trim();
 
-    setCommittedParams(params);
+    fetchWithFilter(params);
   };
 
   const handleResetSearch = () => {
     setSearchForm(EMPTY_SEARCH_FORM);
-    setCommittedParams({});
+    fetchWithFilter(); // load lại toàn bộ
   };
 
   // ─── Thêm / Chỉnh sửa ────────────────────────────────────────────────────
@@ -160,6 +155,7 @@ const useProductManager = () => {
         await createProduct(payload);
         showToast({ type: "success", title: "Thêm mới thành công", message: `Đã thêm sản phẩm "${payload.title}".` });
       }
+      await fetchWithFilter(); // cập nhật lại danh sách
       closeEditModal();
     } catch {
       showToast({ type: "error", title: "Lỗi", message: `Không thể ${isEditMode ? "cập nhật" : "thêm"} sản phẩm. Vui lòng thử lại.` });
@@ -177,6 +173,7 @@ const useProductManager = () => {
     if (!productToDelete?.id) return;
     try {
       await deleteProduct();
+      await fetchWithFilter(); // cập nhật lại danh sách
       showToast({ type: "success", title: "Xóa thành công", message: `Đã xóa sản phẩm "${productToDelete.title}".` });
     } catch {
       showToast({ type: "error", title: "Lỗi", message: "Không thể xóa sản phẩm. Vui lòng thử lại." });
@@ -186,7 +183,8 @@ const useProductManager = () => {
   };
 
   return {
-    products, isLoading, refetch,
+    products, isLoading,
+    refetch: fetchWithFilter,
     searchForm, handleSearchFormChange, handleSearch, handleResetSearch,
     editingProduct, isEditMode, isEditModalVisible, isFormSubmitting,
     editForm, formErrors,

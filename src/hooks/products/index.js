@@ -1,248 +1,179 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import rootApiService from "../../services/api.service";
 import { API_ENDPOINTS } from "../../services/endpoint";
 
 // ─── Lấy danh sách sản phẩm ───────────────────────────────────────────────
 export const useGetProducts = () => {
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => {
-      const response = await rootApiService.get(API_ENDPOINTS.PRODUCT.LIST);
-      return response;
-    },
-  });
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  return {
-    products: Array.isArray(data) ? data : [],
-    isLoading,
-    error,
-    refetch,
+  const fetchProducts = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await rootApiService.get(API_ENDPOINTS.PRODUCT.LIST);
+      setProducts(Array.isArray(response) ? response : []);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  return { products, isLoading, error, refetch: fetchProducts };
 };
 
 // ─── Tìm kiếm gộp nhiều tham số ──────────────────────────────────────────
 // params: { title, price, priceMin, priceMax, categoryId, categorySlug }
-export const useFilterProducts = (params) => {
-  const buildQueryString = (p) => {
+export const useFilterProducts = () => {
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const buildQueryString = (params = {}) => {
     const qs = new URLSearchParams();
-    if (p.title?.trim())        qs.append("title",        p.title.trim());
-    if (p.price)                qs.append("price",        p.price);
-    if (p.priceMin)             qs.append("price_min",    p.priceMin);
-    if (p.priceMax)             qs.append("price_max",    p.priceMax);
-    if (p.categoryId)           qs.append("categoryId",   p.categoryId);
-    if (p.categorySlug?.trim()) qs.append("categorySlug", p.categorySlug.trim());
+    if (params.title?.trim())        qs.append("title",        params.title.trim());
+    if (params.price)                qs.append("price",        params.price);
+    if (params.priceMin)             qs.append("price_min",    params.priceMin);
+    if (params.priceMax)             qs.append("price_max",    params.priceMax);
+    if (params.categoryId)           qs.append("categoryId",   params.categoryId);
+    if (params.categorySlug?.trim()) qs.append("categorySlug", params.categorySlug.trim());
     return qs.toString();
   };
 
-  const queryString = buildQueryString(params ?? {});
-  const hasFilter = Boolean(queryString);
-
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["productsFilter", queryString],
-    queryFn: async () => {
-      const url = hasFilter
+  const fetchWithFilter = async (params = {}) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const queryString = buildQueryString(params);
+      const url = queryString
         ? `${API_ENDPOINTS.PRODUCT.LIST}?${queryString}`
         : API_ENDPOINTS.PRODUCT.LIST;
       const response = await rootApiService.get(url);
-      return response;
-    },
-  });
-
-  return {
-    products: Array.isArray(data) ? data : [],
-    isLoading,
-    error,
-    refetch,
+      setProducts(Array.isArray(response) ? response : []);
+    } catch (err) {
+      setError(err);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  // Load toàn bộ khi mount
+  useEffect(() => {
+    fetchWithFilter();
+  }, []);
+
+  return { products, isLoading, error, fetchWithFilter };
 };
 
 // ─── Lấy chi tiết 1 sản phẩm ──────────────────────────────────────────────
 export const useDetailProduct = (productId) => {
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["product", productId],
-    enabled: Boolean(productId),
-    queryFn: async () => {
+  const [product, setProduct] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const fetchProduct = async () => {
+    if (!productId) {
+      setProduct(null);
+      return;
+    }
+    setIsLoading(true);
+    setError(null);
+    try {
       const response = await rootApiService.get(
         API_ENDPOINTS.PRODUCT.DETAIL(productId)
       );
-      return response;
-    },
-  });
-
-  return {
-    product: data,
-    isLoading,
-    error,
-    refetch,
+      setProduct(response);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
-};
 
-// ─── Tìm kiếm theo tên ────────────────────────────────────────────────────
-export const useSearchProductsByTitle = (title) => {
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["productsByTitle", title],
-    enabled: Boolean(title?.trim()),
-    queryFn: async () => {
-      const response = await rootApiService.get(
-        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_TITLE(title.trim())
-      );
-      return response;
-    },
-  });
+  useEffect(() => {
+    fetchProduct();
+  }, [productId]);
 
-  return {
-    products: Array.isArray(data) ? data : [],
-    isLoading,
-    error,
-    refetch,
-  };
-};
-
-// ─── Tìm kiếm theo giá ────────────────────────────────────────────────────
-export const useSearchProductsByPrice = (price) => {
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["productsByPrice", price],
-    enabled: Boolean(price),
-    queryFn: async () => {
-      const response = await rootApiService.get(
-        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_PRICE(Number(price))
-      );
-      return response;
-    },
-  });
-
-  return {
-    products: Array.isArray(data) ? data : [],
-    isLoading,
-    error,
-    refetch,
-  };
-};
-
-// ─── Tìm kiếm theo khoảng giá ─────────────────────────────────────────────
-export const useSearchProductsByPriceRange = (priceMin, priceMax) => {
-  const enabled = Boolean(priceMin) && Boolean(priceMax) && Number(priceMin) <= Number(priceMax);
-
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["productsByPriceRange", priceMin, priceMax],
-    enabled,
-    queryFn: async () => {
-      const response = await rootApiService.get(
-        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_PRICE_RANGE(
-          Number(priceMin),
-          Number(priceMax)
-        )
-      );
-      return response;
-    },
-  });
-
-  return {
-    products: Array.isArray(data) ? data : [],
-    isLoading,
-    error,
-    refetch,
-  };
-};
-
-// ─── Tìm kiếm theo ID danh mục ────────────────────────────────────────────
-export const useSearchProductsByCategoryId = (categoryId) => {
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["productsByCategoryId", categoryId],
-    enabled: Boolean(categoryId),
-    queryFn: async () => {
-      const response = await rootApiService.get(
-        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_CATEGORY_ID(Number(categoryId))
-      );
-      return response;
-    },
-  });
-
-  return {
-    products: Array.isArray(data) ? data : [],
-    isLoading,
-    error,
-    refetch,
-  };
-};
-
-// ─── Tìm kiếm theo slug danh mục ──────────────────────────────────────────
-export const useSearchProductsByCategorySlug = (categorySlug) => {
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["productsByCategorySlug", categorySlug],
-    enabled: Boolean(categorySlug?.trim()),
-    queryFn: async () => {
-      const response = await rootApiService.get(
-        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_CATEGORY_SLUG(categorySlug.trim())
-      );
-      return response;
-    },
-  });
-
-  return {
-    products: Array.isArray(data) ? data : [],
-    isLoading,
-    error,
-    refetch,
-  };
+  return { product, isLoading, error, refetch: fetchProduct };
 };
 
 // ─── Thêm sản phẩm ────────────────────────────────────────────────────────
 export const useCreateProduct = () => {
-  const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const mutation = useMutation({
-    mutationFn: async (newProduct) => {
+  const mutateAsync = async (newProduct) => {
+    setIsLoading(true);
+    setError(null);
+    try {
       const response = await rootApiService.post(
         API_ENDPOINTS.PRODUCT.CREATE,
         newProduct
       );
       return response;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-    },
-  });
+    } catch (err) {
+      setError(err);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  return mutation;
+  return { mutateAsync, isPending: isLoading, error };
 };
 
 // ─── Cập nhật sản phẩm ────────────────────────────────────────────────────
 export const useUpdateProduct = (productId) => {
-  const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const mutation = useMutation({
-    mutationFn: async (updatedProduct) => {
+  const mutateAsync = async (updatedProduct) => {
+    setIsLoading(true);
+    setError(null);
+    try {
       const response = await rootApiService.put(
         API_ENDPOINTS.PRODUCT.UPDATE(productId),
         updatedProduct
       );
       return response;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-      queryClient.invalidateQueries({ queryKey: ["product", productId] });
-    },
-  });
+    } catch (err) {
+      setError(err);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  return mutation;
+  return { mutateAsync, isPending: isLoading, error };
 };
 
 // ─── Xóa sản phẩm ─────────────────────────────────────────────────────────
 export const useDeleteProduct = (productId) => {
-  const queryClient = useQueryClient();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const mutation = useMutation({
-    mutationFn: async () => {
+  const mutateAsync = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
       const response = await rootApiService.delete(
         API_ENDPOINTS.PRODUCT.DELETE(productId)
       );
       return response;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-    },
-  });
+    } catch (err) {
+      setError(err);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  return mutation;
+  return { mutateAsync, isPending: isLoading, error };
 };

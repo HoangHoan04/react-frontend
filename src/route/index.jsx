@@ -31,6 +31,10 @@ export default function AppRoutes() {
             element={<ProductManager />}
           />
           <Route
+            path={ROUTES.MAIN.PRODUCT_MANAGER.children.DETAIL_PRODUCT.path}
+            element={<ProductDetail />}
+          />
+          <Route
             path={ROUTES.MAIN.DEMODASHBOARD.path}
             element={<DashboardDemo />}
           />
