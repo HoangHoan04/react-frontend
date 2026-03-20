@@ -1,12 +1,22 @@
-import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 import rootApiService from "../../services/api.service";
 import { API_ENDPOINTS } from "../../services/endpoint";
 
 export const useUploadFile = () => {
-  const mutation = useMutation({
-    mutationFn: async (file) => {
-      if (!file) throw new Error("Vui long chon file");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
 
+  const mutateAsync = async (file) => {
+    if (!file) {
+      const err = new Error("Vui long chon file");
+      setError(err);
+      throw err;
+    }
+
+    setIsLoading(true);
+    setError(null);
+    try {
       const formData = new FormData();
       formData.append("file", file);
 
@@ -15,9 +25,20 @@ export const useUploadFile = () => {
         formData,
       );
 
+      setData(response);
       return response;
-    },
-  });
+    } catch (err) {
+      setError(err);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  return mutation;
+  return {
+    mutateAsync,
+    isPending: isLoading,
+    error,
+    data,
+  };
 };

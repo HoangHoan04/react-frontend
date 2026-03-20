@@ -6,6 +6,12 @@ export const ROUTES = {
       path: "/login",
       isShow: false,
     },
+    PROFILE: {
+      key: "PROFILE",
+      label: "Thông tin tài khoản",
+      path: "/profile",
+      icon: "pi pi-user",
+    },
   },
 
   MAIN: {

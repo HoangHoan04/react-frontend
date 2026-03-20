@@ -1,12 +1,16 @@
-import { useThemeStore } from "@/stores";
+import { useAuthStore, useThemeStore } from "@/stores";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import { ROUTES } from "../common/constants/routes";
+import { useRouter } from "../route/hooks";
 import AppNavbar from "./AppNavbar";
 import AppSidebar from "./AppSidebar";
 
 export default function AppLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const theme = useThemeStore((state) => state.theme);
+  const { logout } = useAuthStore();
+  const router = useRouter();
   const isDark = theme === "dark";
 
   const sidebarWidth = 280;
@@ -14,12 +18,9 @@ export default function AppLayout() {
 
   const toggleSidebar = () => setCollapsed((prev) => !prev);
 
-  const handleChangePassword = () => {
-    console.log("Change password");
-  };
-
   const handleLogout = () => {
-    console.log("Logout");
+    logout();
+    router.push(ROUTES.AUTH.LOGIN.path);
   };
 
   return (
@@ -43,7 +44,6 @@ export default function AppLayout() {
         <AppNavbar
           collapsed={collapsed}
           onToggleSidebar={toggleSidebar}
-          onChangePassword={handleChangePassword}
           onLogout={handleLogout}
         />
 

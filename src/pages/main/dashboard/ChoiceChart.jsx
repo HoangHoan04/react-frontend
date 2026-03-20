@@ -1,9 +1,9 @@
-import SelectOption from "../../components/common/SelectOption";
-import ChartDraggableItem from "./Draggable";
-import PopupDateRangePicker from "../../components/ui/PopupDateRangePicker";
-import Chart from "../../components/ui/Chart";
 import { useState } from "react";
-import { useDashboardStore } from "../../stores";
+import SelectOption from "../../../components/common/SelectOption";
+import Chart from "../../../components/ui/Chart";
+import PopupDateRangePicker from "../../../components/ui/PopupDateRangePicker";
+import { useDashboardStore } from "../../../stores";
+import ChartDraggableItem from "./Draggable";
 
 const ChoiceChart = ({ isDark }) => {
   const {
@@ -56,7 +56,6 @@ const ChoiceChart = ({ isDark }) => {
             { value: "the-loai", label: "Thể Loại" },
           ]}
           onChange={(option) => {
-            console.log("Selected:", option);
             setSelectedTable(option.value);
           }}
           isDark={isDark}

@@ -1,6 +1,6 @@
-import { useUploadFile } from "@/hooks";
 import { useToastStore } from "@/stores";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useUploadFile } from "../../hooks";
 import CustomButton from "./button/Button";
 import CustomModal from "./Modal";
 

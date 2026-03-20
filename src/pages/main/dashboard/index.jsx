@@ -1,8 +1,8 @@
-import { useThemeStore, useDashboardStore, useToastStore } from "@/stores";
+import { useDashboardStore, useThemeStore, useToastStore } from "@/stores";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { useState } from "react";
-import Chart from "../../components/ui/Chart";
+import Chart from "../../../components/ui/Chart";
 import ChoiceChart from "./ChoiceChart";
 import Droppable from "./Droppable";
 
@@ -111,7 +111,7 @@ const DashboardPage = () => {
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div
-        className={`dashboard-page w-full h-full  p-4 border border-black rounded-lg relative ${isDark ? "bg-gray-900" : "bg-(--bg-main)"}`}
+        className={`w-full h-full  p-4 border border-black rounded-lg relative `}
       >
         <div className="flex gap-1 h-full">
           <ChoiceChart isDark={isDark} />

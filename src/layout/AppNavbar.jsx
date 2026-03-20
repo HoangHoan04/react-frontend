@@ -3,28 +3,25 @@ import FullScreen from "@/components/ui/FullScreen";
 import { ThemeSwitch } from "@/components/ui/ThemeSwitch";
 import { useAuthStore, useThemeStore } from "@/stores";
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Avatar } from "../components/common/Avatar";
 import { DropdownMenu } from "../components/common/Dropdown";
 import TooltipButtonCustom from "../components/common/button/TooltipButton";
 
-export default function AppNavbar({
-  collapsed,
-  onToggleSidebar,
-  onChangePassword,
-  onLogout,
-}) {
+export default function AppNavbar({ collapsed, onToggleSidebar, onLogout }) {
   const theme = useThemeStore((state) => state.theme);
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
   const user = useAuthStore((state) => state.user);
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const avatarRef = useRef(null);
   const isDark = theme === "dark";
 
   const menuItems = [
     {
-      label: "Đổi mật khẩu",
-      icon: "pi pi-key",
-      command: onChangePassword,
+      label: "Thông tin cá nhân",
+      icon: "pi pi-user",
+      command: () => navigate("/profile"),
     },
     {
       label: "Đăng xuất",
@@ -33,17 +30,11 @@ export default function AppNavbar({
     },
   ];
 
-  const displayUserName = user?.employee?.fullName || user?.username || "Guest";
+  const displayUserName = user?.name || user?.email || "Guest";
 
   const getAvatarUrl = () => {
-    if (user?.employee?.avatar) {
-      const avatarData = Array.isArray(user.employee.avatar)
-        ? user.employee.avatar[0]
-        : user.employee.avatar;
-      return (
-        avatarData?.url ||
-        "https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png"
-      );
+    if (user?.avatar) {
+      return user.avatar;
     }
     return "https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png";
   };
