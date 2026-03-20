@@ -59,19 +59,48 @@ const ProductEditModal = ({
           containerClassName="w-full"
         />
 
-        {/* Giá bán */}
-        <CustomInputText
-          label="Giá bán (USD)"
-          type="number"
-          min="0"
-          value={String(editForm.price)}
-          onChange={onFormChange("price")}
-          placeholder="Nhập giá bán"
-          isDark={isDark}
-          error={Boolean(formErrors.price)}
-          errorMessage={formErrors.price}
-          containerClassName="w-full"
-        />
+        {/* Giá bán + ID danh mục (chỉ hiện khi thêm mới) */}
+        {!isEditMode ? (
+          <div className="grid grid-cols-2 gap-3">
+            <CustomInputText
+              label="Giá bán (USD)"
+              type="number"
+              min="0"
+              value={String(editForm.price)}
+              onChange={onFormChange("price")}
+              placeholder="Nhập giá bán"
+              isDark={isDark}
+              error={Boolean(formErrors.price)}
+              errorMessage={formErrors.price}
+              containerClassName="w-full"
+            />
+            <CustomInputText
+              label="ID danh mục"
+              type="number"
+              min="1"
+              value={String(editForm.categoryId)}
+              onChange={onFormChange("categoryId")}
+              placeholder="Ví dụ: 1, 2, 3..."
+              isDark={isDark}
+              error={Boolean(formErrors.categoryId)}
+              errorMessage={formErrors.categoryId}
+              containerClassName="w-full"
+            />
+          </div>
+        ) : (
+          <CustomInputText
+            label="Giá bán (USD)"
+            type="number"
+            min="0"
+            value={String(editForm.price)}
+            onChange={onFormChange("price")}
+            placeholder="Nhập giá bán"
+            isDark={isDark}
+            error={Boolean(formErrors.price)}
+            errorMessage={formErrors.price}
+            containerClassName="w-full"
+          />
+        )}
 
         {/* Mô tả */}
         <div>
@@ -117,18 +146,11 @@ const ProductEditModal = ({
               <div
                 key={index}
                 className={`rounded-xl border p-3 ${
-                  isDark
-                    ? "border-[#333] bg-[#111]"
-                    : "border-gray-200 bg-gray-50"
+                  isDark ? "border-[#333] bg-[#111]" : "border-gray-200 bg-gray-50"
                 }`}
               >
-                {/* Header của từng ảnh */}
                 <div className="flex items-center justify-between mb-3">
-                  <span
-                    className={`text-xs font-medium ${
-                      isDark ? "text-gray-400" : "text-gray-500"
-                    }`}
-                  >
+                  <span className={`text-xs font-medium ${isDark ? "text-gray-400" : "text-gray-500"}`}>
                     Ảnh {index + 1}
                   </span>
                   <button
@@ -147,19 +169,15 @@ const ProductEditModal = ({
                   </button>
                 </div>
 
-                {/* File upload */}
                 <CustomFileUpload
                   label=""
                   value={url}
-                  onChange={(uploadedUrl) =>
-                    onImageChange(index, uploadedUrl || "")
-                  }
+                  onChange={(uploadedUrl) => onImageChange(index, uploadedUrl || "")}
                   emptyText="Chưa có ảnh — nhấn để tải lên"
                   isDark={isDark}
                   previewTitle={`Ảnh ${index + 1}`}
                 />
 
-                {/* Nhập URL thủ công */}
                 <div className="mt-3">
                   <CustomInputText
                     label="Hoặc nhập URL ảnh"
@@ -174,7 +192,6 @@ const ProductEditModal = ({
             ))}
           </div>
 
-          {/* Nút thêm ảnh */}
           <button
             type="button"
             onClick={onAddImage}

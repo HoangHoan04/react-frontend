@@ -19,6 +19,7 @@ const EMPTY_SEARCH_FORM = {
 const EMPTY_EDIT_FORM = {
   title: "",
   price: "",
+  categoryId: "",
   description: "",
   images: [""],
 };
@@ -139,6 +140,7 @@ const useProductManager = () => {
     const nextErrors = {};
     if (!editForm.title.trim()) nextErrors.title = "Vui lòng nhập tên sản phẩm.";
     if (!editForm.price || Number(editForm.price) <= 0) nextErrors.price = "Vui lòng nhập giá hợp lệ (lớn hơn 0).";
+    if (!isEditMode && !editForm.categoryId) nextErrors.categoryId = "Vui lòng nhập ID danh mục.";
     if (Object.keys(nextErrors).length > 0) { setFormErrors(nextErrors); return; }
 
     const validImages = editForm.images.filter((url) => url.trim());
@@ -147,6 +149,7 @@ const useProductManager = () => {
       price: Number(editForm.price),
       description: editForm.description.trim(),
       images: validImages.length ? validImages : ["https://placehold.co/400"],
+      ...(!isEditMode && { categoryId: Number(editForm.categoryId) }),
     };
 
     try {
