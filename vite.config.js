@@ -43,7 +43,7 @@ export default defineConfig({
           // Animations
           animations: ["lottie-react", "lottie-web"],
           // UI libraries
-          ui: ["@tanstack/react-query", "date-fns", "react-date-range"],
+          ui: ["date-fns", "react-date-range"],
           // State management
           state: ["zustand"],
           // DnD

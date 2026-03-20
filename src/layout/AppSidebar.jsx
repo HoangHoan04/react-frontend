@@ -2,8 +2,9 @@ import { ROUTES } from "@/common/constants/routes";
 import { useThemeStore } from "@/stores";
 import { convertRoutesToMenuItems } from "@/utils/route.util";
 import { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { logo } from "../assets/images";
+import { useRouter } from "../route/hooks";
 
 const checkIsActive = (item, currentPath) => {
   if (
@@ -25,7 +26,7 @@ export default function AppSidebar({
 }) {
   const theme = useThemeStore((state) => state.theme);
   const location = useLocation();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const [openKeys, setOpenKeys] = useState([]);
   const [hoveredKey, setHoveredKey] = useState(null);
@@ -61,7 +62,7 @@ export default function AppSidebar({
     if (item.items && item.items.length > 0 && !collapsed) {
       handleToggleSubmenu(item.key);
     } else if (item.path) {
-      navigate(item.path);
+      router.push(item.path);
     }
   };
 
@@ -94,7 +95,7 @@ export default function AppSidebar({
               .map((child) => (
                 <button
                   key={child.key}
-                  onClick={() => child.path && navigate(child.path)}
+                  onClick={() => child.path && router.push(child.path)}
                   className={`w-full flex items-center px-3 py-2 text-[13px] rounded-md transition-colors text-left
                   ${
                     checkIsActive(child, location.pathname)

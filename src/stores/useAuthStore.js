@@ -2,39 +2,67 @@ import { create } from "zustand";
 
 export const useAuthStore = create((set) => ({
   user: null,
+  accessToken: null,
+  refreshToken: null,
   loading: true,
   isAuthenticated: false,
 
-  // Initialize from localStorage
+  // Initialize from localStorage - load tokens only
   initialize: () => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      try {
-        const user = JSON.parse(savedUser);
-        set({ user, isAuthenticated: true, loading: false });
-      } catch (error) {
-        console.error("Error parsing saved user:", error);
-        set({ loading: false });
-      }
+    const savedAccessToken = localStorage.getItem("accessToken");
+    const savedRefreshToken = localStorage.getItem("refreshToken");
+
+    if (savedAccessToken && savedRefreshToken) {
+      set({
+        accessToken: savedAccessToken,
+        refreshToken: savedRefreshToken,
+        isAuthenticated: true,
+        loading: false,
+      });
     } else {
-      set({ loading: false });
+      set({ loading: false, isAuthenticated: false });
     }
   },
 
-  login: (userData) => {
-    set({ user: userData, isAuthenticated: true });
-    localStorage.setItem("user", JSON.stringify(userData));
+  // Save tokens after login
+  login: (accessToken, refreshToken) => {
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
+    set({
+      accessToken,
+      refreshToken,
+      isAuthenticated: true,
+    });
   },
 
+  // Update user profile (fetch from API, not from token)
+  setUser: (userData) => {
+    set({ user: userData });
+  },
+
+  // Logout - clear everything
   logout: () => {
-    set({ user: null, isAuthenticated: false });
-    localStorage.removeItem("user");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    set({
+      user: null,
+      accessToken: null,
+      refreshToken: null,
+      isAuthenticated: false,
+    });
   },
 
-  updateUser: (userData) =>
-    set((state) => {
-      const updated = { ...state.user, ...userData };
-      localStorage.setItem("user", JSON.stringify(updated));
-      return { user: updated };
-    }),
+  // Update tokens on refresh
+  setTokens: (accessToken, refreshToken) => {
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
+    set({ accessToken, refreshToken });
+  },
+
+  // Update user data
+  updateUser: (userData) => {
+    set((state) => ({
+      user: { ...state.user, ...userData },
+    }));
+  },
 }));

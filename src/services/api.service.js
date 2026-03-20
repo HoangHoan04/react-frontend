@@ -1,45 +1,115 @@
-import { API_ROUTES } from "./endpoint";
+import axios from "axios";
+import { API_ENDPOINTS, API_ROUTES } from "./endpoint";
 
-const handleTimeout = (timeout) =>
-  new Promise((_, reject) =>
-    setTimeout(() => reject(new Error("Request timed out")), timeout),
-  );
+const axiosInstance = axios.create({
+  baseURL: API_ROUTES.BASE_URL,
+  timeout: API_ROUTES.TIMEOUT,
+  headers: API_ROUTES.HEADERS,
+});
 
-const request = async (url, method, options = {}) => {
-  const { headers = {}, body, timeout = API_ROUTES.TIMEOUT } = options;
-
-  const authHeaders = {};
-
-  const isFormData = body instanceof FormData;
-  const requestHeaders = {
-    ...authHeaders,
-    ...headers,
-  };
-
-  if (!isFormData) {
-    Object.assign(requestHeaders, API_ROUTES.HEADERS);
-  }
-
-  const fetchPromise = fetch(`${API_ROUTES.BASE_URL}${url}`, {
-    method,
-    headers: requestHeaders,
-    body: isFormData ? body : body ? JSON.stringify(body) : undefined,
-  }).then(async (res) => {
-    if (!res.ok) {
-      const errorText = await res.text();
-      throw new Error(errorText || res.statusText);
+// Request interceptor to add Authorization header
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
-    return res.json();
-  });
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
 
-  return Promise.race([fetchPromise, handleTimeout(timeout)]);
-};
+// Response interceptor để xử lý lỗi chung và refresh token
+axiosInstance.interceptors.response.use(
+  (response) => response.data,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) {
+          // No refresh token, logout
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          window.location.href = "/login";
+          throw new Error("No refresh token available");
+        }
+
+        // Try to refresh token
+        const response = await axios.post(
+          `${API_ROUTES.BASE_URL}${API_ENDPOINTS.AUTH.REFRESH_TOKEN}`,
+          { refresh_token: refreshToken },
+          {
+            headers: API_ROUTES.HEADERS,
+          },
+        );
+
+        const newAccessToken =
+          response.data.access_token || response.data.accessToken;
+        const newRefreshToken =
+          response.data.refresh_token || response.data.refreshToken;
+
+        if (newAccessToken) {
+          // Update tokens in localStorage
+          localStorage.setItem("accessToken", newAccessToken);
+          if (newRefreshToken) {
+            localStorage.setItem("refreshToken", newRefreshToken);
+          }
+
+          // Update auth store
+          const { useAuthStore } = await import("../stores");
+          useAuthStore.setState({
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken,
+          });
+
+          // Retry original request with new token
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return axiosInstance(originalRequest);
+        }
+      } catch (refreshError) {
+        // Refresh failed, logout
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        window.location.href = "/login";
+        throw new Error(`Token refresh failed: ${refreshError.message}`);
+      }
+    }
+
+    // Handle other errors
+    if (error.response) {
+      throw new Error(
+        error.response.data?.message || error.response.statusText,
+      );
+    } else if (error.request) {
+      throw new Error("No response from server");
+    } else {
+      throw error;
+    }
+  },
+);
 
 const rootApiService = {
-  get: (url, headers) => request(url, "GET", { headers }),
-  post: (url, body, headers) => request(url, "POST", { body, headers }),
-  put: (url, body, headers) => request(url, "PUT", { body, headers }),
-  delete: (url, headers) => request(url, "DELETE", { headers }),
+  get: (url, headers = {}) => axiosInstance.get(url, { headers }),
+
+  post: (url, body, headers = {}) => {
+    if (body instanceof FormData) {
+      return axiosInstance.post(url, body, {
+        headers: {
+          ...headers,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    }
+    return axiosInstance.post(url, body, { headers });
+  },
+
+  put: (url, body, headers = {}) => axiosInstance.put(url, body, { headers }),
+
+  delete: (url, headers = {}) => axiosInstance.delete(url, { headers }),
 };
 
 export default rootApiService;
