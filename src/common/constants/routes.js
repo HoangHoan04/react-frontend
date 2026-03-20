@@ -94,7 +94,7 @@ export const ROUTES = {
       },
     },
 
-    PRODUCT_MANAGER: {
+    PRODUCT_MANAGER: {  
       key: "PRODUCT_MANAGER",
       label: "Quản lý sản phẩm",
       icon: "pi pi-users",

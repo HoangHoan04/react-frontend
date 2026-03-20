@@ -4,6 +4,8 @@ import Login from "@/pages/auth/Login";
 import Profile from "@/pages/auth/Profile";
 import DashboardDemo from "@/pages/main/demo-page";
 import { Route, Routes } from "react-router-dom";
+import ProductManager from "../pages/main/product";
+import ProductDetail from "../pages/main/product/ProductDetail";
 import CategoryManager from "../pages/main/categories";
 import CategoryDetail from "../pages/main/categories/detail";
 import DashboardPage from "../pages/main/dashboard";
@@ -24,6 +26,10 @@ export default function AppRoutes() {
             element={<DashboardPage />}
           />
           <Route path={ROUTES.AUTH.PROFILE.path} element={<Profile />} />
+          <Route
+            path={ROUTES.MAIN.PRODUCT_MANAGER.path}
+            element={<ProductManager />}
+          />
           <Route
             path={ROUTES.MAIN.DEMODASHBOARD.path}
             element={<DashboardDemo />}
