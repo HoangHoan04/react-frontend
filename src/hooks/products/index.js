@@ -25,12 +25,13 @@ export const useGetProducts = () => {
 export const useFilterProducts = (params) => {
   const buildQueryString = (p) => {
     const qs = new URLSearchParams();
-    if (p.title?.trim())        qs.append("title",        p.title.trim());
-    if (p.price)                qs.append("price",        p.price);
-    if (p.priceMin)             qs.append("price_min",    p.priceMin);
-    if (p.priceMax)             qs.append("price_max",    p.priceMax);
-    if (p.categoryId)           qs.append("categoryId",   p.categoryId);
-    if (p.categorySlug?.trim()) qs.append("categorySlug", p.categorySlug.trim());
+    if (p.title?.trim()) qs.append("title", p.title.trim());
+    if (p.price) qs.append("price", p.price);
+    if (p.priceMin) qs.append("price_min", p.priceMin);
+    if (p.priceMax) qs.append("price_max", p.priceMax);
+    if (p.categoryId) qs.append("categoryId", p.categoryId);
+    if (p.categorySlug?.trim())
+      qs.append("categorySlug", p.categorySlug.trim());
     return qs.toString();
   };
 
@@ -63,7 +64,7 @@ export const useDetailProduct = (productId) => {
     enabled: Boolean(productId),
     queryFn: async () => {
       const response = await rootApiService.get(
-        API_ENDPOINTS.PRODUCT.DETAIL(productId)
+        API_ENDPOINTS.PRODUCT.DETAIL(productId),
       );
       return response;
     },
@@ -84,7 +85,7 @@ export const useSearchProductsByTitle = (title) => {
     enabled: Boolean(title?.trim()),
     queryFn: async () => {
       const response = await rootApiService.get(
-        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_TITLE(title.trim())
+        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_TITLE(title.trim()),
       );
       return response;
     },
@@ -105,7 +106,7 @@ export const useSearchProductsByPrice = (price) => {
     enabled: Boolean(price),
     queryFn: async () => {
       const response = await rootApiService.get(
-        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_PRICE(Number(price))
+        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_PRICE(Number(price)),
       );
       return response;
     },
@@ -121,7 +122,10 @@ export const useSearchProductsByPrice = (price) => {
 
 // ─── Tìm kiếm theo khoảng giá ─────────────────────────────────────────────
 export const useSearchProductsByPriceRange = (priceMin, priceMax) => {
-  const enabled = Boolean(priceMin) && Boolean(priceMax) && Number(priceMin) <= Number(priceMax);
+  const enabled =
+    Boolean(priceMin) &&
+    Boolean(priceMax) &&
+    Number(priceMin) <= Number(priceMax);
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["productsByPriceRange", priceMin, priceMax],
@@ -130,8 +134,8 @@ export const useSearchProductsByPriceRange = (priceMin, priceMax) => {
       const response = await rootApiService.get(
         API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_PRICE_RANGE(
           Number(priceMin),
-          Number(priceMax)
-        )
+          Number(priceMax),
+        ),
       );
       return response;
     },
@@ -152,7 +156,7 @@ export const useSearchProductsByCategoryId = (categoryId) => {
     enabled: Boolean(categoryId),
     queryFn: async () => {
       const response = await rootApiService.get(
-        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_CATEGORY_ID(Number(categoryId))
+        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_CATEGORY_ID(Number(categoryId)),
       );
       return response;
     },
@@ -173,7 +177,7 @@ export const useSearchProductsByCategorySlug = (categorySlug) => {
     enabled: Boolean(categorySlug?.trim()),
     queryFn: async () => {
       const response = await rootApiService.get(
-        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_CATEGORY_SLUG(categorySlug.trim())
+        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_CATEGORY_SLUG(categorySlug.trim()),
       );
       return response;
     },
@@ -195,7 +199,7 @@ export const useCreateProduct = () => {
     mutationFn: async (newProduct) => {
       const response = await rootApiService.post(
         API_ENDPOINTS.PRODUCT.CREATE,
-        newProduct
+        newProduct,
       );
       return response;
     },
@@ -215,7 +219,7 @@ export const useUpdateProduct = (productId) => {
     mutationFn: async (updatedProduct) => {
       const response = await rootApiService.put(
         API_ENDPOINTS.PRODUCT.UPDATE(productId),
-        updatedProduct
+        updatedProduct,
       );
       return response;
     },
@@ -235,7 +239,7 @@ export const useDeleteProduct = (productId) => {
   const mutation = useMutation({
     mutationFn: async () => {
       const response = await rootApiService.delete(
-        API_ENDPOINTS.PRODUCT.DELETE(productId)
+        API_ENDPOINTS.PRODUCT.DELETE(productId),
       );
       return response;
     },

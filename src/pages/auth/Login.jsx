@@ -200,10 +200,10 @@ export default function Login() {
             <p>
               Demo tài khoản:
               <span className="block mt-2 font-mono text-xs">
-                Email: john@mail.com
+                Email: admin@mail.com
               </span>
               <span className="block font-mono text-xs">
-                Password: changeme
+                Password: admin123
               </span>
             </p>
           </div>
