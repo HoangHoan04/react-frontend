@@ -4,7 +4,7 @@ const StatsCard = ({ theme, stats }) => {
       {stats.map((item, index) => (
         <div
           key={index}
-          className={`${theme === "dark" ? "bg-gray-800" : "bg-white"} rounded-2xl shadow-sm border p-4 hover:shadow-md transition`}
+          className={`${theme === "dark" ? "bg-[#1f1f1f]" : "bg-white"} rounded-2xl shadow-sm border p-4 hover:shadow-md transition`}
         >
           <div className="flex justify-between items-center mb-2">
             <span className="text-gray-500 text-sm">{item.title}</span>

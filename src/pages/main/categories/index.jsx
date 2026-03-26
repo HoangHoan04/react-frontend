@@ -46,10 +46,14 @@ export default function CategoryManager() {
     error: errorCategoryBySlug,
     refetch: refetchCategoryBySlug,
   } = useGetCategoryBySlug(exactSlugQuery);
+
+  // * Tạo category
   const { mutateAsync: createCategory, isPending: isCreating } =
     useCreateCategory();
+  // * Cập nhật category
   const { mutateAsync: updateCategory, isPending: isUpdating } =
     useUpdateCategory(editingCategory?.id);
+  // * Xóa category
   const { mutateAsync: deleteCategory, isPending: isDeleting } =
     useDeleteCategory(categoryToDelete?.id);
 
@@ -84,7 +88,8 @@ export default function CategoryManager() {
     });
   }, [sourceCategories, slugContains, exactSlugQuery]);
 
-  const tableLoading = isLoading || (Boolean(exactSlugQuery) && isLoadingCategoryBySlug);
+  const tableLoading =
+    isLoading || (Boolean(exactSlugQuery) && isLoadingCategoryBySlug);
   const tableError = exactSlugQuery ? errorCategoryBySlug : error;
 
   const openDeleteDialog = useCallback((category) => {
@@ -92,11 +97,11 @@ export default function CategoryManager() {
     setIsDeleteDialogVisible(true);
   }, []);
 
-  const closeDeleteDialog = useCallback(() => {
+  const closeDeleteDialog = () => {
     if (isDeleting) return;
     setIsDeleteDialogVisible(false);
     setCategoryToDelete(null);
-  }, [isDeleting]);
+  };
 
   const resetCategoryForm = useCallback(() => {
     setName("");
@@ -111,21 +116,21 @@ export default function CategoryManager() {
     setIsCategoryModalVisible(true);
   }, [resetCategoryForm]);
 
-  const openEditModal = useCallback((category) => {
+  const openEditModal = (category) => {
     setEditingCategory(category);
     setName(category?.name || "");
     setImage(category?.image || "");
     setSlug(category?.slug || "");
     setFormErrors({});
     setIsCategoryModalVisible(true);
-  }, []);
+  };
 
-  const closeCategoryModal = useCallback(() => {
+  const closeCategoryModal = () => {
     if (isFormSubmitting) return;
     setIsCategoryModalVisible(false);
     setEditingCategory(null);
     resetCategoryForm();
-  }, [isFormSubmitting, resetCategoryForm]);
+  };
 
   const handleSubmitCategory = useCallback(async () => {
     const trimmedName = name.trim();
@@ -373,7 +378,9 @@ export default function CategoryManager() {
           columns={columns}
           rows={5}
           rowsPerPageOptions={[5, 10, 20]}
-          emptyMessage={tableLoading ? "Đang tải dữ liệu..." : "Không có dữ liệu"}
+          emptyMessage={
+            tableLoading ? "Đang tải dữ liệu..." : "Không có dữ liệu"
+          }
         />
       </div>
 

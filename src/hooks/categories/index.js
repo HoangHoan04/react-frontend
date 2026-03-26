@@ -37,7 +37,23 @@ export const useGetCategories = () => {
 export const useDetailCategory = (categoryId) => {
   const [category, setCategory] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [productsBelongToCategory, setProductsBelongToCategory] = useState([]);
   const [error, setError] = useState(null);
+
+  const fetchProductsBelongToCategory = async (id) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const response = await rootApiService.get(
+        API_ENDPOINTS.CATEGORY.GET_ALL_PRODUCTS_BY_CATEGORY(id),
+      );
+      setProductsBelongToCategory(Array.isArray(response) ? response : []);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const fetchCategory = async () => {
     if (!categoryId) {
@@ -61,12 +77,14 @@ export const useDetailCategory = (categoryId) => {
 
   useEffect(() => {
     fetchCategory();
+    fetchProductsBelongToCategory(categoryId);
   }, [categoryId]);
 
   const refetch = fetchCategory;
 
   return {
     category,
+    productsBelongToCategory,
     isLoading,
     error,
     refetch,
@@ -162,45 +180,6 @@ export const useDeleteCategory = (categoryId) => {
     isPending: isLoading,
     error,
     data,
-  };
-};
-
-export const useGetProductsByCategory = (categoryId) => {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const fetchProducts = async () => {
-    if (!categoryId) {
-      setProducts([]);
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await rootApiService.get(
-        API_ENDPOINTS.CATEGORY.GET_ALL_PRODUCTS_BY_CATEGORY(categoryId),
-      );
-      setProducts(Array.isArray(response) ? response : []);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, [categoryId]);
-
-  const refetch = fetchProducts;
-
-  return {
-    products,
-    isLoading,
-    error,
-    refetch,
   };
 };
 

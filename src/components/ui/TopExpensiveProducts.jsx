@@ -5,7 +5,7 @@ export function TopExpensiveProducts({ products, theme }) {
 
   return (
     <div
-      className={`${theme === "dark" ? "bg-gray-800" : "bg-white"} p-5 rounded-2xl shadow-sm border mt-6`}
+      className={`${theme === "dark" ? "bg-[#1f1f1f]" : "bg-white"} p-5 rounded-2xl shadow-sm border mt-6`}
     >
       <h3 className="text-lg font-semibold mb-4">Giá bán cao nhất</h3>
 
@@ -23,7 +23,11 @@ export function TopExpensiveProducts({ products, theme }) {
             </div>
 
             <div className="text-right">
-              <p className="font-semibold text-gray-800">${p.price}</p>
+              <p
+                className={`font-semibold ${theme === "dark" ? "text-white" : "text-gray-800"}`}
+              >
+                ${p.price}
+              </p>
             </div>
           </div>
         ))}

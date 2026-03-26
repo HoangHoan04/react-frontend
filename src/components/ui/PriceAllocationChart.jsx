@@ -3,7 +3,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PriceAllocationChart = ({ products, theme }) => {
+const PriceAllocationChart = ({ products }) => {
   const priceRange = {
     "0-100": 0,
     "100-300": 0,
@@ -16,7 +16,6 @@ const PriceAllocationChart = ({ products, theme }) => {
     else priceRange["300+"]++;
   });
 
-  // Prepare Chart.js compatible data
   const chartData = {
     labels: Object.keys(priceRange),
     datasets: [
@@ -64,7 +63,9 @@ const PriceAllocationChart = ({ products, theme }) => {
 
   return (
     <div className="w-full h-full flex items-center justify-center">
-      <Doughnut data={chartData} options={options} />
+      <div className="w-full h-full">
+        <Doughnut data={chartData} options={options} />
+      </div>
     </div>
   );
 };
