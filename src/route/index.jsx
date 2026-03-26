@@ -5,11 +5,11 @@ import Profile from "@/pages/auth/Profile";
 import DashboardDemo from "@/pages/main/demo-page";
 import { Route, Routes } from "react-router-dom";
 import ProductManager from "../pages/main/product";
-import ProductDetail from "../pages/main/product/ProductDetail";
 import CategoryManager from "../pages/main/categories";
 import CategoryDetail from "../pages/main/categories/detail";
 import DashboardPage from "../pages/main/dashboard";
 import PrivateRoute from "./PrivateRoute";
+import ProductDetail from "../pages/main/product/Productdetail";
 
 export default function AppRoutes() {
   return (
@@ -29,6 +29,10 @@ export default function AppRoutes() {
           <Route
             path={ROUTES.MAIN.PRODUCT_MANAGER.path}
             element={<ProductManager />}
+          />
+          <Route
+            path={ROUTES.MAIN.PRODUCT_MANAGER.children.DETAIL_PRODUCT.path}
+            element={<ProductDetail />}
           />
           <Route
             path={ROUTES.MAIN.DEMODASHBOARD.path}

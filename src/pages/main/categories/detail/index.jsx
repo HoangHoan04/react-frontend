@@ -12,7 +12,7 @@ import { useRouter } from "../../../../route/hooks/use-router";
 export default function CategoryDetail() {
   const { id } = useParams();
   const router = useRouter();
-  const { category } = useDetailCategory(id);
+  const { category, productsBelongToCategory } = useDetailCategory(id);
   const theme = useThemeStore((state) => state.theme);
   const isDark = theme === "dark";
 
@@ -258,7 +258,7 @@ export default function CategoryDetail() {
       >
         <h3 className="font-bold text-lg mb-4">Sản phẩm trong danh mục</h3>
         <DataTable
-          data={category.products || []}
+          data={productsBelongToCategory || []}
           columns={relatedProductsColumns}
           rows={5}
           rowsPerPageOptions={[5, 10, 20]}

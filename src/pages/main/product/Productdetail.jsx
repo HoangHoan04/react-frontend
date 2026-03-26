@@ -40,8 +40,11 @@ export default function ProductDetail() {
 
   // ─── Hooks ────────────────────────────────────────────────────────────────
   const { product, isLoading, refetch } = useDetailProduct(id);
-  const { mutateAsync: updateProduct, isPending: isUpdating } = useUpdateProduct(id);
-  const { mutateAsync: deleteProduct, isPending: isDeleting } = useDeleteProduct(id);
+
+  const { mutateAsync: updateProduct, isPending: isUpdating } =
+    useUpdateProduct(id);
+  const { mutateAsync: deleteProduct, isPending: isDeleting } =
+    useDeleteProduct(id);
 
   const images = product?.images?.filter(Boolean) ?? [];
   const activeImage = images[activeImageIndex] || "";
@@ -88,9 +91,14 @@ export default function ProductDetail() {
 
   const handleSubmitEdit = useCallback(async () => {
     const nextErrors = {};
-    if (!editForm.title.trim()) nextErrors.title = "Vui lòng nhập tên sản phẩm.";
-    if (!editForm.price || Number(editForm.price) <= 0) nextErrors.price = "Vui lòng nhập giá hợp lệ (lớn hơn 0).";
-    if (Object.keys(nextErrors).length > 0) { setFormErrors(nextErrors); return; }
+    if (!editForm.title.trim())
+      nextErrors.title = "Vui lòng nhập tên sản phẩm.";
+    if (!editForm.price || Number(editForm.price) <= 0)
+      nextErrors.price = "Vui lòng nhập giá hợp lệ (lớn hơn 0).";
+    if (Object.keys(nextErrors).length > 0) {
+      setFormErrors(nextErrors);
+      return;
+    }
 
     const validImages = editForm.images.filter((url) => url.trim());
     try {
@@ -101,10 +109,18 @@ export default function ProductDetail() {
         images: validImages.length ? validImages : product.images,
       });
       await refetch();
-      showToast({ type: "success", title: "Cập nhật thành công", message: `Sản phẩm "${editForm.title}" đã được cập nhật.` });
+      showToast({
+        type: "success",
+        title: "Cập nhật thành công",
+        message: `Sản phẩm "${editForm.title}" đã được cập nhật.`,
+      });
       closeEditModal();
     } catch {
-      showToast({ type: "error", title: "Lỗi", message: "Không thể cập nhật sản phẩm. Vui lòng thử lại." });
+      showToast({
+        type: "error",
+        title: "Lỗi",
+        message: "Không thể cập nhật sản phẩm. Vui lòng thử lại.",
+      });
     }
   }, [editForm, updateProduct, refetch, showToast, closeEditModal, product]);
 
@@ -112,29 +128,49 @@ export default function ProductDetail() {
   const handleConfirmDelete = useCallback(async () => {
     try {
       await deleteProduct();
-      showToast({ type: "success", title: "Xóa thành công", message: `Đã xóa sản phẩm "${product?.title}".` });
+      showToast({
+        type: "success",
+        title: "Xóa thành công",
+        message: `Đã xóa sản phẩm "${product?.title}".`,
+      });
       router.push(ROUTES.MAIN.PRODUCT_MANAGER.path);
     } catch {
-      showToast({ type: "error", title: "Lỗi", message: "Không thể xóa sản phẩm. Vui lòng thử lại." });
+      showToast({
+        type: "error",
+        title: "Lỗi",
+        message: "Không thể xóa sản phẩm. Vui lòng thử lại.",
+      });
     }
   }, [deleteProduct, product, showToast, router]);
 
   // ─── Helper render ────────────────────────────────────────────────────────
   const infoItem = (label, value) => (
     <div className={`p-3 rounded-lg ${isDark ? "bg-[#111]" : "bg-gray-50"}`}>
-      <label className={`text-xs font-medium block mb-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+      <label
+        className={`text-xs font-medium block mb-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}
+      >
         {label}
       </label>
-      <p className={`text-sm font-semibold ${isDark ? "text-gray-100" : "text-gray-800"}`}>{value}</p>
+      <p
+        className={`text-sm font-semibold ${isDark ? "text-gray-100" : "text-gray-800"}`}
+      >
+        {value}
+      </p>
     </div>
   );
 
   // ─── Loading ──────────────────────────────────────────────────────────────
   if (isLoading) {
     return (
-      <div className={`rounded-2xl border p-8 text-center shadow-sm ${isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"}`}>
+      <div
+        className={`rounded-2xl border p-8 text-center shadow-sm ${isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"}`}
+      >
         <i className="pi pi-spin pi-spinner text-2xl" />
-        <p className={`mt-2 text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}>Đang tải...</p>
+        <p
+          className={`mt-2 text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}
+        >
+          Đang tải...
+        </p>
       </div>
     );
   }
@@ -142,12 +178,23 @@ export default function ProductDetail() {
   if (!product) {
     return (
       <div className="space-y-4">
-        <div className={`rounded-2xl border p-4 shadow-sm ${isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"}`}>
-          <CustomButton label="Quay lại" icon="pi pi-arrow-left" severity="secondary" outlined
-            onClick={() => router.push(ROUTES.MAIN.PRODUCT_MANAGER.path)} />
+        <div
+          className={`rounded-2xl border p-4 shadow-sm ${isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"}`}
+        >
+          <CustomButton
+            label="Quay lại"
+            icon="pi pi-arrow-left"
+            severity="secondary"
+            outlined
+            onClick={() => router.push(ROUTES.MAIN.PRODUCT_MANAGER.path)}
+          />
         </div>
-        <div className={`rounded-2xl border p-8 text-center shadow-sm ${isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"}`}>
-          <p className={isDark ? "text-gray-400" : "text-gray-600"}>Không tìm thấy sản phẩm</p>
+        <div
+          className={`rounded-2xl border p-8 text-center shadow-sm ${isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"}`}
+        >
+          <p className={isDark ? "text-gray-400" : "text-gray-600"}>
+            Không tìm thấy sản phẩm
+          </p>
         </div>
       </div>
     );
@@ -156,9 +203,10 @@ export default function ProductDetail() {
   // ─── Render ───────────────────────────────────────────────────────────────
   return (
     <div className="space-y-4">
-
       {/* Header */}
-      <div className={`rounded-2xl border p-4 shadow-sm ${isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"}`}>
+      <div
+        className={`rounded-2xl border p-4 shadow-sm ${isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"}`}
+      >
         <div className="flex items-center justify-between gap-3">
           <CustomButton
             label="Quay lại"
@@ -188,14 +236,21 @@ export default function ProductDetail() {
       </div>
 
       {/* Nội dung chính */}
-      <div className={`rounded-2xl border p-6 shadow-sm ${isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"}`}>
+      <div
+        className={`rounded-2xl border p-6 shadow-sm ${isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"}`}
+      >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
           {/* Cột ảnh */}
           <div className="md:col-span-1 flex flex-col gap-3">
-            <h3 className={`font-semibold ${isDark ? "text-gray-100" : "text-gray-800"}`}>Hình ảnh</h3>
+            <h3
+              className={`font-semibold ${isDark ? "text-gray-100" : "text-gray-800"}`}
+            >
+              Hình ảnh
+            </h3>
 
-            <div className={`rounded-xl border overflow-hidden ${isDark ? "border-[#333] bg-[#111]" : "border-gray-200 bg-gray-50"}`}>
+            <div
+              className={`rounded-xl border overflow-hidden ${isDark ? "border-[#333] bg-[#111]" : "border-gray-200 bg-gray-50"}`}
+            >
               {activeImage ? (
                 <CustomImage
                   src={activeImage}
@@ -204,8 +259,12 @@ export default function ProductDetail() {
                   thumbnailClassName="w-full h-56 object-cover"
                 />
               ) : (
-                <div className={`h-56 flex items-center justify-center ${isDark ? "bg-[#111]" : "bg-gray-100"}`}>
-                  <i className={`pi pi-image text-4xl ${isDark ? "text-gray-600" : "text-gray-300"}`} />
+                <div
+                  className={`h-56 flex items-center justify-center ${isDark ? "bg-[#111]" : "bg-gray-100"}`}
+                >
+                  <i
+                    className={`pi pi-image text-4xl ${isDark ? "text-gray-600" : "text-gray-300"}`}
+                  />
                 </div>
               )}
             </div>
@@ -222,15 +281,25 @@ export default function ProductDetail() {
                       className={`h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-colors ${
                         i === activeImageIndex
                           ? "border-blue-500"
-                          : isDark ? "border-[#333] hover:border-gray-500" : "border-gray-200 hover:border-gray-400"
+                          : isDark
+                            ? "border-[#333] hover:border-gray-500"
+                            : "border-gray-200 hover:border-gray-400"
                       }`}
                     >
-                      <img src={url} alt={`Ảnh ${i + 1}`} className="h-full w-full object-cover"
-                        onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                      <img
+                        src={url}
+                        alt={`Ảnh ${i + 1}`}
+                        className="h-full w-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
+                      />
                     </button>
                   ))}
                 </div>
-                <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}>
+                <p
+                  className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}
+                >
                   {activeImageIndex + 1} / {images.length} ảnh
                 </p>
               </>
@@ -239,7 +308,11 @@ export default function ProductDetail() {
 
           {/* Cột thông tin */}
           <div className="md:col-span-2">
-            <h3 className={`font-semibold mb-3 ${isDark ? "text-gray-100" : "text-gray-800"}`}>Thông tin sản phẩm</h3>
+            <h3
+              className={`font-semibold mb-3 ${isDark ? "text-gray-100" : "text-gray-800"}`}
+            >
+              Thông tin sản phẩm
+            </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {infoItem("ID", product.id)}
               {infoItem("Tên sản phẩm", product.title)}
@@ -249,9 +322,17 @@ export default function ProductDetail() {
               {infoItem("Ngày cập nhật", formatDate(product.updatedAt))}
             </div>
 
-            <div className={`mt-3 rounded-lg p-3 ${isDark ? "bg-[#111]" : "bg-gray-50"}`}>
-              <label className={`text-xs font-medium block mb-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}>Mô tả</label>
-              <p className={`text-sm leading-relaxed ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+            <div
+              className={`mt-3 rounded-lg p-3 ${isDark ? "bg-[#111]" : "bg-gray-50"}`}
+            >
+              <label
+                className={`text-xs font-medium block mb-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}
+              >
+                Mô tả
+              </label>
+              <p
+                className={`text-sm leading-relaxed ${isDark ? "text-gray-300" : "text-gray-700"}`}
+              >
                 {product.description || "Không có mô tả."}
               </p>
             </div>
@@ -261,8 +342,14 @@ export default function ProductDetail() {
 
       {/* Danh mục liên quan */}
       {product.category && (
-        <div className={`rounded-2xl border p-6 shadow-sm ${isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"}`}>
-          <h3 className={`font-bold text-lg mb-4 ${isDark ? "text-gray-100" : "text-gray-800"}`}>Danh mục</h3>
+        <div
+          className={`rounded-2xl border p-6 shadow-sm ${isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"}`}
+        >
+          <h3
+            className={`font-bold text-lg mb-4 ${isDark ? "text-gray-100" : "text-gray-800"}`}
+          >
+            Danh mục
+          </h3>
           <div className="flex items-center gap-4">
             <CustomImage
               src={product.category.image}
@@ -272,10 +359,14 @@ export default function ProductDetail() {
               thumbnailClassName="h-16 w-16 rounded-lg object-cover"
             />
             <div className="space-y-1">
-              <p className={`text-sm font-semibold ${isDark ? "text-gray-100" : "text-gray-800"}`}>
+              <p
+                className={`text-sm font-semibold ${isDark ? "text-gray-100" : "text-gray-800"}`}
+              >
                 {product.category.name}
               </p>
-              <p className={`text-xs font-mono ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+              <p
+                className={`text-xs font-mono ${isDark ? "text-gray-400" : "text-gray-500"}`}
+              >
                 slug: {product.category.slug}
               </p>
               <CustomButton
@@ -286,7 +377,10 @@ export default function ProductDetail() {
                 text
                 onClick={() =>
                   router.push(
-                    ROUTES.MAIN.CATEGORY_MANAGER.children.DETAIL_CATEGORY.path.replace(":id", product.category.id)
+                    ROUTES.MAIN.CATEGORY_MANAGER.children.DETAIL_CATEGORY.path.replace(
+                      ":id",
+                      product.category.id,
+                    ),
                   )
                 }
               />
