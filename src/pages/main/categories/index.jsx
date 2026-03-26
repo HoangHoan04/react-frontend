@@ -287,7 +287,7 @@ export default function CategoryManager() {
           isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"
         }`}
       >
-        <Accordion multiple className="mb-4">
+        <Accordion multiple className="mb-4" isOpen={true}>
           <AccordionTab
             header="Tìm kiếm"
             headerClassName={
