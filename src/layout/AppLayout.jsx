@@ -25,7 +25,7 @@ export default function AppLayout() {
 
   return (
     <div
-      className={`flex min-h-screen transition-colors duration-300 ${
+      className={`flex min-h-screen overflow-x-hidden transition-colors duration-300 ${
         isDark ? "bg-[#141414]" : "bg-[#f5f5f5]"
       }`}
     >
@@ -36,7 +36,7 @@ export default function AppLayout() {
       />
 
       <div
-        className="flex-1 flex flex-col transition-all duration-300"
+        className="flex-1 flex flex-col transition-all duration-300 overflow-hidden"
         style={{
           marginLeft: collapsed ? `${collapsedWidth}px` : `${sidebarWidth}px`,
         }}
