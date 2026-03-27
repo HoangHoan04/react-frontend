@@ -87,7 +87,7 @@ export const useDetailProduct = (productId) => {
     setError(null);
     try {
       const response = await rootApiService.get(
-        API_ENDPOINTS.PRODUCT.DETAIL(productId)
+        API_ENDPOINTS.PRODUCT.DETAIL(productId),
       );
       setProduct(response);
     } catch (err) {
@@ -115,8 +115,10 @@ export const useCreateProduct = () => {
     try {
       const response = await rootApiService.post(
         API_ENDPOINTS.PRODUCT.CREATE,
-        newProduct
+        newProduct,
       );
+      setData(response);
+      notifyProductsChanged();
       return response;
     } catch (err) {
       setError(err);
@@ -140,8 +142,10 @@ export const useUpdateProduct = (productId) => {
     try {
       const response = await rootApiService.put(
         API_ENDPOINTS.PRODUCT.UPDATE(productId),
-        updatedProduct
+        updatedProduct,
       );
+      setData(response);
+      notifyProductsChanged();
       return response;
     } catch (err) {
       setError(err);
@@ -164,8 +168,10 @@ export const useDeleteProduct = (productId) => {
     setError(null);
     try {
       const response = await rootApiService.delete(
-        API_ENDPOINTS.PRODUCT.DELETE(productId)
+        API_ENDPOINTS.PRODUCT.DELETE(productId),
       );
+      setData(response);
+      notifyProductsChanged();
       return response;
     } catch (err) {
       setError(err);

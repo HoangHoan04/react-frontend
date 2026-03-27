@@ -587,10 +587,64 @@ export default function Dashboard() {
           Custom Accordion (PrimeReact style)
         </h1>
 
-        {/* Ví dụ 1: Single mode (chỉ mở 1 tab) */}
+        {/* Ví dụ 1: isOpen={false} - Đóng tất cả khi load */}
         <div className="mb-10">
-          <h2 className="text-xl font-semibold mb-3">Single Mode (default)</h2>
-          <Accordion defaultActiveIndex={1}>
+          <h2 className="text-xl font-semibold mb-3">
+            isOpen=false (đóng tất cả khi load - mặc định)
+          </h2>
+          <Accordion isOpen={false}>
+            <AccordionTab header="Tab 1 - Giới thiệu">
+              Tất cả các tab đều đóng khi trang vừa load. Bạn cần click để mở.
+            </AccordionTab>
+
+            <AccordionTab header="Tab 2 - Tính năng">
+              Đây là tab thứ 2, cũng đóng khi load.
+            </AccordionTab>
+
+            <AccordionTab header="Tab 3 - Disabled" disabled>
+              Tab này bị disabled nên không click được.
+            </AccordionTab>
+          </Accordion>
+        </div>
+
+        {/* Ví dụ 2: isOpen={true} - Mở tất cả khi load */}
+        <div className="mb-10">
+          <h2 className="text-xl font-semibold mb-3">
+            isOpen=true (mở tất cả khi load)
+          </h2>
+          <Accordion isOpen={true} multiple>
+            <AccordionTab header="Tab A - Luôn mở khi load">
+              <p className="text-gray-700">
+                Tab này tự động mở khi trang được load vì{" "}
+                <code>isOpen=true</code>.
+              </p>
+            </AccordionTab>
+
+            <AccordionTab header="Tab B - Cũng mở khi load">
+              <ul className="list-disc pl-5 text-gray-700">
+                <li>Tất cả tab đều mở khi load</li>
+                <li>Vẫn có thể click để đóng/mở bình thường</li>
+                <li>Kết hợp với <code>multiple</code> để mở nhiều tab cùng lúc</li>
+              </ul>
+            </AccordionTab>
+
+            <AccordionTab header="Tab C - Code ví dụ">
+              <pre className="bg-gray-100 p-3 rounded text-sm overflow-x-auto">
+                {`<Accordion isOpen={true} multiple>
+  <AccordionTab header="Tab 1">...</AccordionTab>
+  <AccordionTab header="Tab 2">...</AccordionTab>
+</Accordion>`}
+              </pre>
+            </AccordionTab>
+          </Accordion>
+        </div>
+
+        {/* Ví dụ 3: Single mode - chỉ mở 1 tab */}
+        <div className="mb-10">
+          <h2 className="text-xl font-semibold mb-3">
+            Single Mode (chỉ mở 1 tab cùng lúc)
+          </h2>
+          <Accordion>
             <AccordionTab header="What is Tailwind CSS?">
               Tailwind CSS là một utility-first CSS framework giúp bạn xây dựng
               giao diện nhanh chóng mà không cần viết CSS tùy chỉnh quá nhiều.
@@ -603,43 +657,6 @@ export default function Dashboard() {
 
             <AccordionTab header="Có hỗ trợ disabled không?" disabled>
               Có! Tab này bị disabled nên không click được.
-            </AccordionTab>
-
-            <AccordionTab header="Tab 4 - Disabled" disabled>
-              Nội dung này không thể mở vì tab bị disabled.
-            </AccordionTab>
-          </Accordion>
-        </div>
-
-        {/* Ví dụ 2: Multiple mode */}
-        <div>
-          <h2 className="text-xl font-semibold mb-3">
-            Multiple Mode (mở nhiều tab cùng lúc)
-          </h2>
-          <Accordion multiple defaultActiveIndex={0}>
-            <AccordionTab header="Section A - Giới thiệu">
-              <p className="text-gray-700">
-                Đây là nội dung phần A. Bạn có thể mở nhiều phần cùng lúc khi
-                dùng prop <code>multiple</code>.
-              </p>
-            </AccordionTab>
-
-            <AccordionTab header="Section B - Tính năng">
-              <ul className="list-disc pl-5 text-gray-700">
-                <li>Transition mượt mà</li>
-                <li>Hỗ trợ icon PrimeIcons</li>
-                <li>Disabled tab</li>
-                <li>Dễ tùy chỉnh bằng Tailwind</li>
-              </ul>
-            </AccordionTab>
-
-            <AccordionTab header="Section C - Code ví dụ">
-              <pre className="bg-gray-100 p-3 rounded text-sm overflow-x-auto">
-                {`<Accordion multiple>
-                    <AccordionTab header="Tiêu đề 1">...</AccordionTab>
-                    <AccordionTab header="Tiêu đề 2">...</AccordionTab>
-                  </Accordion>`}
-              </pre>
             </AccordionTab>
           </Accordion>
         </div>

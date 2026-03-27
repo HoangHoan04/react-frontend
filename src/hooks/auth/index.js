@@ -23,7 +23,7 @@ export const useLogin = () => {
         loginResponse.refresh_token || loginResponse.refreshToken;
 
       if (!accessToken) {
-        throw new Error("No access token from login API");
+        throw new Error("Không nhận được access token từ API đăng nhập");
       }
       login(accessToken, refreshToken);
       const profileResponse = await rootApiService.get(

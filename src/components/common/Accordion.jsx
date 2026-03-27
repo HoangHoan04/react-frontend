@@ -1,15 +1,22 @@
 import { Children, cloneElement, isValidElement, useState } from "react";
 
+/**
+ * @param {boolean} [props.isOpen=false] - true: tất cả tab mở khi load, false: tất cả đóng khi load
+ * @param {boolean} [props.multiple=false] - Cho phép mở nhiều tab cùng lúc
+ */
 export const Accordion = ({
   children,
   multiple = false,
-  defaultActiveIndex = 0,
+  isOpen = false,
   className = "",
   ...props
 }) => {
-  const [activeIndexes, setActiveIndexes] = useState(
-    multiple ? [] : [defaultActiveIndex],
-  );
+  const [activeIndexes, setActiveIndexes] = useState(() => {
+    if (!isOpen) return [];
+    // Mở tất cả tab khi isOpen = true
+    const count = Children.count(children);
+    return Array.from({ length: count }, (_, i) => i);
+  });
 
   const toggleTab = (index) => {
     setActiveIndexes((prev) => {
