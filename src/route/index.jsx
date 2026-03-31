@@ -9,7 +9,8 @@ import CategoryManager from "../pages/main/categories";
 import CategoryDetail from "../pages/main/categories/detail";
 import DashboardPage from "../pages/main/dashboard";
 import PrivateRoute from "./PrivateRoute";
-import ProductDetail from "../pages/main/product/Productdetail";
+import CustomersManager from "../pages/main/users/customers";
+import EmployeesManager from "../pages/main/users/employee";
 
 export default function AppRoutes() {
   return (
@@ -30,10 +31,10 @@ export default function AppRoutes() {
             path={ROUTES.MAIN.PRODUCT_MANAGER.path}
             element={<ProductManager />}
           />
-          <Route
+          {/* <Route
             path={ROUTES.MAIN.PRODUCT_MANAGER.children.DETAIL_PRODUCT.path}
             element={<ProductDetail />}
-          />
+          /> */}
           <Route
             path={ROUTES.MAIN.DEMODASHBOARD.path}
             element={<DashboardDemo />}
@@ -45,6 +46,16 @@ export default function AppRoutes() {
           <Route
             path={ROUTES.MAIN.CATEGORY_MANAGER.children.DETAIL_CATEGORY.path}
             element={<CategoryDetail />}
+          />
+
+          <Route
+            path={ROUTES.MAIN.USER_MANAGER.children.CUSTOMER_MANAGER.path}
+            element={<CustomersManager />}
+          />
+
+          <Route
+            path={ROUTES.MAIN.USER_MANAGER.children.EMPLOYEE_MANAGER.path}
+            element={<EmployeesManager />}
           />
         </Route>
       </Route>
