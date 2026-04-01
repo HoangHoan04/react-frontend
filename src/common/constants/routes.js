@@ -38,7 +38,7 @@ export const ROUTES = {
         CUSTOMER_MANAGER: {
           key: "CUSTOMER_MANAGER",
           label: "Quản lý khách hàng",
-          path: "/customer-manager",
+          path: "customer-manager",
           children: {
             ADD_CUSTOMER: {
               key: "ADD_CUSTOMER",
@@ -66,7 +66,7 @@ export const ROUTES = {
         EMPLOYEE_MANAGER: {
           key: "EMPLOYEE_MANAGER",
           label: "Quản lý nhân viên viên",
-          path: "/employee-manager",
+          path: "employee-manager",
           children: {
             ADD_EMPLOYEE: {
               key: "ADD_EMPLOYEE",
