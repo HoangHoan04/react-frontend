@@ -11,6 +11,7 @@ import DashboardPage from "../pages/main/dashboard";
 import PrivateRoute from "./PrivateRoute";
 import CustomersManager from "../pages/main/users/customers";
 import EmployeesManager from "../pages/main/users/employee";
+import ProductDetail from "../pages/main/product/Productdetail";
 
 export default function AppRoutes() {
   return (
@@ -31,10 +32,10 @@ export default function AppRoutes() {
             path={ROUTES.MAIN.PRODUCT_MANAGER.path}
             element={<ProductManager />}
           />
-          {/* <Route
+          <Route
             path={ROUTES.MAIN.PRODUCT_MANAGER.children.DETAIL_PRODUCT.path}
             element={<ProductDetail />}
-          /> */}
+          />
           <Route
             path={ROUTES.MAIN.DEMODASHBOARD.path}
             element={<DashboardDemo />}
