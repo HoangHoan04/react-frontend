@@ -42,13 +42,13 @@ export const useFilterProducts = (params) => {
 
   const buildQueryString = (p) => {
     const qs = new URLSearchParams();
-    if (p.title?.trim()) qs.append("title", p.title.trim());
-    if (p.price) qs.append("price", p.price);
-    if (p.priceMin) qs.append("price_min", p.priceMin);
-    if (p.priceMax) qs.append("price_max", p.priceMax);
-    if (p.categoryId) qs.append("categoryId", p.categoryId);
-    if (p.categorySlug?.trim())
-      qs.append("categorySlug", p.categorySlug.trim());
+    if (params.title?.trim()) qs.append("title", params.title.trim());
+    if (params.price) qs.append("price", params.price);
+    if (params.priceMin) qs.append("price_min", params.priceMin);
+    if (params.priceMax) qs.append("price_max", params.priceMax);
+    if (params.categoryId) qs.append("categoryId", params.categoryId);
+    if (params.categorySlug?.trim())
+      qs.append("categorySlug", params.categorySlug.trim());
     return qs.toString();
   };
 
@@ -85,10 +85,11 @@ export const useFilterProducts = (params) => {
 
 // ─── Lấy chi tiết 1 sản phẩm ──────────────────────────────────────────────
 export const useDetailProduct = (productId) => {
+  // Khởi tạo state để lưu trữ dữ liệu sản phẩm, trạng thái loading và lỗi
   const [product, setProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  // Hàm để gọi API lấy chi tiết sản phẩm
   const fetchProduct = async () => {
     if (!productId) {
       setProduct(null);
@@ -98,6 +99,7 @@ export const useDetailProduct = (productId) => {
     setIsLoading(true);
     setError(null);
     try {
+      // Gọi API để lấy chi tiết sản phẩm dựa trên productId
       const response = await rootApiService.get(
         API_ENDPOINTS.PRODUCT.DETAIL(productId),
       );
@@ -108,240 +110,25 @@ export const useDetailProduct = (productId) => {
       setIsLoading(false);
     }
   };
-
+  // Gọi hàm fetchProduct khi component mount hoặc khi productId thay đổi
   useEffect(() => {
     fetchProduct();
   }, [productId]);
-
-  return {
-    product,
-    isLoading,
-    error,
-    refetch: fetchProduct,
-  };
-};
-
-// ─── Tìm kiếm theo tên ────────────────────────────────────────────────────
-export const useSearchProductsByTitle = (title) => {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const normalizedTitle = title?.trim() ?? "";
-
-  const fetchProducts = async () => {
-    if (!normalizedTitle) {
-      setProducts([]);
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await rootApiService.get(
-        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_TITLE(normalizedTitle),
-      );
-      setProducts(Array.isArray(response) ? response : []);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, [normalizedTitle]);
-
-  return {
-    products,
-    isLoading,
-    error,
-    refetch: fetchProducts,
-  };
-};
-
-// ─── Tìm kiếm theo giá ────────────────────────────────────────────────────
-export const useSearchProductsByPrice = (price) => {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const fetchProducts = async () => {
-    if (!price) {
-      setProducts([]);
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await rootApiService.get(
-        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_PRICE(Number(price)),
-      );
-      setProducts(Array.isArray(response) ? response : []);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, [price]);
-
-  return {
-    products,
-    isLoading,
-    error,
-    refetch: fetchProducts,
-  };
-};
-
-// ─── Tìm kiếm theo khoảng giá ─────────────────────────────────────────────
-export const useSearchProductsByPriceRange = (priceMin, priceMax) => {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const enabled =
-    Boolean(priceMin) &&
-    Boolean(priceMax) &&
-    Number(priceMin) <= Number(priceMax);
-
-  const fetchProducts = async () => {
-    if (!enabled) {
-      setProducts([]);
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await rootApiService.get(
-        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_PRICE_RANGE(
-          Number(priceMin),
-          Number(priceMax),
-        ),
-      );
-      setProducts(Array.isArray(response) ? response : []);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, [priceMin, priceMax, enabled]);
-
-  useEffect(
-    () => subscribeProductsChange(fetchProducts),
-    [priceMin, priceMax, enabled],
-  );
-
-  return {
-    products,
-    isLoading,
-    error,
-    refetch: fetchProducts,
-  };
-};
-
-// ─── Tìm kiếm theo ID danh mục ────────────────────────────────────────────
-export const useSearchProductsByCategoryId = (categoryId) => {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const fetchProducts = async () => {
-    if (!categoryId) {
-      setProducts([]);
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await rootApiService.get(
-        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_CATEGORY_ID(Number(categoryId)),
-      );
-      setProducts(Array.isArray(response) ? response : []);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, [categoryId]);
-
-  useEffect(() => subscribeProductsChange(fetchProducts), [categoryId]);
-
-  return {
-    products,
-    isLoading,
-    error,
-    refetch: fetchProducts,
-  };
-};
-
-// ─── Tìm kiếm theo slug danh mục ──────────────────────────────────────────
-export const useSearchProductsByCategorySlug = (categorySlug) => {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const normalizedSlug = categorySlug?.trim() ?? "";
-
-  const fetchProducts = async () => {
-    if (!normalizedSlug) {
-      setProducts([]);
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await rootApiService.get(
-        API_ENDPOINTS.FILTER_PRODUCT.FIND_BY_CATEGORY_SLUG(normalizedSlug),
-      );
-      setProducts(Array.isArray(response) ? response : []);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, [normalizedSlug]);
-
-  useEffect(() => subscribeProductsChange(fetchProducts), [normalizedSlug]);
-
-  return {
-    products,
-    isLoading,
-    error,
-    refetch: fetchProducts,
-  };
+  // Trả về dữ liệu sản phẩm, trạng thái loading, lỗi và hàm refetch để gọi lại API khi cần thiết
+  return { product, isLoading, error, refetch: fetchProduct };
 };
 
 // ─── Thêm sản phẩm ────────────────────────────────────────────────────────
 export const useCreateProduct = () => {
+  // Khởi tạo state để lưu trữ trạng thái loading và lỗi
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [data, setData] = useState(null);
-
+  // Hàm để gọi API tạo mới sản phẩm
   const mutateAsync = async (newProduct) => {
     setIsLoading(true);
     setError(null);
     try {
+      // Gọi API để tạo mới sản phẩm với dữ liệu newProduct
       const response = await rootApiService.post(
         API_ENDPOINTS.PRODUCT.CREATE,
         newProduct,
@@ -356,21 +143,16 @@ export const useCreateProduct = () => {
       setIsLoading(false);
     }
   };
-
-  return {
-    mutateAsync,
-    isPending: isLoading,
-    error,
-    data,
-  };
+  // Trả về hàm mutateAsync để gọi API tạo sản phẩm, cùng với trạng thái loading và lỗi
+  return { mutateAsync, isPending: isLoading, error };
 };
 
 // ─── Cập nhật sản phẩm ────────────────────────────────────────────────────
 export const useUpdateProduct = (productId) => {
+  // Khởi tạo state để lưu trữ trạng thái loading và lỗi
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [data, setData] = useState(null);
-
+  // Hàm để gọi API cập nhật sản phẩm dựa trên productId
   const mutateAsync = async (updatedProduct) => {
     if (!productId) {
       throw new Error("Missing product id");
@@ -379,6 +161,7 @@ export const useUpdateProduct = (productId) => {
     setIsLoading(true);
     setError(null);
     try {
+      // Gọi API để cập nhật sản phẩm với dữ liệu updatedProduct và productId
       const response = await rootApiService.put(
         API_ENDPOINTS.PRODUCT.UPDATE(productId),
         updatedProduct,
@@ -393,6 +176,7 @@ export const useUpdateProduct = (productId) => {
       setIsLoading(false);
     }
   };
+  // Trả về hàm mutateAsync để gọi API cập nhật sản phẩm, cùng với trạng thái loading và lỗi
 
   return {
     mutateAsync,
@@ -404,10 +188,10 @@ export const useUpdateProduct = (productId) => {
 
 // ─── Xóa sản phẩm ─────────────────────────────────────────────────────────
 export const useDeleteProduct = (productId) => {
+  // khởi tạo state để lưu trữ trạng thái loading và lỗi
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [data, setData] = useState(null);
-
+  // hàm để gọi API xóa sản phẩm dựa trên productId
   const mutateAsync = async () => {
     if (!productId) {
       throw new Error("Missing product id");
@@ -416,6 +200,7 @@ export const useDeleteProduct = (productId) => {
     setIsLoading(true);
     setError(null);
     try {
+      // Gọi API để xóa sản phẩm với productId
       const response = await rootApiService.delete(
         API_ENDPOINTS.PRODUCT.DELETE(productId),
       );
@@ -429,11 +214,6 @@ export const useDeleteProduct = (productId) => {
       setIsLoading(false);
     }
   };
-
-  return {
-    mutateAsync,
-    isPending: isLoading,
-    error,
-    data,
-  };
+  // Trả về hàm mutateAsync để gọi API xóa sản phẩm, cùng với trạng thái loading và lỗi
+  return { mutateAsync, isPending: isLoading, error };
 };

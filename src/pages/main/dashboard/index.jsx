@@ -1,9 +1,11 @@
-import { useDashboardStore, useThemeStore, useToastStore } from "@/stores";
+import { useThemeStore } from "@/stores";
 import StatsCard from "../../../components/ui/StatsCard";
 import ChartSection from "../../../components/ui/ChartSection";
 import { useGetProducts } from "../../../hooks";
 import { TopExpensiveProducts } from "../../../components/ui/TopExpensiveProducts";
 import useStats from "../../../hooks/dasboard";
+import LatestProducts from "../../../components/ui/LatestProducts";
+import { LoadingRenderer } from "../../../components/ui/LoadingRenderer";
 
 const DashboardPage = () => {
   const theme = useThemeStore((state) => state.theme);
@@ -13,7 +15,7 @@ const DashboardPage = () => {
   const { products, isLoading, error } = useGetProducts();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingRenderer />;
   }
 
   if (error) {
@@ -27,6 +29,8 @@ const DashboardPage = () => {
       <ChartSection products={products} theme={theme} />
 
       <TopExpensiveProducts products={products} theme={theme} />
+
+      <LatestProducts products={products} theme={theme} />
     </div>
   );
 };
