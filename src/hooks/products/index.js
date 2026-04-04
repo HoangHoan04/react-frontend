@@ -25,22 +25,17 @@ export const useGetProducts = () => {
     fetchProducts();
   }, []);
 
-  return {
-    products,
-    isLoading,
-    error,
-    refetch: fetchProducts,
-  };
+  return { products, isLoading, error, refetch: fetchProducts };
 };
 
 // ─── Tìm kiếm gộp nhiều tham số ──────────────────────────────────────────
 // params: { title, price, priceMin, priceMax, categoryId, categorySlug }
-export const useFilterProducts = (params) => {
+export const useFilterProducts = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const buildQueryString = (p) => {
+  const buildQueryString = (params = {}) => {
     const qs = new URLSearchParams();
     if (params.title?.trim()) qs.append("title", params.title.trim());
     if (params.price) qs.append("price", params.price);
@@ -52,35 +47,30 @@ export const useFilterProducts = (params) => {
     return qs.toString();
   };
 
-  const queryString = buildQueryString(params ?? {});
-  const hasFilter = Boolean(queryString);
-
-  const fetchProducts = async () => {
+  const fetchWithFilter = async (params = {}) => {
     setIsLoading(true);
     setError(null);
     try {
-      const url = hasFilter
+      const queryString = buildQueryString(params);
+      const url = queryString
         ? `${API_ENDPOINTS.PRODUCT.LIST}?${queryString}`
         : API_ENDPOINTS.PRODUCT.LIST;
       const response = await rootApiService.get(url);
       setProducts(Array.isArray(response) ? response : []);
     } catch (err) {
       setError(err);
+      throw err;
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Load toàn bộ khi mount
   useEffect(() => {
-    fetchProducts();
-  }, [queryString]);
+    fetchWithFilter();
+  }, []);
 
-  return {
-    products,
-    isLoading,
-    error,
-    refetch: fetchProducts,
-  };
+  return { products, isLoading, error, fetchWithFilter };
 };
 
 // ─── Lấy chi tiết 1 sản phẩm ──────────────────────────────────────────────
@@ -95,7 +85,6 @@ export const useDetailProduct = (productId) => {
       setProduct(null);
       return;
     }
-
     setIsLoading(true);
     setError(null);
     try {
@@ -103,7 +92,7 @@ export const useDetailProduct = (productId) => {
       const response = await rootApiService.get(
         API_ENDPOINTS.PRODUCT.DETAIL(productId),
       );
-      setProduct(response ?? null);
+      setProduct(response);
     } catch (err) {
       setError(err);
     } finally {
@@ -154,10 +143,6 @@ export const useUpdateProduct = (productId) => {
   const [error, setError] = useState(null);
   // Hàm để gọi API cập nhật sản phẩm dựa trên productId
   const mutateAsync = async (updatedProduct) => {
-    if (!productId) {
-      throw new Error("Missing product id");
-    }
-
     setIsLoading(true);
     setError(null);
     try {
@@ -178,12 +163,7 @@ export const useUpdateProduct = (productId) => {
   };
   // Trả về hàm mutateAsync để gọi API cập nhật sản phẩm, cùng với trạng thái loading và lỗi
 
-  return {
-    mutateAsync,
-    isPending: isLoading,
-    error,
-    data,
-  };
+  return { mutateAsync, isPending: isLoading, error };
 };
 
 // ─── Xóa sản phẩm ─────────────────────────────────────────────────────────
@@ -193,10 +173,6 @@ export const useDeleteProduct = (productId) => {
   const [error, setError] = useState(null);
   // hàm để gọi API xóa sản phẩm dựa trên productId
   const mutateAsync = async () => {
-    if (!productId) {
-      throw new Error("Missing product id");
-    }
-
     setIsLoading(true);
     setError(null);
     try {

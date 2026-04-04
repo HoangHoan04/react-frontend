@@ -1,56 +1,51 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
-export const useThemeStore = create((set) => ({
-  theme: (() => {
-    const saved = localStorage.getItem("theme");
-    if (saved) return saved;
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
-    }
-    return "light";
-  })(),
+const applyThemeToDOM = (theme) => {
+  const html = document.documentElement;
+  const isDark = theme === "dark";
 
-  setTheme: (newTheme) => {
-    localStorage.setItem("theme", newTheme);
-    const html = document.documentElement;
-    if (newTheme === "dark") {
-      html.classList.add("dark");
-      html.style.colorScheme = "dark";
-    } else {
-      html.classList.remove("dark");
-      html.style.colorScheme = "light";
-    }
-    html.setAttribute("data-theme", newTheme);
-    set({ theme: newTheme });
-  },
+  if (isDark) {
+    html.classList.add("dark");
+    html.style.colorScheme = "dark";
+  } else {
+    html.classList.remove("dark");
+    html.style.colorScheme = "light";
+  }
+  html.setAttribute("data-theme", theme);
+};
 
-  toggleTheme: () =>
-    set((state) => {
-      const newTheme = state.theme === "light" ? "dark" : "light";
-      localStorage.setItem("theme", newTheme);
-      const html = document.documentElement;
-      if (newTheme === "dark") {
-        html.classList.add("dark");
-        html.style.colorScheme = "dark";
-      } else {
-        html.classList.remove("dark");
-        html.style.colorScheme = "light";
-      }
-      html.setAttribute("data-theme", newTheme);
-      return { theme: newTheme };
+export const useThemeStore = create(
+  persist(
+    (set, get) => ({
+      theme: "light",
+
+      setTheme: (newTheme) => {
+        applyThemeToDOM(newTheme);
+        set({ theme: newTheme });
+      },
+
+      toggleTheme: () => {
+        const nextTheme = get().theme === "light" ? "dark" : "light";
+        applyThemeToDOM(nextTheme);
+        set({ theme: nextTheme });
+      },
+
+      initialize: () => {
+        const currentTheme = get().theme;
+        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+          .matches
+          ? "dark"
+          : "light";
+        const finalTheme = currentTheme || systemTheme;
+
+        applyThemeToDOM(finalTheme);
+        set({ theme: finalTheme });
+      },
     }),
-
-  // Initialize theme on app load
-  initialize: () => {
-    const theme = useThemeStore.getState().theme;
-    const html = document.documentElement;
-    if (theme === "dark") {
-      html.classList.add("dark");
-      html.style.colorScheme = "dark";
-    } else {
-      html.classList.remove("dark");
-      html.style.colorScheme = "light";
-    }
-    html.setAttribute("data-theme", theme);
-  },
-}));
+    {
+      name: "theme",
+      storage: createJSONStorage(() => localStorage),
+    },
+  ),
+);

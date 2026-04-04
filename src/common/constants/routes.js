@@ -22,13 +22,6 @@ export const ROUTES = {
       icon: "pi pi-home",
     },
 
-    DEMODASHBOARD: {
-      key: "DEMODASHBOARD",
-      label: "Demo Dashboard",
-      path: "/demo-dashboard",
-      icon: "pi pi-chart-bar",
-    },
-
     USER_MANAGER: {
       key: "USER_MANAGER",
       label: "Quản lý người dùng",
@@ -38,7 +31,7 @@ export const ROUTES = {
         CUSTOMER_MANAGER: {
           key: "CUSTOMER_MANAGER",
           label: "Quản lý khách hàng",
-          path: "/customer-manager",
+          path: "customer-manager",
           children: {
             ADD_CUSTOMER: {
               key: "ADD_CUSTOMER",
@@ -66,7 +59,7 @@ export const ROUTES = {
         EMPLOYEE_MANAGER: {
           key: "EMPLOYEE_MANAGER",
           label: "Quản lý nhân viên viên",
-          path: "/employee-manager",
+          path: "employee-manager",
           children: {
             ADD_EMPLOYEE: {
               key: "ADD_EMPLOYEE",
@@ -94,7 +87,7 @@ export const ROUTES = {
       },
     },
 
-    PRODUCT_MANAGER: {  
+    PRODUCT_MANAGER: {
       key: "PRODUCT_MANAGER",
       label: "Quản lý sản phẩm",
       icon: "pi pi-users",

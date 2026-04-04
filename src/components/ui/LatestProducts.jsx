@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const LatestProducts = ({ products, theme }) => {
   const topProducts = [...products]
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -10,7 +12,11 @@ const LatestProducts = ({ products, theme }) => {
 
       <div className="space-y-4">
         {topProducts.map((p) => (
-          <div key={p.id} className="flex items-center gap-4">
+          <Link
+            key={p.id}
+            to={`/product/detail/${p.id}`}
+            className="flex items-center gap-4"
+          >
             <img
               src={p.images[0]}
               className="w-14 h-14 rounded-lg object-cover"
@@ -28,7 +34,7 @@ const LatestProducts = ({ products, theme }) => {
                 ${p.price}
               </p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
