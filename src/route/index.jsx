@@ -2,7 +2,6 @@ import { ROUTES } from "@/common/constants/routes";
 import AppLayout from "@/layout/AppLayout";
 import Login from "@/pages/auth/Login";
 import Profile from "@/pages/auth/Profile";
-import DashboardDemo from "@/pages/main/demo-page";
 import { Route, Routes } from "react-router-dom";
 import ProductManager from "../pages/main/product";
 import CategoryManager from "../pages/main/categories";

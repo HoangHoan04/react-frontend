@@ -1,4 +1,3 @@
-
 import CustomImage from "@/components/common/Image";
 import DataTable from "@/components/common/table/DataTable";
 import CustomButton from "@/components/common/button/Button";
@@ -81,6 +80,7 @@ export default function CustomersManager() {
         setName("");
         setEmail("");
         setAvatar("");
+        setPassword("");
         setFormErrors({});
     };
 
@@ -95,6 +95,7 @@ export default function CustomersManager() {
         setName(user.name || "");
         setEmail(user.email || "");
         setAvatar(user.avatar || "");
+        setFormErrors({});
         setIsUserModalVisible(true);
     };
 
@@ -129,7 +130,6 @@ export default function CustomersManager() {
         if (!trimmedName) errors.name = "Nhập tên";
         if (!trimmedEmail) errors.email = "Nhập email";
 
-        // 🔥 CHỈ validate password khi CREATE
         if (!isEditModal) {
             if (!password) errors.password = "Nhập mật khẩu";
             else if (password.length < 4)
@@ -143,14 +143,12 @@ export default function CustomersManager() {
 
         try {
             if (isEditModal && editingUser?.id) {
-                // ❌ UPDATE KHÔNG gửi password
                 await updateUser({
                     name: trimmedName,
                     email: trimmedEmail,
                     avatar,
                 });
             } else {
-                // ✅ CREATE PHẢI có password
                 await createUser({
                     name: trimmedName,
                     email: trimmedEmail,
@@ -344,24 +342,45 @@ export default function CustomersManager() {
             <CustomInputText
                 label="Tên"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                    setName(e.target.value);
+                    if (formErrors.name) {
+                        setFormErrors((prev) => ({ ...prev, name: "" }));
+                    }
+                }}
                 isDark={isDark}
+                error={Boolean(formErrors.name)}
+                errorMessage={formErrors.name}
             />
 
             <CustomInputText
                 label="Email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (formErrors.email) {
+                        setFormErrors((prev) => ({ ...prev, email: "" }));
+                    }
+                }}
                 isDark={isDark}
+                error={Boolean(formErrors.email)}
+                errorMessage={formErrors.email}
             />
             {!isEditModal && (
             <CustomInputText
                 label="Mật khẩu"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (formErrors.password) {
+                        setFormErrors((prev) => ({ ...prev, password: "" }));
+                    }
+                }}
                 placeholder="Nhập mật khẩu"
                 isDark={isDark}
+                error={Boolean(formErrors.password)}
+                errorMessage={formErrors.password}
             />
             )}
             <CustomFileUpload

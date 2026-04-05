@@ -22,13 +22,6 @@ export const ROUTES = {
       icon: "pi pi-home",
     },
 
-    DEMODASHBOARD: {
-      key: "DEMODASHBOARD",
-      label: "Demo Dashboard",
-      path: "/demo-dashboard",
-      icon: "pi pi-chart-bar",
-    },
-
     USER_MANAGER: {
       key: "USER_MANAGER",
       label: "Quản lý người dùng",
@@ -94,7 +87,7 @@ export const ROUTES = {
       },
     },
 
-    PRODUCT_MANAGER: {  
+    PRODUCT_MANAGER: {
       key: "PRODUCT_MANAGER",
       label: "Quản lý sản phẩm",
       icon: "pi pi-users",
