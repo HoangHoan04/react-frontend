@@ -260,8 +260,19 @@ export default function CustomersManager() {
         <div className="space-y-4">
 
         {/* SEARCH */}
+        <div
+            className={`rounded-2xl border p-4 shadow-sm ${
+            isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"
+            }`}
+        >
         <Accordion multiple isOpen>
-            <AccordionTab header="Tìm kiếm">
+            <AccordionTab
+                header="Tìm kiếm"
+                headerClassName={
+                isDark ? "bg-[#202020] text-gray-100" : "bg-[#f8fbff]"
+                    }
+                contentClassName={isDark ? "bg-[#171717]" : "bg-white"}
+            >
             <div className="grid md:grid-cols-2 gap-3">
 
                 <CustomInputText
@@ -281,7 +292,7 @@ export default function CustomersManager() {
             </div>
             </AccordionTab>
         </Accordion>
-
+        </div>
         {/* BUTTON */}
         <div className="flex justify-between">
 
@@ -304,13 +315,29 @@ export default function CustomersManager() {
         </div>
 
         {/* TABLE */}
-        <DataTable
-            data={filteredUsers}
-            columns={columns}
-            rows={5}
-            emptyMessage={isLoading ? "Đang tải..." : "Không có dữ liệu"}
-        />
-
+        <div
+            className={`space-y-4 rounded-2xl border p-4 shadow-sm ${
+            isDark ? "border-[#2f2f2f] bg-[#1f1f1f]" : "border-gray-200 bg-white"
+            }`}
+        >
+            {error ? (
+            <div
+                className={`rounded-lg border px-4 py-3 text-sm ${
+                isDark
+                    ? "border-red-500/40 bg-red-950/30 text-red-300"
+                    : "border-red-200 bg-red-50 text-red-700"
+                }`}
+            >
+                Không thể tải danh sách thể loại. Vui lòng thử lại sau.
+            </div>
+        ) : null}
+            <DataTable
+                data={filteredUsers}
+                columns={columns}
+                rows={5}
+                emptyMessage={isLoading ? "Đang tải..." : "Không có dữ liệu"}
+            />
+        </div>
         {/* DELETE */}
         <CustomConfirmDialog
             visible={isDeleteDialogVisible}
