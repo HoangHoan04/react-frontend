@@ -11,6 +11,7 @@ import PrivateRoute from "./PrivateRoute";
 import CustomersManager from "../pages/main/users/customers";
 import EmployeesManager from "../pages/main/users/employee";
 import ProductDetail from "../pages/main/product/Productdetail";
+import DemoPage from "../pages/main/demo";
 
 export default function AppRoutes() {
   return (
@@ -34,6 +35,10 @@ export default function AppRoutes() {
           <Route
             path={ROUTES.MAIN.PRODUCT_MANAGER.children.DETAIL_PRODUCT.path}
             element={<ProductDetail />}
+          />
+           <Route
+            path={ROUTES.MAIN.DEMO.path}
+            element={<DemoPage />}
           />
           <Route
             path={ROUTES.MAIN.CATEGORY_MANAGER.path}

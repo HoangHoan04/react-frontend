@@ -11,6 +11,7 @@ export const ROUTES = {
       label: "Thông tin tài khoản",
       path: "/profile",
       icon: "pi pi-user",
+  isShow: false,
     },
   },
 
@@ -20,6 +21,14 @@ export const ROUTES = {
       label: "Trang chủ",
       path: "/",
       icon: "pi pi-home",
+    },
+
+    DEMO: {
+      key: "DEMO",
+      label: "Demo",
+      icon: "pi pi-home",
+      path: "/demo",
+      isShow: false,
     },
 
     USER_MANAGER: {
