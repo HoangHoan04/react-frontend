@@ -91,7 +91,7 @@ export const ROUTES = {
 
     LOCATION_MANAGER: {
       key: "LOCATION_MANAGER",
-      label: "Quản lý địa điểm",
+      label: "Quản lý vị trí",
       icon: "pi pi-map-marker",
       path: "/location-manager",
     },
