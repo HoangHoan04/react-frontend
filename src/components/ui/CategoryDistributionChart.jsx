@@ -11,7 +11,7 @@ import {
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-const CategoryDistributionChart = ({ products, theme }) => {
+const CategoryDistributionChart = ({ products }) => {
   const categoryData = Object.values(
     products.reduce((acc, p) => {
       const key = p.category?.name || "Unknown";
