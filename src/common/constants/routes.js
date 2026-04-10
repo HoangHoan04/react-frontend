@@ -67,7 +67,7 @@ export const ROUTES = {
         },
         EMPLOYEE_MANAGER: {
           key: "EMPLOYEE_MANAGER",
-          label: "Quản lý nhân viên viên",
+          label: "Quản lý nhân viên",
           path: "employee-manager",
           children: {
             ADD_EMPLOYEE: {
