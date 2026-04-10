@@ -11,7 +11,7 @@ export const ROUTES = {
       label: "Thông tin tài khoản",
       path: "/profile",
       icon: "pi pi-user",
-  isShow: false,
+      isShow: false,
     },
   },
 
@@ -151,13 +151,6 @@ export const ROUTES = {
           isShow: false,
         },
       },
-    },
-
-    LOCATION_MANAGER: {
-      key: "LOCATION_MANAGER",
-      label: "Quản lý vị trí",
-      icon: "pi pi-shield",
-      path: "/location-manager",
     },
   },
 };
