@@ -78,7 +78,7 @@ export default function LocationManager() {
 
   const columns = [
     { field: "id", header: "ID", width: "70px" },
-    { field: "name", header: "Tên / Name" },
+    { field: "name", header: "Địa điểm" },
     { field: "latitude", header: "Vĩ độ" },
     { field: "longitude", header: "Kinh độ" },
   ];
