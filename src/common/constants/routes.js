@@ -72,21 +72,21 @@ export const ROUTES = {
           children: {
             ADD_EMPLOYEE: {
               key: "ADD_EMPLOYEE",
-              label: "Thêm nhân viên viên",
+              label: "Thêm nhân viên",
               path: "/employee/add",
               icon: "pi pi-plus-circle",
               isShow: false,
             },
             EDIT_EMPLOYEE: {
               key: "EDIT_EMPLOYEE",
-              label: "Chỉnh sửa nhân viên viên",
+              label: "Chỉnh sửa nhân viên",
               path: "/employee/edit/:id",
               icon: "pi pi-pencil-circle",
               isShow: false,
             },
             DETAIL_EMPLOYEE: {
               key: "DETAIL_EMPLOYEE",
-              label: "Chi tiết nhân viên viên",
+              label: "Chi tiết nhân viên",
               path: "/employee/detail/:id",
               icon: "pi pi-info-circle",
               isShow: false,
@@ -151,6 +151,13 @@ export const ROUTES = {
           isShow: false,
         },
       },
+    },
+
+    LOCATION_MANAGER: {
+      key: "LOCATION_MANAGER",
+      label: "Quản lý địa điểm",
+      icon: "pi pi-map-marker",
+      path: "/location-manager",
     },
   },
 };

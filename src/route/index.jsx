@@ -11,6 +11,7 @@ import PrivateRoute from "./PrivateRoute";
 import CustomersManager from "../pages/main/users/customers";
 import EmployeesManager from "../pages/main/users/employee";
 import ProductDetail from "../pages/main/product/Productdetail";
+import LocationManager from "../pages/main/locations";
 
 export default function AppRoutes() {
   return (
@@ -52,6 +53,12 @@ export default function AppRoutes() {
           <Route
             path={ROUTES.MAIN.USER_MANAGER.children.EMPLOYEE_MANAGER.path}
             element={<EmployeesManager />}
+          />
+
+          
+          <Route
+            path={ROUTES.MAIN.LOCATION_MANAGER.path}
+            element={<LocationManager />}
           />
         </Route>
       </Route>
