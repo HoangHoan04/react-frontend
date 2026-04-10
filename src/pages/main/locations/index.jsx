@@ -16,9 +16,28 @@ export default function LocationManager() {
   const theme = useThemeStore((state) => state.theme);
   const isDark = theme === "dark";
 
+  const [inputOrigin, setInputOrigin] = useState("");
+  const [inputSize, setInputSize] = useState("");
+  const [inputRadius, setInputRadius] = useState("");
+
   const [originFilter, setOriginFilter] = useState("");
   const [sizeFilter, setSizeFilter] = useState("");
   const [radiusFilter, setRadiusFilter] = useState("");
+
+  const handleSearch = () => {
+    setOriginFilter(inputOrigin);
+    setSizeFilter(inputSize);
+    setRadiusFilter(inputRadius);
+  };
+
+  const handleResetSearch = () => {
+    setInputOrigin("");
+    setInputSize("");
+    setInputRadius("");
+    setOriginFilter("");
+    setSizeFilter("");
+    setRadiusFilter("");
+  };
 
   const activeMode = useMemo(() => {
     if (originFilter && radiusFilter) return "RADIUS";
@@ -79,8 +98,9 @@ export default function LocationManager() {
   const columns = [
     { field: "id", header: "ID", width: "70px" },
     { field: "name", header: "Địa điểm" },
-    { field: "latitude", header: "Vĩ độ" },
     { field: "longitude", header: "Kinh độ" },
+    { field: "latitude", header: "Vĩ độ" },
+    { field: "description", header: "Mô tả" },
   ];
 
   return (
@@ -100,8 +120,8 @@ export default function LocationManager() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <CustomInputText
                   label="Origin (Điểm gốc / Khu vực)"
-                  value={originFilter}
-                  onChange={(e) => setOriginFilter(e.target.value)}
+                  value={inputOrigin}
+                  onChange={(e) => setInputOrigin(e.target.value)}
                   placeholder="VD: 6.2071641,-75.5720321"
                   isDark={isDark}
                   containerClassName="w-full"
@@ -110,8 +130,8 @@ export default function LocationManager() {
                 <CustomInputText
                   label="Radius (Bán kính)"
                   type="number"
-                  value={radiusFilter}
-                  onChange={(e) => setRadiusFilter(e.target.value)}
+                  value={inputRadius}
+                  onChange={(e) => setInputRadius(e.target.value)}
                   placeholder="VD: 10"
                   isDark={isDark}
                   containerClassName="w-full"
@@ -120,15 +140,24 @@ export default function LocationManager() {
                 <CustomInputText
                   label="Size (Giới hạn số lượng)"
                   type="number"
-                  value={sizeFilter}
-                  onChange={(e) => setSizeFilter(e.target.value)}
+                  value={inputSize}
+                  onChange={(e) => setInputSize(e.target.value)}
                   placeholder="VD: 10"
                   isDark={isDark}
                   containerClassName="w-full"
                 />
               </div>
 
-             
+              {/* Nút hành động + đếm kết quả */}
+              <div className="flex items-center justify-between flex-wrap gap-3">
+                <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}>
+                  Đang hiển thị {currentLocations.length} địa điểm
+                </p>
+                <div className="flex gap-2">
+                  <CustomButton label="Tìm kiếm" icon="pi pi-search" severity="info" outlined onClick={handleSearch} />
+                  <CustomButton label="Đặt lại" icon="pi pi-refresh" severity="secondary" outlined onClick={handleResetSearch} />
+                </div>
+              </div>
             </div>
           </AccordionTab>
         </Accordion>
