@@ -18,9 +18,9 @@ export const ROUTES = {
   MAIN: {
     HOME: {
       key: "HOME",
-      label: "Trang chủ",
+      label: "Báo cáo",
       path: "/",
-      icon: "pi pi-home",
+      icon: "pi pi-chart-bar",
     },
 
     DEMO: {
@@ -31,70 +31,6 @@ export const ROUTES = {
       isShow: false,
     },
 
-    USER_MANAGER: {
-      key: "USER_MANAGER",
-      label: "Quản lý người dùng",
-      icon: "pi pi-user",
-      path: "/user-manager",
-      children: {
-        CUSTOMER_MANAGER: {
-          key: "CUSTOMER_MANAGER",
-          label: "Quản lý khách hàng",
-          path: "customer-manager",
-          children: {
-            ADD_CUSTOMER: {
-              key: "ADD_CUSTOMER",
-              label: "Thêm khách hàng",
-              path: "/customer/add",
-              icon: "pi pi-plus-circle",
-              isShow: false,
-            },
-            EDIT_CUSTOMER: {
-              key: "EDIT_CUSTOMER",
-              label: "Chỉnh sửa khách hàng",
-              path: "/customer/edit/:id",
-              icon: "pi pi-pencil-circle",
-              isShow: false,
-            },
-            DETAIL_CUSTOMER: {
-              key: "DETAIL_CUSTOMER",
-              label: "Chi tiết khách hàng",
-              path: "/customer/detail/:id",
-              icon: "pi pi-info-circle",
-              isShow: false,
-            },
-          },
-        },
-        EMPLOYEE_MANAGER: {
-          key: "EMPLOYEE_MANAGER",
-          label: "Quản lý nhân viên",
-          path: "employee-manager",
-          children: {
-            ADD_EMPLOYEE: {
-              key: "ADD_EMPLOYEE",
-              label: "Thêm nhân viên",
-              path: "/employee/add",
-              icon: "pi pi-plus-circle",
-              isShow: false,
-            },
-            EDIT_EMPLOYEE: {
-              key: "EDIT_EMPLOYEE",
-              label: "Chỉnh sửa nhân viên",
-              path: "/employee/edit/:id",
-              icon: "pi pi-pencil-circle",
-              isShow: false,
-            },
-            DETAIL_EMPLOYEE: {
-              key: "DETAIL_EMPLOYEE",
-              label: "Chi tiết nhân viên",
-              path: "/employee/detail/:id",
-              icon: "pi pi-info-circle",
-              isShow: false,
-            },
-          },
-        },
-      },
-    },
 
     PRODUCT_MANAGER: {
       key: "PRODUCT_MANAGER",
@@ -158,6 +94,72 @@ export const ROUTES = {
       label: "Quản lý địa điểm",
       icon: "pi pi-map-marker",
       path: "/location-manager",
+    },
+
+    
+    USER_MANAGER: {
+      key: "USER_MANAGER",
+      label: "Quản lý người dùng",
+      icon: "pi pi-user",
+      path: "/user-manager",
+      children: {
+        CUSTOMER_MANAGER: {
+          key: "CUSTOMER_MANAGER",
+          label: "Quản lý khách hàng",
+          path: "customer-manager",
+          children: {
+            ADD_CUSTOMER: {
+              key: "ADD_CUSTOMER",
+              label: "Thêm khách hàng",
+              path: "/customer/add",
+              icon: "pi pi-plus-circle",
+              isShow: false,
+            },
+            EDIT_CUSTOMER: {
+              key: "EDIT_CUSTOMER",
+              label: "Chỉnh sửa khách hàng",
+              path: "/customer/edit/:id",
+              icon: "pi pi-pencil-circle",
+              isShow: false,
+            },
+            DETAIL_CUSTOMER: {
+              key: "DETAIL_CUSTOMER",
+              label: "Chi tiết khách hàng",
+              path: "/customer/detail/:id",
+              icon: "pi pi-info-circle",
+              isShow: false,
+            },
+          },
+        },
+        EMPLOYEE_MANAGER: {
+          key: "EMPLOYEE_MANAGER",
+          label: "Quản lý nhân viên",
+          path: "employee-manager",
+          children: {
+            ADD_EMPLOYEE: {
+              key: "ADD_EMPLOYEE",
+              label: "Thêm nhân viên",
+              path: "/employee/add",
+              icon: "pi pi-plus-circle",
+              isShow: false,
+            },
+            EDIT_EMPLOYEE: {
+              key: "EDIT_EMPLOYEE",
+              label: "Chỉnh sửa nhân viên",
+              path: "/employee/edit/:id",
+              icon: "pi pi-pencil-circle",
+              isShow: false,
+            },
+            DETAIL_EMPLOYEE: {
+              key: "DETAIL_EMPLOYEE",
+              label: "Chi tiết nhân viên",
+              path: "/employee/detail/:id",
+              icon: "pi pi-info-circle",
+              isShow: false,
+            },
+          },
+        },
+      },
     },
   },
 };
