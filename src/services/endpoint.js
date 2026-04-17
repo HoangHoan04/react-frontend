@@ -57,8 +57,8 @@ export const API_ENDPOINTS = {
 
   LOCATIONS: {
     LIST: "/locations",
-    GET_BY_ORIGIN: (origin) => `/locations/?origin=${origin}`,
-    GET_WITH_LIMIT: (limit) => `/locations/?limit=${limit}`,
+    GET_BY_ORIGIN: (origin) => `/locations?origin=${origin}`,
+    GET_WITH_SIZE: (size) => `/locations?size=${size}`,
     GET_WITHIN_RADIUS: (radius, origin) =>
       `/locations?origin=${origin}&radius=${radius}`,
   },

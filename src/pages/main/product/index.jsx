@@ -18,9 +18,9 @@ export default function ProductManager() {
   const router = useRouter();
 
   const {
-    products, isLoading, refetch,
+    products, refetch,
     searchForm, handleSearchFormChange, handleSearch, handleResetSearch,
-    editingProduct, isEditMode, isEditModalVisible,
+    isEditMode, isEditModalVisible,
     editForm, formErrors,
     openCreateModal, openEditModal, closeEditModal,
     handleEditFormChange, handleImageChange, handleAddImage, handleRemoveImage,

@@ -278,7 +278,7 @@ export default function ProductDetail() {
                       key={i}
                       type="button"
                       onClick={() => setActiveImageIndex(i)}
-                      className={`h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-colors ${
+                      className={`h-14 w-14 shrink-0 overflow-hidden rounded-lg border-2 transition-colors ${
                         i === activeImageIndex
                           ? "border-blue-500"
                           : isDark
