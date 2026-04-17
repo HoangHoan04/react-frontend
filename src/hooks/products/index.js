@@ -112,7 +112,6 @@ export const useCreateProduct = () => {
   // Khởi tạo state để lưu trữ trạng thái loading và lỗi
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [data, setData] = useState(null);
   // Hàm để gọi API tạo mới sản phẩm
   const mutateAsync = async (newProduct) => {
     setIsLoading(true);
@@ -123,7 +122,6 @@ export const useCreateProduct = () => {
         API_ENDPOINTS.PRODUCT.CREATE,
         newProduct,
       );
-      setData(response);
       return response;
     } catch (err) {
       setError(err);
@@ -141,7 +139,6 @@ export const useUpdateProduct = (productId) => {
   // Khởi tạo state để lưu trữ trạng thái loading và lỗi
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [data, setData] = useState(null);
   // Hàm để gọi API cập nhật sản phẩm dựa trên productId
   const mutateAsync = async (updatedProduct) => {
     setIsLoading(true);
@@ -152,7 +149,6 @@ export const useUpdateProduct = (productId) => {
         API_ENDPOINTS.PRODUCT.UPDATE(productId),
         updatedProduct,
       );
-      setData(response);
       return response;
     } catch (err) {
       setError(err);
@@ -171,7 +167,6 @@ export const useDeleteProduct = (productId) => {
   // khởi tạo state để lưu trữ trạng thái loading và lỗi
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [data, setData] = useState(null);
   // hàm để gọi API xóa sản phẩm dựa trên productId
   const mutateAsync = async () => {
     setIsLoading(true);
@@ -181,7 +176,6 @@ export const useDeleteProduct = (productId) => {
       const response = await rootApiService.delete(
         API_ENDPOINTS.PRODUCT.DELETE(productId),
       );
-      setData(response);
       return response;
     } catch (err) {
       setError(err);
