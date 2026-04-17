@@ -49,7 +49,7 @@ export const useGetLocationsByOrigin = (origin) => {
     setError(null);
     try {
       const response = await rootApiService.get(
-        API_ENDPOINTS.LOCATIONS.GET_BY_ORIGIN(origin)
+        API_ENDPOINTS.LOCATIONS.GET_BY_ORIGIN(origin),
       );
       setLocations(response || []);
     } catch (err) {
@@ -88,7 +88,7 @@ export const useGetLocationsWithSize = (size) => {
     setError(null);
     try {
       const response = await rootApiService.get(
-        API_ENDPOINTS.LOCATIONS.GET_WITH_SIZE(size)
+        API_ENDPOINTS.LOCATIONS.GET_WITH_SIZE(size),
       );
       setLocations(response || []);
     } catch (err) {
@@ -127,7 +127,7 @@ export const useGetLocationsWithinRadius = (radius, origin) => {
     setError(null);
     try {
       const response = await rootApiService.get(
-        API_ENDPOINTS.LOCATIONS.GET_WITHIN_RADIUS(radius, origin)
+        API_ENDPOINTS.LOCATIONS.GET_WITHIN_RADIUS(radius, origin),
       );
       setLocations(response || []);
     } catch (err) {
