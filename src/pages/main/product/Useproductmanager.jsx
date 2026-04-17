@@ -43,9 +43,12 @@ const useProductManager = () => {
 
   // ─── Data & mutations ─────────────────────────────────────────────────────
   const { products, isLoading, fetchWithFilter } = useFilterProducts();
-  const { mutateAsync: createProduct, isPending: isCreating } = useCreateProduct();
-  const { mutateAsync: updateProduct, isPending: isUpdating } = useUpdateProduct(editingProduct?.id);
-  const { mutateAsync: deleteProduct, isPending: isDeleting } = useDeleteProduct(productToDelete?.id);
+  const { mutateAsync: createProduct, isPending: isCreating } =
+    useCreateProduct();
+  const { mutateAsync: updateProduct, isPending: isUpdating } =
+    useUpdateProduct(editingProduct?.id);
+  const { mutateAsync: deleteProduct, isPending: isDeleting } =
+    useDeleteProduct(productToDelete?.id);
 
   const isFormSubmitting = isCreating || isUpdating;
 
@@ -58,22 +61,31 @@ const useProductManager = () => {
     const { priceMin, priceMax } = searchForm;
 
     if ((priceMin && !priceMax) || (!priceMin && priceMax)) {
-      showToast({ type: "error", title: "Lỗi", message: "Vui lòng nhập cả giá tối thiểu và tối đa." });
+      showToast({
+        type: "error",
+        title: "Lỗi",
+        message: "Vui lòng nhập cả giá tối thiểu và tối đa.",
+      });
       return;
     }
     if (priceMin && priceMax && Number(priceMin) > Number(priceMax)) {
-      showToast({ type: "error", title: "Lỗi", message: "Giá tối thiểu phải nhỏ hơn giá tối đa." });
+      showToast({
+        type: "error",
+        title: "Lỗi",
+        message: "Giá tối thiểu phải nhỏ hơn giá tối đa.",
+      });
       return;
     }
 
     // Chỉ truyền các trường có giá trị
     const params = {};
-    if (searchForm.title.trim())        params.title        = searchForm.title.trim();
-    if (searchForm.price)               params.price        = searchForm.price;
-    if (searchForm.priceMin)            params.priceMin     = searchForm.priceMin;
-    if (searchForm.priceMax)            params.priceMax     = searchForm.priceMax;
-    if (searchForm.categoryId)          params.categoryId   = searchForm.categoryId;
-    if (searchForm.categorySlug.trim()) params.categorySlug = searchForm.categorySlug.trim();
+    if (searchForm.title.trim()) params.title = searchForm.title.trim();
+    if (searchForm.price) params.price = searchForm.price;
+    if (searchForm.priceMin) params.priceMin = searchForm.priceMin;
+    if (searchForm.priceMax) params.priceMax = searchForm.priceMax;
+    if (searchForm.categoryId) params.categoryId = searchForm.categoryId;
+    if (searchForm.categorySlug.trim())
+      params.categorySlug = searchForm.categorySlug.trim();
 
     fetchWithFilter(params);
   };
@@ -133,10 +145,16 @@ const useProductManager = () => {
 
   const handleSubmitProduct = async () => {
     const nextErrors = {};
-    if (!editForm.title.trim()) nextErrors.title = "Vui lòng nhập tên sản phẩm.";
-    if (!editForm.price || Number(editForm.price) <= 0) nextErrors.price = "Vui lòng nhập giá hợp lệ (lớn hơn 0).";
-    if (!isEditMode && !editForm.categoryId) nextErrors.categoryId = "Vui lòng nhập ID danh mục.";
-    if (Object.keys(nextErrors).length > 0) { setFormErrors(nextErrors); return; }
+    if (!editForm.title.trim())
+      nextErrors.title = "Vui lòng nhập tên sản phẩm.";
+    if (!editForm.price || Number(editForm.price) <= 0)
+      nextErrors.price = "Vui lòng nhập giá hợp lệ (lớn hơn 0).";
+    if (!isEditMode && !editForm.categoryId)
+      nextErrors.categoryId = "Vui lòng nhập ID danh mục.";
+    if (Object.keys(nextErrors).length > 0) {
+      setFormErrors(nextErrors);
+      return;
+    }
 
     const validImages = editForm.images.filter((url) => url.trim());
     const payload = {
@@ -150,20 +168,36 @@ const useProductManager = () => {
     try {
       if (isEditMode) {
         await updateProduct(payload);
-        showToast({ type: "success", title: "Cập nhật thành công", message: `Sản phẩm "${payload.title}" đã được cập nhật.` });
+        showToast({
+          type: "success",
+          title: "Cập nhật thành công",
+          message: `Sản phẩm "${payload.title}" đã được cập nhật.`,
+        });
       } else {
         await createProduct(payload);
-        showToast({ type: "success", title: "Thêm mới thành công", message: `Đã thêm sản phẩm "${payload.title}".` });
+        showToast({
+          type: "success",
+          title: "Thêm mới thành công",
+          message: `Đã thêm sản phẩm "${payload.title}".`,
+        });
       }
       await fetchWithFilter(); // cập nhật lại danh sách
       closeEditModal();
-    } catch {
-      showToast({ type: "error", title: "Lỗi", message: `Không thể ${isEditMode ? "cập nhật" : "thêm"} sản phẩm. Vui lòng thử lại.` });
+    } catch (error) {
+      console.log(error);
+      showToast({
+        type: "error",
+        title: "Lỗi",
+        message: `Không thể ${isEditMode ? "cập nhật" : "thêm"} sản phẩm. Vui lòng thử lại.`,
+      });
     }
   };
 
   // ─── Xóa ──────────────────────────────────────────────────────────────────
-  const openDeleteDialog = (product) => { setProductToDelete(product); setIsDeleteDialogVisible(true); };
+  const openDeleteDialog = (product) => {
+    setProductToDelete(product);
+    setIsDeleteDialogVisible(true);
+  };
   const closeDeleteDialog = () => {
     if (isDeleting) return;
     setIsDeleteDialogVisible(false);
@@ -174,25 +208,50 @@ const useProductManager = () => {
     try {
       await deleteProduct();
       await fetchWithFilter(); // cập nhật lại danh sách
-      showToast({ type: "success", title: "Xóa thành công", message: `Đã xóa sản phẩm "${productToDelete.title}".` });
+      showToast({
+        type: "success",
+        title: "Xóa thành công",
+        message: `Đã xóa sản phẩm "${productToDelete.title}".`,
+      });
     } catch {
-      showToast({ type: "error", title: "Lỗi", message: "Không thể xóa sản phẩm. Vui lòng thử lại." });
+      showToast({
+        type: "error",
+        title: "Lỗi",
+        message: "Không thể xóa sản phẩm. Vui lòng thử lại.",
+      });
     } finally {
       closeDeleteDialog();
     }
   };
 
   return {
-    products, isLoading,
+    products,
+    isLoading,
     refetch: fetchWithFilter,
-    searchForm, handleSearchFormChange, handleSearch, handleResetSearch,
-    editingProduct, isEditMode, isEditModalVisible, isFormSubmitting,
-    editForm, formErrors,
-    openCreateModal, openEditModal, closeEditModal,
-    handleEditFormChange, handleImageChange, handleAddImage, handleRemoveImage,
+    searchForm,
+    handleSearchFormChange,
+    handleSearch,
+    handleResetSearch,
+    editingProduct,
+    isEditMode,
+    isEditModalVisible,
+    isFormSubmitting,
+    editForm,
+    formErrors,
+    openCreateModal,
+    openEditModal,
+    closeEditModal,
+    handleEditFormChange,
+    handleImageChange,
+    handleAddImage,
+    handleRemoveImage,
     handleSubmitProduct,
-    productToDelete, isDeleteDialogVisible, isDeleting,
-    openDeleteDialog, closeDeleteDialog, handleConfirmDelete,
+    productToDelete,
+    isDeleteDialogVisible,
+    isDeleting,
+    openDeleteDialog,
+    closeDeleteDialog,
+    handleConfirmDelete,
   };
 };
 

@@ -112,6 +112,7 @@ export const useCreateProduct = () => {
   // Khởi tạo state để lưu trữ trạng thái loading và lỗi
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
   // Hàm để gọi API tạo mới sản phẩm
   const mutateAsync = async (newProduct) => {
     setIsLoading(true);
@@ -123,7 +124,6 @@ export const useCreateProduct = () => {
         newProduct,
       );
       setData(response);
-      notifyProductsChanged();
       return response;
     } catch (err) {
       setError(err);
@@ -141,6 +141,7 @@ export const useUpdateProduct = (productId) => {
   // Khởi tạo state để lưu trữ trạng thái loading và lỗi
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
   // Hàm để gọi API cập nhật sản phẩm dựa trên productId
   const mutateAsync = async (updatedProduct) => {
     setIsLoading(true);
@@ -152,7 +153,6 @@ export const useUpdateProduct = (productId) => {
         updatedProduct,
       );
       setData(response);
-      notifyProductsChanged();
       return response;
     } catch (err) {
       setError(err);
@@ -171,6 +171,7 @@ export const useDeleteProduct = (productId) => {
   // khởi tạo state để lưu trữ trạng thái loading và lỗi
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
   // hàm để gọi API xóa sản phẩm dựa trên productId
   const mutateAsync = async () => {
     setIsLoading(true);
@@ -181,7 +182,6 @@ export const useDeleteProduct = (productId) => {
         API_ENDPOINTS.PRODUCT.DELETE(productId),
       );
       setData(response);
-      notifyProductsChanged();
       return response;
     } catch (err) {
       setError(err);
