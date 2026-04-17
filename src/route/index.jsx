@@ -10,8 +10,8 @@ import DashboardPage from "../pages/main/dashboard";
 import PrivateRoute from "./PrivateRoute";
 import CustomersManager from "../pages/main/users/customers";
 import EmployeesManager from "../pages/main/users/employee";
-import ProductDetail from "../pages/main/product/Productdetail";
 import LocationManager from "../pages/main/locations";
+import ProductDetail from "../pages/main/product/Productdetail";
 
 export default function AppRoutes() {
   return (

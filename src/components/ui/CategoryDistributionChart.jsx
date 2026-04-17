@@ -25,11 +25,13 @@ const CategoryDistributionChart = ({ products }) => {
     }, {}),
   );
 
+  console.log(categoryData);
+
   const chartData = {
-    labels: ["Tạp", "Furniture", "Shoes", "Miscellaneous", "Clothes"],
+    labels: categoryData.map((item) => item.category),
     datasets: [
       {
-        label: "Product Count",
+        label: "Số lượng sản phẩm",
         data: categoryData.map((item) => item.count),
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
@@ -68,7 +70,7 @@ const CategoryDistributionChart = ({ products }) => {
       tooltip: {
         callbacks: {
           label: function (context) {
-            return `${context.dataset.label}: ${context.parsed.y} products`;
+            return `${context.dataset.label}: ${context.parsed.y} sản phẩm`;
           },
         },
       },

@@ -20,7 +20,7 @@ const PriceAllocationChart = ({ products }) => {
     labels: Object.keys(priceRange),
     datasets: [
       {
-        label: "Product Count",
+        label: "Số lượng sản phẩm",
         data: Object.values(priceRange),
         backgroundColor: [
           "rgba(75, 192, 192, 0.6)",
@@ -54,7 +54,7 @@ const PriceAllocationChart = ({ products }) => {
       tooltip: {
         callbacks: {
           label: function (context) {
-            return `${context.label}: ${context.parsed} products`;
+            return `${context.label}: ${context.parsed} sản phẩm`;
           },
         },
       },
