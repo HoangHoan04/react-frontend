@@ -9,8 +9,8 @@ import { Accordion, AccordionTab } from "../../../components/common/Accordion";
 import CustomTooltipButton from "../../../components/common/button/TooltipButton";
 import { ROUTES } from "../../../common/constants/routes";
 import { useRouter } from "../../../route/hooks/use-router";
-import useProductManager from "./useProductManager";
 import ProductEditModal from "./ProductEditModal";
+import useProductManager from "./Useproductmanager";
 
 export default function ProductManager() {
   const theme = useThemeStore((state) => state.theme);
